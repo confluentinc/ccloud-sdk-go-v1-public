@@ -1,11 +1,11 @@
 module github.com/confluentinc/ccloud-sdk-go-v1-internal
 
 require (
-	github.com/confluentinc/proto-go-setter v0.0.0-20201026155413-c6ceb267ee65
-	github.com/envoyproxy/protoc-gen-validate v0.6.7
+	github.com/confluentinc/proto-go-setter v0.3.0
+	github.com/envoyproxy/protoc-gen-validate v0.9.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/go-cmp v0.5.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 )
 
 replace (
