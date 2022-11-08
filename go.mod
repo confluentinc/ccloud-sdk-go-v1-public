@@ -5,7 +5,6 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.9.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/go-cmp v0.5.7 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
 )
 
 replace (
