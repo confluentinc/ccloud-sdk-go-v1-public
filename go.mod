@@ -1,4 +1,4 @@
-module github.com/confluentinc/ccloud-sdk-go-v1-internal
+module github.com/confluentinc/ccloud-sdk-go-v1-public
 
 require (
 	github.com/confluentinc/proto-go-setter v0.3.0
