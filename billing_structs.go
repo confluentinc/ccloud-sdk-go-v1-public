@@ -6,7 +6,6 @@ import (
 	io "io"
 	math "math"
 
-	v13 "github.com/confluentinc/cc-structs/kafka/org/v1"
 	_ "github.com/confluentinc/proto-go-setter"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
@@ -58,82 +57,55 @@ func (*PromoCodeClaim) ProtoMessage()    {}
 func (*PromoCodeClaim) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{48}
 }
-func (m *PromoCodeClaim) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PromoCodeClaim) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PromoCodeClaim.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
 
-// func (m *PromoCodeClaim) XXX_Merge(src proto.Message) {
-// 	xxx_messageInfo_PromoCodeClaim.Merge(m, src)
-// }
-// func (m *PromoCodeClaim) XXX_Size() int {
-// 	return m.Size()
-// }
-// func (m *PromoCodeClaim) XXX_DiscardUnknown() {
-// 	xxx_messageInfo_PromoCodeClaim.DiscardUnknown(m)
+// func (m *PromoCodeClaim) GetOrgId() int32 {
+// 	if m != nil {
+// 		return m.OrgId
+// 	}
+// 	return 0
 // }
 
-var xxx_messageInfo_PromoCodeClaim proto.InternalMessageInfo
+// func (m *PromoCodeClaim) GetCode() string {
+// 	if m != nil {
+// 		return m.Code
+// 	}
+// 	return ""
+// }
 
-func (m *PromoCodeClaim) GetOrgId() int32 {
-	if m != nil {
-		return m.OrgId
-	}
-	return 0
-}
+// func (m *PromoCodeClaim) GetAmount() int64 {
+// 	if m != nil {
+// 		return m.Amount
+// 	}
+// 	return 0
+// }
 
-func (m *PromoCodeClaim) GetCode() string {
-	if m != nil {
-		return m.Code
-	}
-	return ""
-}
+// func (m *PromoCodeClaim) GetBalance() int64 {
+// 	if m != nil {
+// 		return m.Balance
+// 	}
+// 	return 0
+// }
 
-func (m *PromoCodeClaim) GetAmount() int64 {
-	if m != nil {
-		return m.Amount
-	}
-	return 0
-}
+// func (m *PromoCodeClaim) GetClaimDate() *types.Timestamp {
+// 	if m != nil {
+// 		return m.ClaimDate
+// 	}
+// 	return nil
+// }
 
-func (m *PromoCodeClaim) GetBalance() int64 {
-	if m != nil {
-		return m.Balance
-	}
-	return 0
-}
+// func (m *PromoCodeClaim) GetCreditExpirationDate() *types.Timestamp {
+// 	if m != nil {
+// 		return m.CreditExpirationDate
+// 	}
+// 	return nil
+// }
 
-func (m *PromoCodeClaim) GetClaimDate() *types.Timestamp {
-	if m != nil {
-		return m.ClaimDate
-	}
-	return nil
-}
-
-func (m *PromoCodeClaim) GetCreditExpirationDate() *types.Timestamp {
-	if m != nil {
-		return m.CreditExpirationDate
-	}
-	return nil
-}
-
-func (m *PromoCodeClaim) GetClaimedBy() int32 {
-	if m != nil {
-		return m.ClaimedBy
-	}
-	return 0
-}
+// func (m *PromoCodeClaim) GetClaimedBy() int32 {
+// 	if m != nil {
+// 		return m.ClaimedBy
+// 	}
+// 	return 0
+// }
 
 type Card struct {
 	Cardholder           string   `protobuf:"bytes,1,opt,name=cardholder,proto3" json:"cardholder,omitempty" db:"cardholder,omitempty" url:"cardholder,omitempty"`
@@ -152,69 +124,43 @@ func (*Card) ProtoMessage()    {}
 func (*Card) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{80}
 }
-func (m *Card) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Card) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Card.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
 
-//	func (m *Card) XXX_Merge(src proto.Message) {
-//		xxx_messageInfo_Card.Merge(m, src)
-//	}
-func (m *Card) XXX_Size() int {
-	return m.Size()
-}
+// var xxx_messageInfo_Card proto.InternalMessageInfo
 
-// func (m *Card) XXX_DiscardUnknown() {
-// 	xxx_messageInfo_Card.DiscardUnknown(m)
+// func (m *Card) GetCardholder() string {
+// 	if m != nil {
+// 		return m.Cardholder
+// 	}
+// 	return ""
 // }
 
-var xxx_messageInfo_Card proto.InternalMessageInfo
+// func (m *Card) GetBrand() string {
+// 	if m != nil {
+// 		return m.Brand
+// 	}
+// 	return ""
+// }
 
-func (m *Card) GetCardholder() string {
-	if m != nil {
-		return m.Cardholder
-	}
-	return ""
-}
+// func (m *Card) GetLast4() string {
+// 	if m != nil {
+// 		return m.Last4
+// 	}
+// 	return ""
+// }
 
-func (m *Card) GetBrand() string {
-	if m != nil {
-		return m.Brand
-	}
-	return ""
-}
+// func (m *Card) GetExpMonth() string {
+// 	if m != nil {
+// 		return m.ExpMonth
+// 	}
+// 	return ""
+// }
 
-func (m *Card) GetLast4() string {
-	if m != nil {
-		return m.Last4
-	}
-	return ""
-}
-
-func (m *Card) GetExpMonth() string {
-	if m != nil {
-		return m.ExpMonth
-	}
-	return ""
-}
-
-func (m *Card) GetExpYear() string {
-	if m != nil {
-		return m.ExpYear
-	}
-	return ""
-}
+// func (m *Card) GetExpYear() string {
+// 	if m != nil {
+// 		return m.ExpYear
+// 	}
+// 	return ""
+// }
 
 type PriceTable struct {
 	PriceTable           map[string]*UnitPrices `protobuf:"bytes,1,rep,name=price_table,json=priceTable,proto3" json:"price_table,omitempty" db:"price_table,omitempty" url:"price_table,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
@@ -228,41 +174,6 @@ func (m *PriceTable) String() string { return proto.CompactTextString(m) }
 func (*PriceTable) ProtoMessage()    {}
 func (*PriceTable) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{66}
-}
-func (m *PriceTable) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PriceTable) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PriceTable.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-
-//	func (m *PriceTable) XXX_Merge(src proto.Message) {
-//		xxx_messageInfo_PriceTable.Merge(m, src)
-//	}
-func (m *PriceTable) XXX_Size() int {
-	return m.Size()
-}
-
-// func (m *PriceTable) XXX_DiscardUnknown() {
-// 	xxx_messageInfo_PriceTable.DiscardUnknown(m)
-// }
-
-var xxx_messageInfo_PriceTable proto.InternalMessageInfo
-
-func (m *PriceTable) GetPriceTable() map[string]*UnitPrices {
-	if m != nil {
-		return m.PriceTable
-	}
-	return nil
 }
 
 type UnitPrices struct {
@@ -279,48 +190,6 @@ func (*UnitPrices) ProtoMessage()    {}
 func (*UnitPrices) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{69}
 }
-func (m *UnitPrices) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *UnitPrices) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_UnitPrices.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-
-//	func (m *UnitPrices) XXX_Merge(src proto.Message) {
-//		xxx_messageInfo_UnitPrices.Merge(m, src)
-//	}
-func (m *UnitPrices) XXX_Size() int {
-	return m.Size()
-}
-
-// func (m *UnitPrices) XXX_DiscardUnknown() {
-// 	xxx_messageInfo_UnitPrices.DiscardUnknown(m)
-// }
-
-var xxx_messageInfo_UnitPrices proto.InternalMessageInfo
-
-func (m *UnitPrices) GetPrices() map[string]float64 {
-	if m != nil {
-		return m.Prices
-	}
-	return nil
-}
-
-func (m *UnitPrices) GetUnit() string {
-	if m != nil {
-		return m.Unit
-	}
-	return ""
-}
 
 type GetPriceTableReply struct {
 	PriceTable           *PriceTable `protobuf:"bytes,1,opt,name=price_table,json=priceTable,proto3" json:"price_table,omitempty" db:"price_table,omitempty" url:"price_table,omitempty"`
@@ -336,40 +205,6 @@ func (*GetPriceTableReply) ProtoMessage()    {}
 func (*GetPriceTableReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{31}
 }
-func (m *GetPriceTableReply) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetPriceTableReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetPriceTableReply.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-
-// func (m *GetPriceTableReply) XXX_Merge(src proto.Message) {
-// 	xxx_messageInfo_GetPriceTableReply.Merge(m, src)
-// }
-// func (m *GetPriceTableReply) XXX_Size() int {
-// 	return m.Size()
-// }
-// func (m *GetPriceTableReply) XXX_DiscardUnknown() {
-// 	xxx_messageInfo_GetPriceTableReply.DiscardUnknown(m)
-// }
-
-var xxx_messageInfo_GetPriceTableReply proto.InternalMessageInfo
-
-func (m *GetPriceTableReply) GetPriceTable() *PriceTable {
-	if m != nil {
-		return m.PriceTable
-	}
-	return nil
-}
 
 func (m *GetPriceTableReply) GetError() *Error {
 	if m != nil {
@@ -379,14 +214,14 @@ func (m *GetPriceTableReply) GetError() *Error {
 }
 
 type GetPaymentInfoReply struct {
-	Card                 *Card             `protobuf:"bytes,1,opt,name=card,proto3" json:"card,omitempty" db:"card,omitempty" url:"card,omitempty"`
-	Organization         *v13.Organization `protobuf:"bytes,3,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
-	Error                *Error            `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
-	TaxAddress           *TaxAddress       `protobuf:"bytes,4,opt,name=tax_address,json=taxAddress,proto3" json:"tax_address,omitempty" db:"tax_address,omitempty" url:"tax_address,omitempty"`
-	TaxIds               []*TaxId          `protobuf:"bytes,5,rep,name=tax_ids,json=taxIds,proto3" json:"tax_ids,omitempty" db:"tax_ids,omitempty" url:"tax_ids,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	Card                 *Card         `protobuf:"bytes,1,opt,name=card,proto3" json:"card,omitempty" db:"card,omitempty" url:"card,omitempty"`
+	Organization         *Organization `protobuf:"bytes,3,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
+	Error                *Error        `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	TaxAddress           *TaxAddress   `protobuf:"bytes,4,opt,name=tax_address,json=taxAddress,proto3" json:"tax_address,omitempty" db:"tax_address,omitempty" url:"tax_address,omitempty"`
+	TaxIds               []*TaxId      `protobuf:"bytes,5,rep,name=tax_ids,json=taxIds,proto3" json:"tax_ids,omitempty" db:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
 func (m *GetPaymentInfoReply) Reset()         { *m = GetPaymentInfoReply{} }
@@ -394,47 +229,6 @@ func (m *GetPaymentInfoReply) String() string { return proto.CompactTextString(m
 func (*GetPaymentInfoReply) ProtoMessage()    {}
 func (*GetPaymentInfoReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{82}
-}
-func (m *GetPaymentInfoReply) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetPaymentInfoReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetPaymentInfoReply.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-
-// func (m *GetPaymentInfoReply) XXX_Merge(src proto.Message) {
-// 	xxx_messageInfo_GetPaymentInfoReply.Merge(m, src)
-// }
-// func (m *GetPaymentInfoReply) XXX_Size() int {
-// 	return m.Size()
-// }
-// func (m *GetPaymentInfoReply) XXX_DiscardUnknown() {
-// 	xxx_messageInfo_GetPaymentInfoReply.DiscardUnknown(m)
-// }
-
-var xxx_messageInfo_GetPaymentInfoReply proto.InternalMessageInfo
-
-func (m *GetPaymentInfoReply) GetCard() *Card {
-	if m != nil {
-		return m.Card
-	}
-	return nil
-}
-
-func (m *GetPaymentInfoReply) GetOrganization() *v13.Organization {
-	if m != nil {
-		return m.Organization
-	}
-	return nil
 }
 
 func (m *GetPaymentInfoReply) GetError() *Error {
@@ -444,23 +238,9 @@ func (m *GetPaymentInfoReply) GetError() *Error {
 	return nil
 }
 
-func (m *GetPaymentInfoReply) GetTaxAddress() *TaxAddress {
-	if m != nil {
-		return m.TaxAddress
-	}
-	return nil
-}
-
-func (m *GetPaymentInfoReply) GetTaxIds() []*TaxId {
-	if m != nil {
-		return m.TaxIds
-	}
-	return nil
-}
-
 type UpdatePaymentInfoRequest struct {
 	StripeToken          string            `protobuf:"bytes,1,opt,name=stripe_token,json=stripeToken,proto3" json:"stripe_token,omitempty" redact:"-" db:"stripe_token,omitempty" url:"stripe_token,omitempty"`
-	Organization         *v13.Organization `protobuf:"bytes,2,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
+	Organization         *Organization     `protobuf:"bytes,2,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
 	RequestCarrier       map[string]string `protobuf:"bytes,3,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
@@ -472,12 +252,12 @@ func (m *UpdatePaymentInfoRequest) String() string { return proto.CompactTextStr
 func (*UpdatePaymentInfoRequest) ProtoMessage()    {}
 
 type UpdatePaymentInfoReply struct {
-	Card                 *Card             `protobuf:"bytes,1,opt,name=card,proto3" json:"card,omitempty" db:"card,omitempty" url:"card,omitempty"`
-	Organization         *v13.Organization `protobuf:"bytes,3,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
-	Error                *Error            `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	Card                 *Card         `protobuf:"bytes,1,opt,name=card,proto3" json:"card,omitempty" db:"card,omitempty" url:"card,omitempty"`
+	Organization         *Organization `protobuf:"bytes,3,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
+	Error                *Error        `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
 func (m *UpdatePaymentInfoReply) Reset()         { *m = UpdatePaymentInfoReply{} }
@@ -1977,7 +1757,7 @@ func (m *GetPaymentInfoReply) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Organization == nil {
-				m.Organization = &v13.Organization{}
+				m.Organization = &Organization{}
 			}
 			if err := m.Organization.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

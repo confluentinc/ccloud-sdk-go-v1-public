@@ -2,17 +2,15 @@ package ccloud
 
 import (
 	"context"
-
-	orgv1 "github.com/confluentinc/cc-structs/kafka/org/v1"
 )
 
 // Billing service allows getting billing information for an org in Confluent Cloud
 type Billing interface {
-	GetPriceTable(ctx context.Context, org *orgv1.Organization, product string) (*PriceTable, error)
-	GetPaymentInfo(ctx context.Context, org *orgv1.Organization) (*Card, error)
-	UpdatePaymentInfo(ctx context.Context, org *orgv1.Organization, stripeToken string) error
-	ClaimPromoCode(ctx context.Context, org *orgv1.Organization, code string) (*PromoCodeClaim, error)
-	GetClaimedPromoCodes(ctx context.Context, org *orgv1.Organization, excludeExpired bool) ([]*PromoCodeClaim, error)
+	GetPriceTable(ctx context.Context, org *Organization, product string) (*PriceTable, error)
+	GetPaymentInfo(ctx context.Context, org *Organization) (*Card, error)
+	UpdatePaymentInfo(ctx context.Context, org *Organization, stripeToken string) error
+	ClaimPromoCode(ctx context.Context, org *Organization, code string) (*PromoCodeClaim, error)
+	GetClaimedPromoCodes(ctx context.Context, org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error)
 }
 
 // Logger provides an interface that will be used for all logging in this client. User provided

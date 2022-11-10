@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
-	corev1 "github.com/confluentinc/cc-structs/kafka/core/v1"
 )
 
-var ErrNotFound = &corev1.Error{Code: http.StatusNotFound, Message: "resource not found"}
+var ErrNotFound = &Error{Code: http.StatusNotFound, Message: "resource not found"}
 
 // WrapErr returns a standard typed error if one exists, or a generic wrapped corev1.Error with the msg
 func WrapErr(err error, msg string) error {
@@ -27,7 +25,7 @@ func WrapErr(err error, msg string) error {
 	if strings.Contains(err.Error(), "Token parsing error") {
 		return &InvalidTokenError{Message: err.Error()}
 	}
-	return corev1.WrapErr(err, msg)
+	return WrapErr(err, msg)
 }
 
 type InvalidLoginError struct{}

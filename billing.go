@@ -34,7 +34,7 @@ func (o *BillingService) GetPriceTable(_ context.Context, org *Organization, pro
 	res := new(GetPriceTableReply)
 
 	_, err := o.sling.New().Get(url).Receive(res, res)
-	if err := utilv1.ReplyErr(res, err); err != nil {
+	if err := ReplyErr(res, err); err != nil {
 		return nil, WrapErr(err, "error getting price table")
 	}
 
