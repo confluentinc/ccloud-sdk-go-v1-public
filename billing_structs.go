@@ -58,55 +58,6 @@ func (*PromoCodeClaim) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{48}
 }
 
-// func (m *PromoCodeClaim) GetOrgId() int32 {
-// 	if m != nil {
-// 		return m.OrgId
-// 	}
-// 	return 0
-// }
-
-// func (m *PromoCodeClaim) GetCode() string {
-// 	if m != nil {
-// 		return m.Code
-// 	}
-// 	return ""
-// }
-
-// func (m *PromoCodeClaim) GetAmount() int64 {
-// 	if m != nil {
-// 		return m.Amount
-// 	}
-// 	return 0
-// }
-
-// func (m *PromoCodeClaim) GetBalance() int64 {
-// 	if m != nil {
-// 		return m.Balance
-// 	}
-// 	return 0
-// }
-
-// func (m *PromoCodeClaim) GetClaimDate() *types.Timestamp {
-// 	if m != nil {
-// 		return m.ClaimDate
-// 	}
-// 	return nil
-// }
-
-// func (m *PromoCodeClaim) GetCreditExpirationDate() *types.Timestamp {
-// 	if m != nil {
-// 		return m.CreditExpirationDate
-// 	}
-// 	return nil
-// }
-
-// func (m *PromoCodeClaim) GetClaimedBy() int32 {
-// 	if m != nil {
-// 		return m.ClaimedBy
-// 	}
-// 	return 0
-// }
-
 type Card struct {
 	Cardholder           string   `protobuf:"bytes,1,opt,name=cardholder,proto3" json:"cardholder,omitempty" db:"cardholder,omitempty" url:"cardholder,omitempty"`
 	Brand                string   `protobuf:"bytes,2,opt,name=brand,proto3" json:"brand,omitempty" db:"brand,omitempty" url:"brand,omitempty"`
@@ -124,43 +75,6 @@ func (*Card) ProtoMessage()    {}
 func (*Card) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f6f5cf017d9954b9, []int{80}
 }
-
-// var xxx_messageInfo_Card proto.InternalMessageInfo
-
-// func (m *Card) GetCardholder() string {
-// 	if m != nil {
-// 		return m.Cardholder
-// 	}
-// 	return ""
-// }
-
-// func (m *Card) GetBrand() string {
-// 	if m != nil {
-// 		return m.Brand
-// 	}
-// 	return ""
-// }
-
-// func (m *Card) GetLast4() string {
-// 	if m != nil {
-// 		return m.Last4
-// 	}
-// 	return ""
-// }
-
-// func (m *Card) GetExpMonth() string {
-// 	if m != nil {
-// 		return m.ExpMonth
-// 	}
-// 	return ""
-// }
-
-// func (m *Card) GetExpYear() string {
-// 	if m != nil {
-// 		return m.ExpYear
-// 	}
-// 	return ""
-// }
 
 type PriceTable struct {
 	PriceTable           map[string]*UnitPrices `protobuf:"bytes,1,rep,name=price_table,json=priceTable,proto3" json:"price_table,omitempty" db:"price_table,omitempty" url:"price_table,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
