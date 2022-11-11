@@ -25,7 +25,25 @@ func WrapErr(err error, msg string) error {
 	if strings.Contains(err.Error(), "Token parsing error") {
 		return &InvalidTokenError{Message: err.Error()}
 	}
-	return WrapErr(err, msg)
+	return WrapCoreErr(err, msg)
+}
+
+// WrapCoreErr returns a corev1.Error for the given error and msg.
+func WrapCoreErr(err error, msg string) error {
+	if err == nil {
+		return nil
+	}
+
+	e := &Error{Message: fmt.Sprintf("%s: %s", msg, err.Error())}
+	if v1err, ok := err.(*Error); ok {
+		e.Code = v1err.Code
+		e.NestedErrors = v1err.NestedErrors
+		e.Details = v1err.Details
+		e.Stack = v1err.Stack
+		e.Message = fmt.Sprintf("%s: %s", msg, v1err.Message)
+		e.ErrorCode = v1err.ErrorCode
+	}
+	return e
 }
 
 type InvalidLoginError struct{}

@@ -12,7 +12,7 @@ func ReplyErr(resp Errorer, err error) error {
 		case *Error:
 			return err
 		default:
-			return WrapErr(err, "reply error")
+			return WrapCoreErr(err, "reply error")
 		}
 	}
 	// can't return resp.GetError() cuz of https://golang.org/doc/faq#nil_error
