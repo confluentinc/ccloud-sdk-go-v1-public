@@ -70,6 +70,20 @@ func (m *Card) Reset()         { *m = Card{} }
 func (m *Card) String() string { return proto.CompactTextString(m) }
 func (*Card) ProtoMessage()    {}
 
+func (m *Card) GetBrand() string {
+	if m != nil {
+		return m.Brand
+	}
+	return ""
+}
+
+func (m *Card) GetLast4() string {
+	if m != nil {
+		return m.Last4
+	}
+	return ""
+}
+
 type PriceTable struct {
 	PriceTable           map[string]*UnitPrices `protobuf:"bytes,1,rep,name=price_table,json=priceTable,proto3" json:"price_table,omitempty" db:"price_table,omitempty" url:"price_table,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
