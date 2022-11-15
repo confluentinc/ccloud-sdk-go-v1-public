@@ -55,6 +55,55 @@ func (m *PromoCodeClaim) Reset()         { *m = PromoCodeClaim{} }
 func (m *PromoCodeClaim) String() string { return proto.CompactTextString(m) }
 func (*PromoCodeClaim) ProtoMessage()    {}
 
+func (m *PromoCodeClaim) GetOrgId() int32 {
+	if m != nil {
+		return m.OrgId
+	}
+	return 0
+}
+
+func (m *PromoCodeClaim) GetCode() string {
+	if m != nil {
+		return m.Code
+	}
+	return ""
+}
+
+func (m *PromoCodeClaim) GetAmount() int64 {
+	if m != nil {
+		return m.Amount
+	}
+	return 0
+}
+
+func (m *PromoCodeClaim) GetBalance() int64 {
+	if m != nil {
+		return m.Balance
+	}
+	return 0
+}
+
+func (m *PromoCodeClaim) GetClaimDate() *types.Timestamp {
+	if m != nil {
+		return m.ClaimDate
+	}
+	return nil
+}
+
+func (m *PromoCodeClaim) GetCreditExpirationDate() *types.Timestamp {
+	if m != nil {
+		return m.CreditExpirationDate
+	}
+	return nil
+}
+
+func (m *PromoCodeClaim) GetClaimedBy() int32 {
+	if m != nil {
+		return m.ClaimedBy
+	}
+	return 0
+}
+
 type Card struct {
 	Cardholder           string   `protobuf:"bytes,1,opt,name=cardholder,proto3" json:"cardholder,omitempty" db:"cardholder,omitempty" url:"cardholder,omitempty"`
 	Brand                string   `protobuf:"bytes,2,opt,name=brand,proto3" json:"brand,omitempty" db:"brand,omitempty" url:"brand,omitempty"`
