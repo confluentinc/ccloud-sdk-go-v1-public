@@ -11,6 +11,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.8.0
 	github.com/travisjeffery/proto-go-sql v0.0.0-20190911121832-39ff47280e87
+	github.com/ugorji/go/codec v1.2.7
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
 	golang.org/x/sys v0.0.0-20220224120231-95c6836cb0e7 // indirect
