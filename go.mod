@@ -1,6 +1,7 @@
 module github.com/confluentinc/ccloud-sdk-go-v1-public
 
 require (
+	github.com/antihax/optional v1.0.0
 	github.com/confluentinc/proto-go-setter v0.0.0-20201026155413-c6ceb267ee65
 	github.com/dghubble/sling v1.2.1-0.20181125223409-7458fd7fa70b
 	github.com/envoyproxy/protoc-gen-validate v0.6.7
