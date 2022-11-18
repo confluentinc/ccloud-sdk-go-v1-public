@@ -8,21 +8,21 @@ import (
 	context "context"
 	sync "sync"
 
-	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
+	github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud "github.com/confluentinc/ccloud-sdk-go-v1-public/ccloud"
 )
 
 // Auth is a mock of Auth interface
 type Auth struct {
 	lockLogin sync.Mutex
-	LoginFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
+	LoginFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateReply, error)
 
 	lockUser sync.Mutex
-	UserFunc func(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error)
+	UserFunc func(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetMeReply, error)
 
 	calls struct {
 		Login []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateRequest
 		}
 		User []struct {
 			Arg0 context.Context
@@ -31,7 +31,7 @@ type Auth struct {
 }
 
 // Login mocks base method by wrapping the associated func.
-func (m *Auth) Login(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
+func (m *Auth) Login(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateReply, error) {
 	m.lockLogin.Lock()
 	defer m.lockLogin.Unlock()
 
@@ -41,7 +41,7 @@ func (m *Auth) Login(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateRequest
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -63,7 +63,7 @@ func (m *Auth) LoginCalled() bool {
 // LoginCalls returns the calls made to Login.
 func (m *Auth) LoginCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.AuthenticateRequest
 } {
 	m.lockLogin.Lock()
 	defer m.lockLogin.Unlock()
@@ -72,7 +72,7 @@ func (m *Auth) LoginCalls() []struct {
 }
 
 // User mocks base method by wrapping the associated func.
-func (m *Auth) User(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error) {
+func (m *Auth) User(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetMeReply, error) {
 	m.lockUser.Lock()
 	defer m.lockUser.Unlock()
 
