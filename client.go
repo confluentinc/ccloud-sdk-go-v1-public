@@ -62,8 +62,8 @@ type Params struct {
 // Client represents the Confluent SDK client.
 type Client struct {
 	*Params
-	sling *sling.Sling
-	// Auth    Auth
+	sling   *sling.Sling
+	Auth    Auth
 	Billing Billing
 }
 

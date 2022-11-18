@@ -14,6 +14,96 @@ import (
 	_ "github.com/travisjeffery/proto-go-sql"
 )
 
+type User struct {
+	Id                   int32             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" url:"id" db:"id,omitempty"`
+	Email                string            `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" url:"email" db:"email,omitempty"`
+	FirstName            string            `protobuf:"bytes,3,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty" url:"first_name" db:"first_name,omitempty"`
+	LastName             string            `protobuf:"bytes,4,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty" url:"last_name" db:"last_name,omitempty"`
+	OrganizationId       int32             `protobuf:"varint,6,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty" url:"organization_id" db:"organization_id,omitempty"`
+	Deactivated          bool              `protobuf:"varint,7,opt,name=deactivated,proto3" json:"deactivated,omitempty" db:"deactivated,omitempty" url:"deactivated,omitempty"`
+	Verified             *types.Timestamp  `protobuf:"bytes,11,opt,name=verified,proto3" json:"verified,omitempty" db:"verified,omitempty" url:"verified,omitempty"`
+	Created              *types.Timestamp  `protobuf:"bytes,8,opt,name=created,proto3" json:"created,omitempty" db:"created,omitempty" url:"created,omitempty"`
+	Modified             *types.Timestamp  `protobuf:"bytes,9,opt,name=modified,proto3" json:"modified,omitempty" db:"modified,omitempty" url:"modified,omitempty"`
+	ServiceName          string            `protobuf:"bytes,12,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty" db:"service_name,omitempty" url:"service_name,omitempty"`
+	ServiceDescription   string            `protobuf:"bytes,13,opt,name=service_description,json=serviceDescription,proto3" json:"service_description,omitempty" db:"service_description,omitempty" url:"service_description,omitempty"`
+	ServiceAccount       bool              `protobuf:"varint,14,opt,name=service_account,json=serviceAccount,proto3" json:"service_account,omitempty" db:"service_account,omitempty" url:"service_account,omitempty"`
+	Preferences          map[string]string `protobuf:"bytes,16,rep,name=preferences,proto3" json:"preferences,omitempty" db:"preferences,omitempty" url:"preferences,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Internal             bool              `protobuf:"varint,17,opt,name=internal,proto3" json:"internal,omitempty" db:"internal,omitempty" url:"internal,omitempty"`
+	ResourceId           string            `protobuf:"bytes,18,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty" db:"resource_id,omitempty" url:"resource_id,omitempty"`
+	DeactivatedAt        *types.Timestamp  `protobuf:"bytes,19,opt,name=deactivated_at,json=deactivatedAt,proto3" json:"deactivated_at,omitempty" db:"deactivated_at,omitempty" url:"deactivated_at,omitempty"`
+	SocialConnection     string            `protobuf:"bytes,20,opt,name=social_connection,json=socialConnection,proto3" json:"social_connection,omitempty" db:"social_connection,omitempty" url:"social_connection,omitempty"`
+	AuthType             AuthType          `protobuf:"varint,21,opt,name=auth_type,json=authType,proto3,enum=kafka.org.v1.AuthType" json:"auth_type,omitempty" db:"auth_type,omitempty" url:"auth_type,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *User) Reset()         { *m = User{} }
+func (m *User) String() string { return proto.CompactTextString(m) }
+func (*User) ProtoMessage()    {}
+
+func (m *User) GetEmail() string {
+	if m != nil {
+		return m.Email
+	}
+	return ""
+}
+
+type AuthType int32
+
+const (
+	AuthType_AUTH_TYPE_UNKNOWN AuthType = 0
+	AuthType_AUTH_TYPE_LOCAL   AuthType = 1
+	AuthType_AUTH_TYPE_SSO     AuthType = 2
+)
+
+var AuthType_name = map[int32]string{
+	0: "AUTH_TYPE_UNKNOWN",
+	1: "AUTH_TYPE_LOCAL",
+	2: "AUTH_TYPE_SSO",
+}
+
+var AuthType_value = map[string]int32{
+	"AUTH_TYPE_UNKNOWN": 0,
+	"AUTH_TYPE_LOCAL":   1,
+	"AUTH_TYPE_SSO":     2,
+}
+
+func (x AuthType) String() string {
+	return proto.EnumName(AuthType_name, int32(x))
+}
+
+type Account struct {
+	Id                   string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" db:"id,omitempty" url:"id,omitempty"`
+	Name                 string           `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" db:"name,omitempty" url:"name,omitempty"`
+	OrganizationId       int32            `protobuf:"varint,4,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty" db:"organization_id,omitempty" url:"organization_id,omitempty"`
+	Deactivated          bool             `protobuf:"varint,5,opt,name=deactivated,proto3" json:"deactivated,omitempty" db:"deactivated,omitempty" url:"deactivated,omitempty"`
+	Created              *types.Timestamp `protobuf:"bytes,6,opt,name=created,proto3" json:"created,omitempty" db:"created,omitempty" url:"created,omitempty"`
+	Modified             *types.Timestamp `protobuf:"bytes,7,opt,name=modified,proto3" json:"modified,omitempty" db:"modified,omitempty" url:"modified,omitempty"`
+	Config               *AccountConfig   `protobuf:"bytes,8,opt,name=config,proto3" json:"config,omitempty" db:"config,omitempty" url:"config,omitempty"`
+	Internal             bool             `protobuf:"varint,9,opt,name=internal,proto3" json:"internal,omitempty" db:"internal,omitempty" url:"internal,omitempty"`
+	DeactivatedAt        *types.Timestamp `protobuf:"bytes,10,opt,name=deactivated_at,json=deactivatedAt,proto3" json:"deactivated_at,omitempty" db:"deactivated_at,omitempty" url:"deactivated_at,omitempty"`
+	OrgResourceId        string           `protobuf:"bytes,11,opt,name=org_resource_id,json=orgResourceId,proto3" json:"org_resource_id,omitempty" db:"org_resource_id,omitempty" url:"org_resource_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *Account) Reset()         { *m = Account{} }
+func (m *Account) String() string { return proto.CompactTextString(m) }
+func (*Account) ProtoMessage()    {}
+
+type AccountConfig struct {
+	MaxKafkaClusters     int32    `protobuf:"varint,1,opt,name=max_kafka_clusters,json=maxKafkaClusters,proto3" json:"max_kafka_clusters,omitempty" db:"max_kafka_clusters,omitempty" url:"max_kafka_clusters,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AccountConfig) Reset()         { *m = AccountConfig{} }
+func (m *AccountConfig) String() string { return proto.CompactTextString(m) }
+func (*AccountConfig) ProtoMessage()    {}
+
 type Organization struct {
 	Id               int32            `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" db:"id,omitempty" url:"id,omitempty"`
 	Name             string           `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" db:"name,omitempty" url:"name,omitempty"`
@@ -41,6 +131,24 @@ type Organization struct {
 	XXX_NoUnkeyedLiteral    struct{}                `json:"-"`
 	XXX_unrecognized        []byte                  `json:"-"`
 	XXX_sizecache           int32                   `json:"-"`
+}
+
+func (m *Organization) Reset()         { *m = Organization{} }
+func (m *Organization) String() string { return proto.CompactTextString(m) }
+func (*Organization) ProtoMessage()    {}
+
+func (m *Organization) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Organization) GetResourceId() string {
+	if m != nil {
+		return m.ResourceId
+	}
+	return ""
 }
 
 // Represents the customer-accessible audit log cluster info for the organization

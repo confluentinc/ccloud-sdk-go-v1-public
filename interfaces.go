@@ -4,6 +4,12 @@ import (
 	"context"
 )
 
+// Auth allows authenticating in Confluent Cloud
+type Auth interface {
+	Login(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
+	User(context.Context) (*GetMeReply, error)
+}
+
 // Billing service allows getting billing information for an org in Confluent Cloud
 type Billing interface {
 	GetPriceTable(ctx context.Context, org *Organization, product string) (*PriceTable, error)
