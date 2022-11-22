@@ -64,6 +64,7 @@ type Client struct {
 	*Params
 	sling   *sling.Sling
 	Auth    Auth
+	Signup  Signup
 	Billing Billing
 }
 

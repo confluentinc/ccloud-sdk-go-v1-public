@@ -478,6 +478,111 @@ func (x BillingInterval) String() string {
 	return proto.EnumName(BillingInterval_name, int32(x))
 }
 
+type SignupRequest struct {
+	Organization         *Organization     `protobuf:"bytes,1,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
+	User                 *User             `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty" db:"user,omitempty" url:"user,omitempty"`
+	Credentials          *Credentials      `protobuf:"bytes,3,opt,name=credentials,proto3" json:"credentials,omitempty" db:"credentials,omitempty" url:"credentials,omitempty"`
+	StripeToken          string            `protobuf:"bytes,4,opt,name=stripe_token,json=stripeToken,proto3" json:"stripe_token,omitempty" db:"stripe_token,omitempty" url:"stripe_token,omitempty"`
+	Enterprise           bool              `protobuf:"varint,5,opt,name=enterprise,proto3" json:"enterprise,omitempty" db:"enterprise,omitempty" url:"enterprise,omitempty"`
+	RequestCarrier       map[string]string `protobuf:"bytes,6,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Utm                  *Utm              `protobuf:"bytes,7,opt,name=utm,proto3" json:"utm,omitempty" db:"utm,omitempty" url:"utm,omitempty"`
+	ExistingCreds        bool              `protobuf:"varint,8,opt,name=existing_creds,json=existingCreds,proto3" json:"existing_creds,omitempty" db:"existing_creds,omitempty" url:"existing_creds,omitempty"`
+	Token                string            `protobuf:"bytes,9,opt,name=token,proto3" json:"token,omitempty" db:"token,omitempty" url:"token,omitempty"`
+	MarketplaceCreds     *MarketplaceCreds `protobuf:"bytes,10,opt,name=marketplace_creds,json=marketplaceCreds,proto3" json:"marketplace_creds,omitempty" db:"marketplace_creds,omitempty" url:"marketplace_creds,omitempty"`
+	CountryCode          string            `protobuf:"bytes,11,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty" db:"country_code,omitempty" url:"country_code,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *SignupRequest) Reset()         { *m = SignupRequest{} }
+func (m *SignupRequest) String() string { return proto.CompactTextString(m) }
+func (*SignupRequest) ProtoMessage()    {}
+
+// TODO remove with CDMUM-789
+type Credentials struct {
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" db:"username,omitempty" url:"username,omitempty"`
+	// to redact from json logs
+	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty" redact:"-" db:"password,omitempty" url:"password,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Credentials) Reset()         { *m = Credentials{} }
+func (m *Credentials) String() string { return proto.CompactTextString(m) }
+func (*Credentials) ProtoMessage()    {}
+
+type Utm struct {
+	Source               string   `protobuf:"bytes,1,opt,name=source,proto3" json:"source,omitempty" db:"source,omitempty" url:"source,omitempty"`
+	Campaign             string   `protobuf:"bytes,2,opt,name=campaign,proto3" json:"campaign,omitempty" db:"campaign,omitempty" url:"campaign,omitempty"`
+	Medium               string   `protobuf:"bytes,3,opt,name=medium,proto3" json:"medium,omitempty" db:"medium,omitempty" url:"medium,omitempty"`
+	Partner              string   `protobuf:"bytes,4,opt,name=partner,proto3" json:"partner,omitempty" db:"partner,omitempty" url:"partner,omitempty"`
+	Term                 string   `protobuf:"bytes,5,opt,name=term,proto3" json:"term,omitempty" db:"term,omitempty" url:"term,omitempty"`
+	Content              string   `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty" db:"content,omitempty" url:"content,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Utm) Reset()         { *m = Utm{} }
+func (m *Utm) String() string { return proto.CompactTextString(m) }
+func (*Utm) ProtoMessage()    {}
+
+// TODO remove with CDMUM-789
+type MarketplaceCreds struct {
+	Token                string             `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty" db:"token,omitempty" url:"token,omitempty"`
+	Partner              MarketplacePartner `protobuf:"varint,2,opt,name=partner,proto3,enum=kafka.core.v1.MarketplacePartner" json:"partner,omitempty" db:"partner,omitempty" url:"partner,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *MarketplaceCreds) Reset()         { *m = MarketplaceCreds{} }
+func (m *MarketplaceCreds) String() string { return proto.CompactTextString(m) }
+func (*MarketplaceCreds) ProtoMessage()    {}
+
+type SignupReply struct {
+	User                 *User         `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty" db:"user,omitempty" url:"user,omitempty"`
+	Organization         *Organization `protobuf:"bytes,2,opt,name=organization,proto3" json:"organization,omitempty" db:"organization,omitempty" url:"organization,omitempty"`
+	Account              *Account      `protobuf:"bytes,3,opt,name=account,proto3" json:"account,omitempty" db:"account,omitempty" url:"account,omitempty"`
+	Error                *Error        `protobuf:"bytes,5,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *SignupReply) Reset()         { *m = SignupReply{} }
+func (m *SignupReply) String() string { return proto.CompactTextString(m) }
+func (*SignupReply) ProtoMessage()    {}
+
+func (m *SignupReply) GetOrganization() *Organization {
+	if m != nil {
+		return m.Organization
+	}
+	return nil
+}
+
+func (m *SignupReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type CreateEmailVerificationRequest struct {
+	// Only username is required
+	Credentials          *Credentials      `protobuf:"bytes,1,opt,name=credentials,proto3" json:"credentials,omitempty" db:"credentials,omitempty" url:"credentials,omitempty"`
+	RequestCarrier       map[string]string `protobuf:"bytes,2,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *CreateEmailVerificationRequest) Reset()         { *m = CreateEmailVerificationRequest{} }
+func (m *CreateEmailVerificationRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateEmailVerificationRequest) ProtoMessage()    {}
+
 type Saml struct {
 	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty" db:"enabled,omitempty" url:"enabled,omitempty"`
 	MetadataUrl          string   `protobuf:"bytes,2,opt,name=metadata_url,json=metadataUrl,proto3" json:"metadata_url,omitempty" db:"metadata_url,omitempty" url:"metadata_url,omitempty"`

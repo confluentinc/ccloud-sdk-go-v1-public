@@ -39,8 +39,6 @@ github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5P
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
-github.com/confluentinc/ccloud-sdk-go-v1-public v0.0.0-20221115212529-5debfa201d7b h1:MZdmrAQ4Xa6bInqJDaweVNtkHCSy0weFbGpLnqFK5XM=
-github.com/confluentinc/ccloud-sdk-go-v1-public v0.0.0-20221115212529-5debfa201d7b/go.mod h1:WqkVs0zqDRTBPUpU3azJVTxA0w3mejPgmqNs1K7T3pw=
 github.com/confluentinc/proto-go-setter v0.0.0-20201026155413-c6ceb267ee65 h1:77/42xar6SY7DxTSVZhb1XoJycpkh6UIy0OdpxpVmFU=
 github.com/confluentinc/proto-go-setter v0.0.0-20201026155413-c6ceb267ee65/go.mod h1:WD/4qYOPFMs2ozq2z2VJFtHljgptKHWtOMb9ochncfA=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

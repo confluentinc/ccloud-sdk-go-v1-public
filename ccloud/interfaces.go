@@ -10,6 +10,12 @@ type Auth interface {
 	User(context.Context) (*GetMeReply, error)
 }
 
+// Signup service allows managing signups in Confluent Cloud
+type Signup interface {
+	Create(context.Context, *SignupRequest) (*SignupReply, error)
+	SendVerificationEmail(context.Context, *User) error
+}
+
 // Billing service allows getting billing information for an org in Confluent Cloud
 type Billing interface {
 	GetPriceTable(ctx context.Context, org *Organization, product string) (*PriceTable, error)
