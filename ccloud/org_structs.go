@@ -93,6 +93,13 @@ func (m *Account) Reset()         { *m = Account{} }
 func (m *Account) String() string { return proto.CompactTextString(m) }
 func (*Account) ProtoMessage()    {}
 
+func (m *Account) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
 type AccountConfig struct {
 	MaxKafkaClusters     int32    `protobuf:"varint,1,opt,name=max_kafka_clusters,json=maxKafkaClusters,proto3" json:"max_kafka_clusters,omitempty" db:"max_kafka_clusters,omitempty" url:"max_kafka_clusters,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -144,11 +151,46 @@ func (m *Organization) GetName() string {
 	return ""
 }
 
+func (m *Organization) GetId() int32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func (m *Organization) GetResourceId() string {
 	if m != nil {
 		return m.ResourceId
 	}
 	return ""
+}
+
+func (m *Organization) GetSuspensionStatus() *SuspensionStatus {
+	if m != nil {
+		return m.SuspensionStatus
+	}
+	return nil
+}
+
+func (m *Organization) GetAuditLog() *AuditLog {
+	if m != nil {
+		return m.AuditLog
+	}
+	return nil
+}
+
+func (m *Organization) GetPlan() *Plan {
+	if m != nil {
+		return m.Plan
+	}
+	return nil
+}
+
+func (m *Organization) GetDeactivated() bool {
+	if m != nil {
+		return m.Deactivated
+	}
+	return false
 }
 
 // Represents the customer-accessible audit log cluster info for the organization
@@ -163,6 +205,45 @@ type AuditLog struct {
 	XXX_sizecache            int32    `json:"-"`
 }
 
+func (m *AuditLog) Reset()         { *m = AuditLog{} }
+func (m *AuditLog) String() string { return proto.CompactTextString(m) }
+func (*AuditLog) ProtoMessage()    {}
+
+func (m *AuditLog) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *AuditLog) GetAccountId() string {
+	if m != nil {
+		return m.AccountId
+	}
+	return ""
+}
+
+func (m *AuditLog) GetServiceAccountId() int32 {
+	if m != nil {
+		return m.ServiceAccountId
+	}
+	return 0
+}
+
+func (m *AuditLog) GetTopicName() string {
+	if m != nil {
+		return m.TopicName
+	}
+	return ""
+}
+
+func (m *AuditLog) GetServiceAccountResourceId() string {
+	if m != nil {
+		return m.ServiceAccountResourceId
+	}
+	return ""
+}
+
 type SuspensionStatus struct {
 	Suspended              *types.Timestamp     `protobuf:"bytes,1,opt,name=suspended,proto3" json:"suspended,omitempty" db:"suspended,omitempty" url:"suspended,omitempty"`
 	Status                 SuspensionStatusType `protobuf:"varint,2,opt,name=status,proto3,enum=kafka.org.v1.SuspensionStatusType" json:"status,omitempty" db:"status,omitempty" url:"status,omitempty"`
@@ -173,6 +254,20 @@ type SuspensionStatus struct {
 	XXX_NoUnkeyedLiteral   struct{}             `json:"-"`
 	XXX_unrecognized       []byte               `json:"-"`
 	XXX_sizecache          int32                `json:"-"`
+}
+
+func (m *SuspensionStatus) GetStatus() SuspensionStatusType {
+	if m != nil {
+		return m.Status
+	}
+	return SuspensionStatusType_SUSPENSION_UNKNOWN
+}
+
+func (m *SuspensionStatus) GetEventType() SuspensionEventType {
+	if m != nil {
+		return m.EventType
+	}
+	return SuspensionEventType_SUSPENSION_EVENT_UNKNOWN
 }
 
 type Plan struct {
@@ -191,6 +286,13 @@ type Plan struct {
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *Plan) GetBilling() *Plan_Billing {
+	if m != nil {
+		return m.Billing
+	}
+	return nil
 }
 
 // representation of SSO configs on the DB records themselves
@@ -422,6 +524,20 @@ type Plan_Billing struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Plan_Billing) GetMethod() BillingMethod {
+	if m != nil {
+		return m.Method
+	}
+	return BillingMethod_STRIPE
+}
+
+func (m *Plan_Billing) GetStripeCustomerId() string {
+	if m != nil {
+		return m.StripeCustomerId
+	}
+	return ""
 }
 
 type BillingMethod int32
