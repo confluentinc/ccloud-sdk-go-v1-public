@@ -114,6 +114,13 @@ func (m *Account) GetId() string {
 	return ""
 }
 
+func (m *Account) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
 type AccountConfig struct {
 	MaxKafkaClusters     int32    `protobuf:"varint,1,opt,name=max_kafka_clusters,json=maxKafkaClusters,proto3" json:"max_kafka_clusters,omitempty" db:"max_kafka_clusters,omitempty" url:"max_kafka_clusters,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
