@@ -42,6 +42,13 @@ func (m *User) Reset()         { *m = User{} }
 func (m *User) String() string { return proto.CompactTextString(m) }
 func (*User) ProtoMessage()    {}
 
+func (m *User) GetId() int32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func (m *User) GetEmail() string {
 	if m != nil {
 		return m.Email
