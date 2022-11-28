@@ -38,3 +38,7 @@ type Logger interface {
 	Error(...interface{})
 	Errorf(string, ...interface{})
 }
+
+type LoginRealm interface {
+	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
+}

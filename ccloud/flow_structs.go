@@ -127,3 +127,51 @@ type CreateDecisionEngineAuthTokenReply struct {
 func (m *CreateDecisionEngineAuthTokenReply) Reset()         { *m = CreateDecisionEngineAuthTokenReply{} }
 func (m *CreateDecisionEngineAuthTokenReply) String() string { return proto.CompactTextString(m) }
 func (*CreateDecisionEngineAuthTokenReply) ProtoMessage()    {}
+
+type GetLoginRealmRequest struct {
+	ClientId             string            `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty" db:"client_id,omitempty" url:"client_id,omitempty"`
+	Email                string            `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" db:"email,omitempty" url:"email,omitempty"`
+	RequestCarrier       map[string]string `protobuf:"bytes,3,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	OrgResourceId        string            `protobuf:"bytes,4,opt,name=org_resource_id,json=orgResourceId,proto3" json:"org_resource_id,omitempty" db:"org_resource_id,omitempty" url:"org_resource_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *GetLoginRealmRequest) Reset()         { *m = GetLoginRealmRequest{} }
+func (m *GetLoginRealmRequest) String() string { return proto.CompactTextString(m) }
+func (*GetLoginRealmRequest) ProtoMessage()    {}
+
+type GetLoginRealmReply struct {
+	Realm                string   `protobuf:"bytes,1,opt,name=realm,proto3" json:"realm,omitempty" db:"realm,omitempty" url:"realm,omitempty"`
+	IsSso                bool     `protobuf:"varint,2,opt,name=is_sso,json=isSso,proto3" json:"is_sso,omitempty" db:"is_sso,omitempty" url:"is_sso,omitempty"`
+	Error                *Error   `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetLoginRealmReply) Reset()         { *m = GetLoginRealmReply{} }
+func (m *GetLoginRealmReply) String() string { return proto.CompactTextString(m) }
+func (*GetLoginRealmReply) ProtoMessage()    {}
+
+func (m *GetLoginRealmReply) GetRealm() string {
+	if m != nil {
+		return m.Realm
+	}
+	return ""
+}
+
+func (m *GetLoginRealmReply) GetIsSso() bool {
+	if m != nil {
+		return m.IsSso
+	}
+	return false
+}
+
+func (m *GetLoginRealmReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
