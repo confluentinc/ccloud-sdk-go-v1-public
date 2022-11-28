@@ -49,6 +49,13 @@ func (m *User) GetEmail() string {
 	return ""
 }
 
+func (m *User) GetResourceId() string {
+	if m != nil {
+		return m.ResourceId
+	}
+	return ""
+}
+
 func (m *User) GetSocialConnection() string {
 	if m != nil {
 		return m.SocialConnection
