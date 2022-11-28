@@ -728,6 +728,88 @@ type Saml struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
+type CreateAccountRequest struct {
+	Account              *Account          `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty" db:"account,omitempty" url:"account,omitempty"`
+	RequestCarrier       map[string]string `protobuf:"bytes,2,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *CreateAccountRequest) Reset()         { *m = CreateAccountRequest{} }
+func (m *CreateAccountRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateAccountRequest) ProtoMessage()    {}
+
+type CreateAccountReply struct {
+	Account              *Account `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty" db:"account,omitempty" url:"account,omitempty"`
+	Error                *Error   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateAccountReply) Reset()         { *m = CreateAccountReply{} }
+func (m *CreateAccountReply) String() string { return proto.CompactTextString(m) }
+func (*CreateAccountReply) ProtoMessage()    {}
+
+func (m *CreateAccountReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type GetAccountReply struct {
+	Account              *Account `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty" db:"account,omitempty" url:"account,omitempty"`
+	Error                *Error   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetAccountReply) Reset()         { *m = GetAccountReply{} }
+func (m *GetAccountReply) String() string { return proto.CompactTextString(m) }
+func (*GetAccountReply) ProtoMessage()    {}
+
+func (m *GetAccountReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type ListAccountsReply struct {
+	Accounts             []*Account `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts,omitempty" db:"accounts,omitempty" url:"accounts,omitempty"`
+	Error                *Error     `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	PageInfo             *PageInfo  `protobuf:"bytes,3,opt,name=page_info,json=pageInfo,proto3" json:"page_info,omitempty" db:"page_info,omitempty" url:"page_info,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *ListAccountsReply) Reset()         { *m = ListAccountsReply{} }
+func (m *ListAccountsReply) String() string { return proto.CompactTextString(m) }
+func (*ListAccountsReply) ProtoMessage()    {}
+
+func (m *ListAccountsReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type PageInfo struct {
+	PageSize             int32    `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty" db:"page_size,omitempty" url:"page_size,omitempty"`
+	PageToken            string   `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty" db:"page_token,omitempty" url:"page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PageInfo) Reset()         { *m = PageInfo{} }
+func (m *PageInfo) String() string { return proto.CompactTextString(m) }
+func (*PageInfo) ProtoMessage()    {}
+
 func (m *Saml) Size() (n int) {
 	if m == nil {
 		return 0

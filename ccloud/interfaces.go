@@ -4,6 +4,13 @@ import (
 	"context"
 )
 
+// Account service allows managing accounts in Confluent Cloud
+type AccountInterface interface {
+	Create(context.Context, *Account) (*Account, error)
+	Get(context.Context, *Account) (*Account, error)
+	List(context.Context, *Account) ([]*Account, error)
+}
+
 // Auth allows authenticating in Confluent Cloud
 type Auth interface {
 	Login(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
