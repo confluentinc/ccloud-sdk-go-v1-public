@@ -49,6 +49,13 @@ func (m *User) GetEmail() string {
 	return ""
 }
 
+func (m *User) GetAuthType() AuthType {
+	if m != nil {
+		return m.AuthType
+	}
+	return AuthType_AUTH_TYPE_UNKNOWN
+}
+
 type AuthType int32
 
 const (
