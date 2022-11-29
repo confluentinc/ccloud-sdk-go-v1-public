@@ -13,6 +13,10 @@ type Billing interface {
 	GetClaimedPromoCodes(ctx context.Context, org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error)
 }
 
+type Growth interface {
+	GetFreeTrialInfo(context.Context, int32) ([]*GrowthPromoCodeClaim, error)
+}
+
 // Logger provides an interface that will be used for all logging in this client. User provided
 // logging implementations must conform to this interface. Popular loggers like zap and logrus
 // already implement this interface.

@@ -65,6 +65,7 @@ type Client struct {
 	sling *sling.Sling
 	// Auth    Auth
 	Billing Billing
+	Growth  Growth
 }
 
 func GetSlingWithNewClient(s *sling.Sling, client *http.Client, logger Logger) *sling.Sling {
@@ -128,6 +129,7 @@ func NewClient(p *Params) *Client {
 	}
 	// client.Auth = NewAuthService(client)
 	client.Billing = NewBillingService(client)
+	client.Growth = NewGrowthService(client)
 	return client
 }
 
