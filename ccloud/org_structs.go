@@ -291,6 +291,10 @@ type SuspensionStatus struct {
 	XXX_sizecache          int32                `json:"-"`
 }
 
+func (m *SuspensionStatus) Reset()         { *m = SuspensionStatus{} }
+func (m *SuspensionStatus) String() string { return proto.CompactTextString(m) }
+func (*SuspensionStatus) ProtoMessage()    {}
+
 func (m *SuspensionStatus) GetStatus() SuspensionStatusType {
 	if m != nil {
 		return m.Status
