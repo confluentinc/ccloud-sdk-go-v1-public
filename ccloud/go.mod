@@ -1,22 +1,16 @@
 module github.com/confluentinc/ccloud-sdk-go-v1-public/ccloud
 
 require (
+	github.com/confluentinc/ccloud-sdk-go-v1-public v0.0.0-20221129200057-fcec26d70dbc
 	github.com/confluentinc/proto-go-setter v0.0.0-20201026155413-c6ceb267ee65
 	github.com/dghubble/sling v1.2.1-0.20181125223409-7458fd7fa70b
 	github.com/envoyproxy/protoc-gen-validate v0.6.7
 	github.com/gogo/protobuf v1.3.2
-	github.com/google/go-cmp v0.5.7 // indirect
-	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/kr/pretty v0.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.8.0
 	github.com/travisjeffery/proto-go-sql v0.0.0-20190911121832-39ff47280e87
 	github.com/ugorji/go/codec v1.2.7
-	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
-	golang.org/x/sys v0.0.0-20220224120231-95c6836cb0e7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )
 
 replace (
