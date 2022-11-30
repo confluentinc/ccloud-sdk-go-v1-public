@@ -327,6 +327,10 @@ type Plan struct {
 	XXX_sizecache        int32            `json:"-"`
 }
 
+func (m *Plan) Reset()         { *m = Plan{} }
+func (m *Plan) String() string { return proto.CompactTextString(m) }
+func (*Plan) ProtoMessage()    {}
+
 func (m *Plan) GetBilling() *Plan_Billing {
 	if m != nil {
 		return m.Billing
@@ -552,6 +556,10 @@ type Plan_Product struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
+func (m *Plan_Product) Reset()         { *m = Plan_Product{} }
+func (m *Plan_Product) String() string { return proto.CompactTextString(m) }
+func (*Plan_Product) ProtoMessage()    {}
+
 type Plan_Billing struct {
 	Method   BillingMethod   `protobuf:"varint,1,opt,name=method,proto3,enum=kafka.org.v1.BillingMethod" json:"method,omitempty" db:"method,omitempty" url:"method,omitempty"`
 	Interval BillingInterval `protobuf:"varint,2,opt,name=interval,proto3,enum=kafka.org.v1.BillingInterval" json:"interval,omitempty" db:"interval,omitempty" url:"interval,omitempty"`
@@ -564,6 +572,10 @@ type Plan_Billing struct {
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
+
+func (m *Plan_Billing) Reset()         { *m = Plan_Billing{} }
+func (m *Plan_Billing) String() string { return proto.CompactTextString(m) }
+func (*Plan_Billing) ProtoMessage()    {}
 
 func (m *Plan_Billing) GetMethod() BillingMethod {
 	if m != nil {
@@ -745,6 +757,10 @@ type Saml struct {
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
+
+func (m *Saml) Reset()         { *m = Saml{} }
+func (m *Saml) String() string { return proto.CompactTextString(m) }
+func (*Saml) ProtoMessage()    {}
 
 type CreateAccountRequest struct {
 	Account              *Account          `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty" db:"account,omitempty" url:"account,omitempty"`
