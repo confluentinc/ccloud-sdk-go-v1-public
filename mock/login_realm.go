@@ -8,24 +8,24 @@ import (
 	context "context"
 	sync "sync"
 
-	github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud "github.com/confluentinc/ccloud-sdk-go-v1-public/ccloud"
+	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
 )
 
 // LoginRealm is a mock of LoginRealm interface
 type LoginRealm struct {
 	lockLoginRealm sync.Mutex
-	LoginRealmFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmReply, error)
+	LoginRealmFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmReply, error)
 
 	calls struct {
 		LoginRealm []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmRequest
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
 		}
 	}
 }
 
 // LoginRealm mocks base method by wrapping the associated func.
-func (m *LoginRealm) LoginRealm(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmReply, error) {
+func (m *LoginRealm) LoginRealm(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmReply, error) {
 	m.lockLoginRealm.Lock()
 	defer m.lockLoginRealm.Unlock()
 
@@ -35,7 +35,7 @@ func (m *LoginRealm) LoginRealm(arg0 context.Context, arg1 *github_com_confluent
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmRequest
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -57,7 +57,7 @@ func (m *LoginRealm) LoginRealmCalled() bool {
 // LoginRealmCalls returns the calls made to LoginRealm.
 func (m *LoginRealm) LoginRealmCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.GetLoginRealmRequest
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
 } {
 	m.lockLoginRealm.Lock()
 	defer m.lockLoginRealm.Unlock()

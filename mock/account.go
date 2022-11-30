@@ -8,38 +8,38 @@ import (
 	context "context"
 	sync "sync"
 
-	github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud "github.com/confluentinc/ccloud-sdk-go-v1-public/ccloud"
+	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
 )
 
 // AccountInterface is a mock of AccountInterface interface
 type AccountInterface struct {
 	lockCreate sync.Mutex
-	CreateFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account, error)
+	CreateFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Account, error)
 
 	lockGet sync.Mutex
-	GetFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account, error)
+	GetFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Account, error)
 
 	lockList sync.Mutex
-	ListFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account, error)
+	ListFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.Account, error)
 
 	calls struct {
 		Create []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 		}
 		Get []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 		}
 		List []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 		}
 	}
 }
 
 // Create mocks base method by wrapping the associated func.
-func (m *AccountInterface) Create(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account, error) {
+func (m *AccountInterface) Create(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Account, error) {
 	m.lockCreate.Lock()
 	defer m.lockCreate.Unlock()
 
@@ -49,7 +49,7 @@ func (m *AccountInterface) Create(arg0 context.Context, arg1 *github_com_conflue
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -71,7 +71,7 @@ func (m *AccountInterface) CreateCalled() bool {
 // CreateCalls returns the calls made to Create.
 func (m *AccountInterface) CreateCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 } {
 	m.lockCreate.Lock()
 	defer m.lockCreate.Unlock()
@@ -80,7 +80,7 @@ func (m *AccountInterface) CreateCalls() []struct {
 }
 
 // Get mocks base method by wrapping the associated func.
-func (m *AccountInterface) Get(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account, error) {
+func (m *AccountInterface) Get(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Account, error) {
 	m.lockGet.Lock()
 	defer m.lockGet.Unlock()
 
@@ -90,7 +90,7 @@ func (m *AccountInterface) Get(arg0 context.Context, arg1 *github_com_confluenti
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -112,7 +112,7 @@ func (m *AccountInterface) GetCalled() bool {
 // GetCalls returns the calls made to Get.
 func (m *AccountInterface) GetCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 } {
 	m.lockGet.Lock()
 	defer m.lockGet.Unlock()
@@ -121,7 +121,7 @@ func (m *AccountInterface) GetCalls() []struct {
 }
 
 // List mocks base method by wrapping the associated func.
-func (m *AccountInterface) List(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account, error) {
+func (m *AccountInterface) List(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.Account, error) {
 	m.lockList.Lock()
 	defer m.lockList.Unlock()
 
@@ -131,7 +131,7 @@ func (m *AccountInterface) List(arg0 context.Context, arg1 *github_com_confluent
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -153,7 +153,7 @@ func (m *AccountInterface) ListCalled() bool {
 // ListCalls returns the calls made to List.
 func (m *AccountInterface) ListCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.Account
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.Account
 } {
 	m.lockList.Lock()
 	defer m.lockList.Unlock()

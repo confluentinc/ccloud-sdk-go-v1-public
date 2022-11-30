@@ -8,31 +8,31 @@ import (
 	context "context"
 	sync "sync"
 
-	github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud "github.com/confluentinc/ccloud-sdk-go-v1-public/ccloud"
+	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
 )
 
 // Signup is a mock of Signup interface
 type Signup struct {
 	lockCreate sync.Mutex
-	CreateFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupReply, error)
+	CreateFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SignupRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SignupReply, error)
 
 	lockSendVerificationEmail sync.Mutex
-	SendVerificationEmailFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.User) error
+	SendVerificationEmailFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.User) error
 
 	calls struct {
 		Create []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupRequest
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SignupRequest
 		}
 		SendVerificationEmail []struct {
 			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.User
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.User
 		}
 	}
 }
 
 // Create mocks base method by wrapping the associated func.
-func (m *Signup) Create(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupReply, error) {
+func (m *Signup) Create(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SignupRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SignupReply, error) {
 	m.lockCreate.Lock()
 	defer m.lockCreate.Unlock()
 
@@ -42,7 +42,7 @@ func (m *Signup) Create(arg0 context.Context, arg1 *github_com_confluentinc_cclo
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupRequest
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SignupRequest
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -64,7 +64,7 @@ func (m *Signup) CreateCalled() bool {
 // CreateCalls returns the calls made to Create.
 func (m *Signup) CreateCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.SignupRequest
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SignupRequest
 } {
 	m.lockCreate.Lock()
 	defer m.lockCreate.Unlock()
@@ -73,7 +73,7 @@ func (m *Signup) CreateCalls() []struct {
 }
 
 // SendVerificationEmail mocks base method by wrapping the associated func.
-func (m *Signup) SendVerificationEmail(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.User) error {
+func (m *Signup) SendVerificationEmail(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.User) error {
 	m.lockSendVerificationEmail.Lock()
 	defer m.lockSendVerificationEmail.Unlock()
 
@@ -83,7 +83,7 @@ func (m *Signup) SendVerificationEmail(arg0 context.Context, arg1 *github_com_co
 
 	call := struct {
 		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.User
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.User
 	}{
 		Arg0: arg0,
 		Arg1: arg1,
@@ -105,7 +105,7 @@ func (m *Signup) SendVerificationEmailCalled() bool {
 // SendVerificationEmailCalls returns the calls made to SendVerificationEmail.
 func (m *Signup) SendVerificationEmailCalls() []struct {
 	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public_ccloud.User
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.User
 } {
 	m.lockSendVerificationEmail.Lock()
 	defer m.lockSendVerificationEmail.Unlock()
