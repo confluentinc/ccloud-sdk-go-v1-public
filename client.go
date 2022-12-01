@@ -62,10 +62,13 @@ type Params struct {
 // Client represents the Confluent SDK client.
 type Client struct {
 	*Params
-	sling *sling.Sling
-	// Auth    Auth
-	Billing Billing
-	Growth  Growth
+	sling      *sling.Sling
+	Account    AccountInterface
+	Auth       Auth
+	Signup     Signup
+	Billing    Billing
+	LoginRealm LoginRealm
+	Growth     Growth
 }
 
 func GetSlingWithNewClient(s *sling.Sling, client *http.Client, logger Logger) *sling.Sling {
@@ -127,8 +130,11 @@ func NewClient(p *Params) *Client {
 			Set("User-Agent", p.UserAgent).
 			ResponseDecoder(NewJSONPBDecoder()),
 	}
-	// client.Auth = NewAuthService(client)
+	client.Auth = NewAuthService(client)
+	client.Account = NewAccountService(client)
 	client.Billing = NewBillingService(client)
+	client.Signup = NewSignupService(client)
+	client.LoginRealm = NewLoginRealmService(client)
 	client.Growth = NewGrowthService(client)
 	return client
 }

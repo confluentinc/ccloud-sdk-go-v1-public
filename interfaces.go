@@ -4,6 +4,25 @@ import (
 	"context"
 )
 
+// Account service allows managing accounts in Confluent Cloud
+type AccountInterface interface {
+	Create(context.Context, *Account) (*Account, error)
+	Get(context.Context, *Account) (*Account, error)
+	List(context.Context, *Account) ([]*Account, error)
+}
+
+// Auth allows authenticating in Confluent Cloud
+type Auth interface {
+	Login(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
+	User(context.Context) (*GetMeReply, error)
+}
+
+// Signup service allows managing signups in Confluent Cloud
+type Signup interface {
+	Create(context.Context, *SignupRequest) (*SignupReply, error)
+	SendVerificationEmail(context.Context, *User) error
+}
+
 // Billing service allows getting billing information for an org in Confluent Cloud
 type Billing interface {
 	GetPriceTable(ctx context.Context, org *Organization, product string) (*PriceTable, error)
@@ -29,4 +48,8 @@ type Logger interface {
 	Warnf(string, ...interface{})
 	Error(...interface{})
 	Errorf(string, ...interface{})
+}
+
+type LoginRealm interface {
+	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
 }
