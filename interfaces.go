@@ -17,12 +17,6 @@ type Auth interface {
 	User(context.Context) (*GetMeReply, error)
 }
 
-// Signup service allows managing signups in Confluent Cloud
-type Signup interface {
-	Create(context.Context, *SignupRequest) (*SignupReply, error)
-	SendVerificationEmail(context.Context, *User) error
-}
-
 // Billing service allows getting billing information for an org in Confluent Cloud
 type Billing interface {
 	GetPriceTable(ctx context.Context, org *Organization, product string) (*PriceTable, error)
@@ -32,8 +26,23 @@ type Billing interface {
 	GetClaimedPromoCodes(ctx context.Context, org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error)
 }
 
+// External Identity services allow managing external identities for Bring-Your-Own-Key in Confluent Cloud.
+type ExternalIdentity interface {
+	CreateExternalIdentity(ctx context.Context, cloud, accountID string) (externalIdentityName string, err error)
+}
+
 type Growth interface {
 	GetFreeTrialInfo(context.Context, int32) ([]*GrowthPromoCodeClaim, error)
+}
+
+type LoginRealm interface {
+	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
+}
+
+// Signup service allows managing signups in Confluent Cloud
+type Signup interface {
+	Create(context.Context, *SignupRequest) (*SignupReply, error)
+	SendVerificationEmail(context.Context, *User) error
 }
 
 // Logger provides an interface that will be used for all logging in this client. User provided
@@ -48,8 +57,4 @@ type Logger interface {
 	Warnf(string, ...interface{})
 	Error(...interface{})
 	Errorf(string, ...interface{})
-}
-
-type LoginRealm interface {
-	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
 }
