@@ -26,6 +26,11 @@ type Billing interface {
 	GetClaimedPromoCodes(ctx context.Context, org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error)
 }
 
+// Environment metadata service allows getting information about available cloud regions data
+type EnvironmentMetadata interface {
+	Get(context.Context) ([]*CloudMetadata, error)
+}
+
 // External Identity services allow managing external identities for Bring-Your-Own-Key in Confluent Cloud.
 type ExternalIdentity interface {
 	CreateExternalIdentity(ctx context.Context, cloud, accountID string) (externalIdentityName string, err error)
