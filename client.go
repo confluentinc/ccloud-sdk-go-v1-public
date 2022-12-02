@@ -135,6 +135,7 @@ func NewClient(p *Params) *Client {
 	client.Auth = NewAuthService(client)
 	client.Account = NewAccountService(client)
 	client.Billing = NewBillingService(client)
+	client.EnvironmentMetadata = NewEnvironmentMetadataService(client)
 	client.ExternalIdentity = NewExternalIdentityService(client)
 	client.Growth = NewGrowthService(client)
 	client.LoginRealm = NewLoginRealmService(client)
