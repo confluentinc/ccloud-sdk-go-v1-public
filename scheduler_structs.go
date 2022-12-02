@@ -46,6 +46,27 @@ func (m *Region) Reset()         { *m = Region{} }
 func (m *Region) String() string { return proto.CompactTextString(m) }
 func (*Region) ProtoMessage()    {}
 
+func (m *Region) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *Region) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Region) GetIsSchedulable() bool {
+	if m != nil {
+		return m.IsSchedulable
+	}
+	return false
+}
+
 type AvailabilityZone struct {
 	// us-west-2
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" db:"name,omitempty" url:"name,omitempty"`
