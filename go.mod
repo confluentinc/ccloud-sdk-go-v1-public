@@ -5,6 +5,7 @@ require (
 	github.com/dghubble/sling v1.2.1-0.20181125223409-7458fd7fa70b
 	github.com/envoyproxy/protoc-gen-validate v0.6.7
 	github.com/gogo/protobuf v1.3.2
+	github.com/golang/protobuf v1.5.2
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.8.0

@@ -39,6 +39,43 @@ func (e *Error) Error() string {
 	return b.String()
 }
 
+// E is a useful func for instantiating corev1.Errors.
+func E(args ...interface{}) error {
+	if len(args) == 0 {
+		panic("call to E with no arguments")
+	}
+	e := &Error{}
+	b := new(bytes.Buffer)
+	var stack bool
+	for _, arg := range args {
+		switch arg := arg.(type) {
+		case string:
+			pad(b, ": ")
+			b.WriteString(arg)
+		case int32:
+			e.Code = arg
+		case int:
+			e.Code = int32(arg)
+		case bool:
+			stack = true
+		case error:
+			pad(b, ": ")
+			b.WriteString(arg.Error())
+		}
+	}
+	e.Message = b.String()
+	if stack {
+		e.populateStack()
+	}
+	return e
+}
+
+// populateStack uses the runtime to populate the Error's stack struct with
+// information about the current stack.
+func (e *Error) populateStack() {
+	e.Stack = &Stack{Callers: callers()}
+}
+
 // pad appends str to the buffer if the buffer already has some data.
 func pad(b *bytes.Buffer, str string) {
 	if b.Len() == 0 {

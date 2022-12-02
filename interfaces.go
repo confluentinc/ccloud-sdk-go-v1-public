@@ -36,6 +36,11 @@ type Growth interface {
 	GetFreeTrialInfo(context.Context, int32) ([]*GrowthPromoCodeClaim, error)
 }
 
+// External Identity services allow managing external identities for Bring-Your-Own-Key in Confluent Cloud.
+type ExternalIdentity interface {
+	CreateExternalIdentity(ctx context.Context, cloud, accountID string) (externalIdentityName string, err error)
+}
+
 // Logger provides an interface that will be used for all logging in this client. User provided
 // logging implementations must conform to this interface. Popular loggers like zap and logrus
 // already implement this interface.
