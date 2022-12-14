@@ -69,8 +69,8 @@ type Client struct {
 	EnvironmentMetadata EnvironmentMetadata
 	ExternalIdentity    ExternalIdentity
 	Growth              Growth
-	LoginRealm          LoginRealm
 	Signup              Signup
+	User                UserInterface
 }
 
 func GetSlingWithNewClient(s *sling.Sling, client *http.Client, logger Logger) *sling.Sling {
@@ -138,8 +138,8 @@ func NewClient(p *Params) *Client {
 	client.EnvironmentMetadata = NewEnvironmentMetadataService(client)
 	client.ExternalIdentity = NewExternalIdentityService(client)
 	client.Growth = NewGrowthService(client)
-	client.LoginRealm = NewLoginRealmService(client)
 	client.Signup = NewSignupService(client)
+	client.User = NewUserService(client)
 	return client
 }
 

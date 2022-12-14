@@ -40,7 +40,11 @@ type Growth interface {
 	GetFreeTrialInfo(context.Context, int32) ([]*GrowthPromoCodeClaim, error)
 }
 
-type LoginRealm interface {
+// User service allows managing users in Confluent Cloud
+type UserInterface interface {
+	List(context.Context) ([]*User, error)
+	GetServiceAccounts(context.Context) ([]*User, error)
+	GetServiceAccount(context.Context, int32) (*User, error)
 	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
 }
 

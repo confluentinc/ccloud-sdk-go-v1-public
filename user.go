@@ -3,6 +3,7 @@ package ccloud
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/dghubble/sling"
@@ -26,23 +27,54 @@ const (
 )
 
 // UserService provides methods for managing users on Confluent Control Plane.
-type LoginRealmService struct {
+type UserService struct {
 	client *http.Client
 	sling  *sling.Sling
 }
 
-var _ LoginRealm = (*LoginRealmService)(nil)
+var _ UserInterface = (*UserService)(nil)
 
 // NewUserService returns a new UserService.
-func NewLoginRealmService(client *Client) *LoginRealmService {
-	return &LoginRealmService{
+func NewUserService(client *Client) *UserService {
+	return &UserService{
 		client: client.HttpClient,
 		sling:  client.sling,
 	}
 }
 
+// List returns the users in the authenticated user's organization.
+func (s *UserService) List(_ context.Context) ([]*User, error) {
+	reply := new(GetUsersReply)
+	_, err := s.sling.New().Get(USERS).Receive(reply, reply)
+	if err := ReplyErr(reply, err); err != nil {
+		return nil, WrapErr(err, "error retrieving users")
+	}
+	return reply.Users, nil
+}
+
+// GetServiceAccounts returns a collection of service account users.
+func (s *UserService) GetServiceAccounts(_ context.Context) ([]*User, error) {
+	reply := new(GetServiceAccountsReply)
+
+	_, err := s.sling.New().Get(SERVICEACCOUNTS).Receive(reply, reply)
+	if err := ReplyErr(reply, err); err != nil {
+		return nil, WrapErr(err, "error listing service account")
+	}
+
+	return reply.Users, nil
+}
+
+// GetServiceAccount returns a service account user.
+func (s *UserService) GetServiceAccount(_ context.Context, id int32) (*User, error) {
+	url := fmt.Sprintf(SERVICEACCOUNT, id)
+	res := new(GetServiceAccountReply)
+
+	_, err := s.sling.New().Get(url).Receive(res, res)
+	return res.User, WrapErr(ReplyErr(res, err), "error getting service account")
+}
+
 // LoginRealm gets a user's login realm information. can be used to determine if the user is an SSO user
-func (s *LoginRealmService) LoginRealm(_ context.Context, req *GetLoginRealmRequest) (*GetLoginRealmReply, error) {
+func (s *UserService) LoginRealm(_ context.Context, req *GetLoginRealmRequest) (*GetLoginRealmReply, error) {
 	reply := new(GetLoginRealmReply)
 
 	if req == nil || req.Email == "" {
