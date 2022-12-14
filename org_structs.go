@@ -101,6 +101,102 @@ func (x AuthType) String() string {
 	return proto.EnumName(AuthType_name, int32(x))
 }
 
+type GetUsersReply struct {
+	Users                []*User   `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty" db:"users,omitempty" url:"users,omitempty"`
+	Error                *Error    `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	PageInfo             *PageInfo `protobuf:"bytes,3,opt,name=page_info,json=pageInfo,proto3" json:"page_info,omitempty" db:"page_info,omitempty" url:"page_info,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *GetUsersReply) Reset()         { *m = GetUsersReply{} }
+func (m *GetUsersReply) String() string { return proto.CompactTextString(m) }
+func (*GetUsersReply) ProtoMessage()    {}
+
+func (m *GetUsersReply) GetUsers() []*User {
+	if m != nil {
+		return m.Users
+	}
+	return nil
+}
+
+func (m *GetUsersReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+func (m *GetUsersReply) GetPageInfo() *PageInfo {
+	if m != nil {
+		return m.PageInfo
+	}
+	return nil
+}
+
+// GetServiceAccountReply contains the requested service account user
+type GetServiceAccountReply struct {
+	User                 *User    `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty" db:"user,omitempty" url:"user,omitempty"`
+	Error                *Error   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetServiceAccountReply) Reset()         { *m = GetServiceAccountReply{} }
+func (m *GetServiceAccountReply) String() string { return proto.CompactTextString(m) }
+func (*GetServiceAccountReply) ProtoMessage()    {}
+
+func (m *GetServiceAccountReply) GetUser() *User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+func (m *GetServiceAccountReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+// GetServiceAccountsReply contains the requests service account user
+type GetServiceAccountsReply struct {
+	Users                []*User   `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty" db:"users,omitempty" url:"users,omitempty"`
+	Error                *Error    `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	PageInfo             *PageInfo `protobuf:"bytes,3,opt,name=page_info,json=pageInfo,proto3" json:"page_info,omitempty" db:"page_info,omitempty" url:"page_info,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *GetServiceAccountsReply) Reset()         { *m = GetServiceAccountsReply{} }
+func (m *GetServiceAccountsReply) String() string { return proto.CompactTextString(m) }
+func (*GetServiceAccountsReply) ProtoMessage()    {}
+
+func (m *GetServiceAccountsReply) GetUsers() []*User {
+	if m != nil {
+		return m.Users
+	}
+	return nil
+}
+
+func (m *GetServiceAccountsReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+func (m *GetServiceAccountsReply) GetPageInfo() *PageInfo {
+	if m != nil {
+		return m.PageInfo
+	}
+	return nil
+}
+
 type Account struct {
 	Id                   string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" db:"id,omitempty" url:"id,omitempty"`
 	Name                 string           `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" db:"name,omitempty" url:"name,omitempty"`
