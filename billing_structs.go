@@ -144,6 +144,13 @@ func (m *PriceTable) Reset()         { *m = PriceTable{} }
 func (m *PriceTable) String() string { return proto.CompactTextString(m) }
 func (*PriceTable) ProtoMessage()    {}
 
+func (m *PriceTable) GetPriceTable() map[string]*UnitPrices {
+	if m != nil {
+		return m.PriceTable
+	}
+	return nil
+}
+
 type UnitPrices struct {
 	Prices               map[string]float64 `protobuf:"bytes,1,rep,name=prices,proto3" json:"prices,omitempty" db:"prices,omitempty" url:"prices,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed64,2,opt,name=value,proto3"`
 	Unit                 string             `protobuf:"bytes,2,opt,name=unit,proto3" json:"unit,omitempty" db:"unit,omitempty" url:"unit,omitempty"`
