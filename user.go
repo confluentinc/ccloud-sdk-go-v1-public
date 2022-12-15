@@ -58,7 +58,7 @@ func (s *UserService) GetServiceAccounts(_ context.Context) ([]*User, error) {
 
 	_, err := s.sling.New().Get(SERVICEACCOUNTS).Receive(reply, reply)
 	if err := ReplyErr(reply, err); err != nil {
-		return nil, WrapErr(err, "error listing service account")
+		return nil, WrapErr(err, "error listing service accounts")
 	}
 
 	return reply.Users, nil
