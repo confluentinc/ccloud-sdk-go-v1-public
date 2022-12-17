@@ -40,18 +40,27 @@ type Growth interface {
 	GetFreeTrialInfo(context.Context, int32) ([]*GrowthPromoCodeClaim, error)
 }
 
-// User service allows managing users in Confluent Cloud
-type UserInterface interface {
-	List(context.Context) ([]*User, error)
-	GetServiceAccounts(context.Context) ([]*User, error)
-	GetServiceAccount(context.Context, int32) (*User, error)
-	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
+// Schema Registry service allows managing SR clusters in Confluent Cloud
+type SchemaRegistry interface {
+	CreateSchemaRegistryCluster(context.Context, *SchemaRegistryClusterConfig) (*SchemaRegistryCluster, error)
+	GetSchemaRegistryClusters(context.Context, *SchemaRegistryCluster) ([]*SchemaRegistryCluster, error)
+	GetSchemaRegistryCluster(context.Context, *SchemaRegistryCluster) (*SchemaRegistryCluster, error)
+	UpdateSchemaRegistryCluster(context.Context, *SchemaRegistryCluster) (*SchemaRegistryCluster, error)
+	DeleteSchemaRegistryCluster(context.Context, *SchemaRegistryCluster) error
 }
 
 // Signup service allows managing signups in Confluent Cloud
 type Signup interface {
 	Create(context.Context, *SignupRequest) (*SignupReply, error)
 	SendVerificationEmail(context.Context, *User) error
+}
+
+// User service allows managing users in Confluent Cloud
+type UserInterface interface {
+	List(context.Context) ([]*User, error)
+	GetServiceAccounts(context.Context) ([]*User, error)
+	GetServiceAccount(context.Context, int32) (*User, error)
+	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
 }
 
 // Logger provides an interface that will be used for all logging in this client. User provided

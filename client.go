@@ -69,6 +69,7 @@ type Client struct {
 	EnvironmentMetadata EnvironmentMetadata
 	ExternalIdentity    ExternalIdentity
 	Growth              Growth
+	SchemaRegistry      SchemaRegistry
 	Signup              Signup
 	User                UserInterface
 }
@@ -138,6 +139,7 @@ func NewClient(p *Params) *Client {
 	client.EnvironmentMetadata = NewEnvironmentMetadataService(client)
 	client.ExternalIdentity = NewExternalIdentityService(client)
 	client.Growth = NewGrowthService(client)
+	client.SchemaRegistry = NewSchemaRegistryService(client)
 	client.Signup = NewSignupService(client)
 	client.User = NewUserService(client)
 	return client

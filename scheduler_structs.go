@@ -324,3 +324,355 @@ var GlobalSchemaRegistryLocation_value = map[string]int32{
 func (x GlobalSchemaRegistryLocation) String() string {
 	return proto.EnumName(GlobalSchemaRegistryLocation_name, int32(x))
 }
+
+type SchemaRegistryClusterConfig struct {
+	Name                  string                       `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" db:"name,omitempty" url:"name,omitempty"` // Deprecated: Do not use.
+	KafkaClusterId        string                       `protobuf:"bytes,1,opt,name=kafka_cluster_id,json=kafkaClusterId,proto3" json:"kafka_cluster_id,omitempty" db:"kafka_cluster_id,omitempty" url:"kafka_cluster_id,omitempty"`
+	Servers               int32                        `protobuf:"varint,2,opt,name=servers,proto3" json:"servers,omitempty" db:"servers,omitempty" url:"servers,omitempty"`
+	AccountId             string                       `protobuf:"bytes,3,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty" db:"account_id,omitempty" url:"account_id,omitempty"`
+	Location              GlobalSchemaRegistryLocation `protobuf:"varint,5,opt,name=location,proto3,enum=kafka.scheduler.v1.GlobalSchemaRegistryLocation" json:"location,omitempty" db:"location,omitempty" url:"location,omitempty"` // Deprecated: Do not use.
+	ServiceProvider       string                       `protobuf:"bytes,6,opt,name=service_provider,json=serviceProvider,proto3" json:"service_provider,omitempty" db:"service_provider,omitempty" url:"service_provider,omitempty"`
+	PhysicalClusterId     string                       `protobuf:"bytes,7,opt,name=physical_cluster_id,json=physicalClusterId,proto3" json:"physical_cluster_id,omitempty" db:"physical_cluster_id,omitempty" url:"physical_cluster_id,omitempty"`
+	Package               string                       `protobuf:"bytes,8,opt,name=package,proto3" json:"package,omitempty" db:"package,omitempty" url:"package,omitempty"`
+	ServiceProviderRegion string                       `protobuf:"bytes,9,opt,name=service_provider_region,json=serviceProviderRegion,proto3" json:"service_provider_region,omitempty" db:"service_provider_region,omitempty" url:"service_provider_region,omitempty"`
+	Region                *StreamGovernanceRegion      `protobuf:"bytes,10,opt,name=region,proto3" json:"region,omitempty" db:"region,omitempty" url:"region,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{}                     `json:"-"`
+	XXX_unrecognized      []byte                       `json:"-"`
+	XXX_sizecache         int32                        `json:"-"`
+}
+
+func (m *SchemaRegistryClusterConfig) Reset()         { *m = SchemaRegistryClusterConfig{} }
+func (m *SchemaRegistryClusterConfig) String() string { return proto.CompactTextString(m) }
+func (*SchemaRegistryClusterConfig) ProtoMessage()    {}
+
+type StreamGovernanceRegion struct {
+	Created              *types.Timestamp               `protobuf:"bytes,1,opt,name=created,proto3" json:"created,omitempty" db:"created,omitempty" url:"created,omitempty"`
+	Modified             *types.Timestamp               `protobuf:"bytes,2,opt,name=modified,proto3" json:"modified,omitempty" db:"modified,omitempty" url:"modified,omitempty"`
+	Deactivated          *types.Timestamp               `protobuf:"bytes,3,opt,name=deactivated,proto3" json:"deactivated,omitempty" db:"deactivated,omitempty" url:"deactivated,omitempty"`
+	Id                   string                         `protobuf:"bytes,4,opt,name=id,proto3" json:"id,omitempty" db:"id,omitempty" url:"id,omitempty"`
+	DisplayName          string                         `protobuf:"bytes,5,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty" db:"display_name,omitempty" url:"display_name,omitempty"`
+	Cloud                string                         `protobuf:"bytes,6,opt,name=cloud,proto3" json:"cloud,omitempty" db:"cloud,omitempty" url:"cloud,omitempty"`
+	RegionId             string                         `protobuf:"bytes,7,opt,name=region_id,json=regionId,proto3" json:"region_id,omitempty" db:"region_id,omitempty" url:"region_id,omitempty"`
+	EnvironmentId        string                         `protobuf:"bytes,8,opt,name=environment_id,json=environmentId,proto3" json:"environment_id,omitempty" db:"environment_id,omitempty" url:"environment_id,omitempty"`
+	Config               *StreamGovernanceRegion_Config `protobuf:"bytes,9,opt,name=config,proto3" json:"config,omitempty" db:"config,omitempty" url:"config,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *StreamGovernanceRegion) Reset()         { *m = StreamGovernanceRegion{} }
+func (m *StreamGovernanceRegion) String() string { return proto.CompactTextString(m) }
+func (*StreamGovernanceRegion) ProtoMessage()    {}
+
+type StreamGovernanceRegion_Config struct {
+	ClusterId            string   `protobuf:"bytes,1,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty" db:"cluster_id,omitempty" url:"cluster_id,omitempty"`
+	Package              []string `protobuf:"bytes,2,rep,name=package,proto3" json:"package,omitempty" db:"package,omitempty" url:"package,omitempty"`
+	GeolocationName      string   `protobuf:"bytes,4,opt,name=geolocation_name,json=geolocationName,proto3" json:"geolocation_name,omitempty" db:"geolocation_name,omitempty" url:"geolocation_name,omitempty"` // Deprecated: Do not use.
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *StreamGovernanceRegion_Config) Reset()         { *m = StreamGovernanceRegion_Config{} }
+func (m *StreamGovernanceRegion_Config) String() string { return proto.CompactTextString(m) }
+func (*StreamGovernanceRegion_Config) ProtoMessage()    {}
+
+type SchemaRegistryCluster struct {
+	Id                string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" db:"id,omitempty" url:"id,omitempty"`
+	Name              string           `protobuf:"bytes,10,opt,name=name,proto3" json:"name,omitempty" db:"name,omitempty" url:"name,omitempty"`
+	KafkaClusterId    string           `protobuf:"bytes,2,opt,name=kafka_cluster_id,json=kafkaClusterId,proto3" json:"kafka_cluster_id,omitempty" db:"kafka_cluster_id,omitempty" url:"kafka_cluster_id,omitempty"`
+	Endpoint          string           `protobuf:"bytes,3,opt,name=endpoint,proto3" json:"endpoint,omitempty" db:"endpoint,omitempty" url:"endpoint,omitempty"`
+	Created           *types.Timestamp `protobuf:"bytes,4,opt,name=created,proto3" json:"created,omitempty" db:"created,omitempty" url:"created,omitempty"`
+	Modified          *types.Timestamp `protobuf:"bytes,5,opt,name=modified,proto3" json:"modified,omitempty" db:"modified,omitempty" url:"modified,omitempty"`
+	Status            ClusterStatus    `protobuf:"varint,6,opt,name=status,proto3,enum=kafka.scheduler.v1.ClusterStatus" json:"status,omitempty" db:"status,omitempty" url:"status,omitempty"`
+	PhysicalClusterId string           `protobuf:"bytes,7,opt,name=physical_cluster_id,json=physicalClusterId,proto3" json:"physical_cluster_id,omitempty" db:"physical_cluster_id,omitempty" url:"physical_cluster_id,omitempty"`
+	AccountId         string           `protobuf:"bytes,8,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty" url:"account_id" db:"account_id,omitempty"`
+	OrganizationId    int32            `protobuf:"varint,9,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty" db:"organization_id,omitempty" url:"organization_id,omitempty"`
+	// maximum number of schemas allowed for this logical cluster
+	MaxSchemas            int32                   `protobuf:"varint,11,opt,name=max_schemas,json=maxSchemas,proto3" json:"max_schemas,omitempty" db:"max_schemas,omitempty" url:"max_schemas,omitempty"`
+	OrgResourceId         string                  `protobuf:"bytes,12,opt,name=org_resource_id,json=orgResourceId,proto3" json:"org_resource_id,omitempty" db:"org_resource_id,omitempty" url:"org_resource_id,omitempty"`
+	Package               string                  `protobuf:"bytes,13,opt,name=package,proto3" json:"package,omitempty" db:"package,omitempty" url:"package,omitempty"`
+	ServiceProvider       string                  `protobuf:"bytes,17,opt,name=service_provider,json=serviceProvider,proto3" json:"service_provider,omitempty" db:"service_provider,omitempty" url:"service_provider,omitempty"`
+	ServiceProviderRegion string                  `protobuf:"bytes,18,opt,name=service_provider_region,json=serviceProviderRegion,proto3" json:"service_provider_region,omitempty" db:"service_provider_region,omitempty" url:"service_provider_region,omitempty"`
+	Region                *StreamGovernanceRegion `protobuf:"bytes,19,opt,name=region,proto3" json:"region,omitempty" db:"region,omitempty" url:"region,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{}                `json:"-"`
+	XXX_unrecognized      []byte                  `json:"-"`
+	XXX_sizecache         int32                   `json:"-"`
+}
+
+func (m *SchemaRegistryCluster) Reset()         { *m = SchemaRegistryCluster{} }
+func (m *SchemaRegistryCluster) String() string { return proto.CompactTextString(m) }
+func (*SchemaRegistryCluster) ProtoMessage()    {}
+
+func (m *SchemaRegistryCluster) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetKafkaClusterId() string {
+	if m != nil {
+		return m.KafkaClusterId
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetEndpoint() string {
+	if m != nil {
+		return m.Endpoint
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetCreated() *types.Timestamp {
+	if m != nil {
+		return m.Created
+	}
+	return nil
+}
+
+func (m *SchemaRegistryCluster) GetModified() *types.Timestamp {
+	if m != nil {
+		return m.Modified
+	}
+	return nil
+}
+
+func (m *SchemaRegistryCluster) GetStatus() ClusterStatus {
+	if m != nil {
+		return m.Status
+	}
+	return ClusterStatus_PROVISIONING
+}
+
+func (m *SchemaRegistryCluster) GetPhysicalClusterId() string {
+	if m != nil {
+		return m.PhysicalClusterId
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetAccountId() string {
+	if m != nil {
+		return m.AccountId
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetOrganizationId() int32 {
+	if m != nil {
+		return m.OrganizationId
+	}
+	return 0
+}
+
+func (m *SchemaRegistryCluster) GetMaxSchemas() int32 {
+	if m != nil {
+		return m.MaxSchemas
+	}
+	return 0
+}
+
+func (m *SchemaRegistryCluster) GetOrgResourceId() string {
+	if m != nil {
+		return m.OrgResourceId
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetPackage() string {
+	if m != nil {
+		return m.Package
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetServiceProvider() string {
+	if m != nil {
+		return m.ServiceProvider
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetServiceProviderRegion() string {
+	if m != nil {
+		return m.ServiceProviderRegion
+	}
+	return ""
+}
+
+func (m *SchemaRegistryCluster) GetRegion() *StreamGovernanceRegion {
+	if m != nil {
+		return m.Region
+	}
+	return nil
+}
+
+type ClusterStatus int32
+
+const (
+	ClusterStatus_PROVISIONING      ClusterStatus = 0
+	ClusterStatus_UP                ClusterStatus = 1
+	ClusterStatus_DOWN              ClusterStatus = 2
+	ClusterStatus_DELETING          ClusterStatus = 3
+	ClusterStatus_DELETED           ClusterStatus = 4
+	ClusterStatus_EXPANSION_PENDING ClusterStatus = 5
+	ClusterStatus_EXPANDING         ClusterStatus = 6
+	ClusterStatus_SHRINK_PENDING    ClusterStatus = 7
+	ClusterStatus_SHRINKING         ClusterStatus = 8
+	ClusterStatus_STORAGE_EXPANDING ClusterStatus = 9
+)
+
+var ClusterStatus_name = map[int32]string{
+	0: "PROVISIONING",
+	1: "UP",
+	2: "DOWN",
+	3: "DELETING",
+	4: "DELETED",
+	5: "EXPANSION_PENDING",
+	6: "EXPANDING",
+	7: "SHRINK_PENDING",
+	8: "SHRINKING",
+	9: "STORAGE_EXPANDING",
+}
+
+var ClusterStatus_value = map[string]int32{
+	"PROVISIONING":      0,
+	"UP":                1,
+	"DOWN":              2,
+	"DELETING":          3,
+	"DELETED":           4,
+	"EXPANSION_PENDING": 5,
+	"EXPANDING":         6,
+	"SHRINK_PENDING":    7,
+	"SHRINKING":         8,
+	"STORAGE_EXPANDING": 9,
+}
+
+func (x ClusterStatus) String() string {
+	return proto.EnumName(ClusterStatus_name, int32(x))
+}
+
+type CreateSchemaRegistryClusterRequest struct {
+	Config               *SchemaRegistryClusterConfig `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty" db:"config,omitempty" url:"config,omitempty"`
+	RequestCarrier       map[string]string            `protobuf:"bytes,2,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" redact:"-" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Cluster              *SchemaRegistryCluster       `protobuf:"bytes,4,opt,name=cluster,proto3" json:"cluster,omitempty" db:"cluster,omitempty" url:"cluster,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
+}
+
+func (m *CreateSchemaRegistryClusterRequest) Reset()         { *m = CreateSchemaRegistryClusterRequest{} }
+func (m *CreateSchemaRegistryClusterRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateSchemaRegistryClusterRequest) ProtoMessage()    {}
+
+type CreateSchemaRegistryClusterReply struct {
+	Error *Error `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	// {"field name": "err msg"}
+	ValidationErrors     map[string]string      `protobuf:"bytes,2,rep,name=validation_errors,json=validationErrors,proto3" json:"validation_errors,omitempty" db:"validation_errors,omitempty" url:"validation_errors,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Cluster              *SchemaRegistryCluster `protobuf:"bytes,3,opt,name=cluster,proto3" json:"cluster,omitempty" db:"cluster,omitempty" url:"cluster,omitempty"`
+	Credentials          *APICredentials        `protobuf:"bytes,4,opt,name=credentials,proto3" json:"credentials,omitempty" db:"credentials,omitempty" url:"credentials,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *CreateSchemaRegistryClusterReply) Reset()         { *m = CreateSchemaRegistryClusterReply{} }
+func (m *CreateSchemaRegistryClusterReply) String() string { return proto.CompactTextString(m) }
+func (*CreateSchemaRegistryClusterReply) ProtoMessage()    {}
+
+func (m *CreateSchemaRegistryClusterReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type APICredentials struct {
+	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty" db:"key,omitempty" url:"key,omitempty"`
+	Secret               string   `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty" redact:"-" db:"secret,omitempty" url:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *APICredentials) Reset()         { *m = APICredentials{} }
+func (m *APICredentials) String() string { return proto.CompactTextString(m) }
+func (*APICredentials) ProtoMessage()    {}
+
+type GetSchemaRegistryClustersReply struct {
+	Error                *Error                   `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	Clusters             []*SchemaRegistryCluster `protobuf:"bytes,2,rep,name=clusters,proto3" json:"clusters,omitempty" db:"clusters,omitempty" url:"clusters,omitempty"`
+	NextPageToken        string                   `protobuf:"bytes,3,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty" db:"next_page_token,omitempty" url:"next_page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *GetSchemaRegistryClustersReply) Reset()         { *m = GetSchemaRegistryClustersReply{} }
+func (m *GetSchemaRegistryClustersReply) String() string { return proto.CompactTextString(m) }
+func (*GetSchemaRegistryClustersReply) ProtoMessage()    {}
+
+func (m *GetSchemaRegistryClustersReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type GetSchemaRegistryClusterReply struct {
+	Error                *Error                 `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	Cluster              *SchemaRegistryCluster `protobuf:"bytes,2,opt,name=cluster,proto3" json:"cluster,omitempty" db:"cluster,omitempty" url:"cluster,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *GetSchemaRegistryClusterReply) Reset()         { *m = GetSchemaRegistryClusterReply{} }
+func (m *GetSchemaRegistryClusterReply) String() string { return proto.CompactTextString(m) }
+func (*GetSchemaRegistryClusterReply) ProtoMessage()    {}
+
+func (m *GetSchemaRegistryClusterReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
+type UpdateSchemaRegistryClusterRequest struct {
+	Cluster              *SchemaRegistryCluster `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty" db:"cluster,omitempty" url:"cluster,omitempty"`
+	RequestCarrier       map[string]string      `protobuf:"bytes,2,rep,name=request_carrier,json=requestCarrier,proto3" json:"request_carrier,omitempty" redact:"-" db:"request_carrier,omitempty" url:"request_carrier,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *UpdateSchemaRegistryClusterRequest) Reset()         { *m = UpdateSchemaRegistryClusterRequest{} }
+func (m *UpdateSchemaRegistryClusterRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateSchemaRegistryClusterRequest) ProtoMessage()    {}
+
+type DeleteSchemaRegistryClusterReply struct {
+	Error                *Error   `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty" db:"error,omitempty" url:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteSchemaRegistryClusterReply) Reset()         { *m = DeleteSchemaRegistryClusterReply{} }
+func (m *DeleteSchemaRegistryClusterReply) String() string { return proto.CompactTextString(m) }
+func (*DeleteSchemaRegistryClusterReply) ProtoMessage()    {}
+
+func (m *DeleteSchemaRegistryClusterReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
