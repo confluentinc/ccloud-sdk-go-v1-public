@@ -74,27 +74,12 @@ message Account {
   string last4 = 2;
 }
 
-enum PaymentMethodType {
-  NONE = 0;
-  CARD = 1;
-  ACH = 2;
-}
-
-message PaymentMethod {
-  PaymentMethodType type = 1;
-  oneof payment_details{
-    Card card = 2;
-    Account account = 3;
-  }
-}
-
 message GetPaymentInfoReply {
   Card card = 1;
   .ccloud.org.Organization organization = 3;
   .ccloud.core.Error error = 2;
   TaxAddress tax_address = 4;
   repeated TaxId tax_ids = 5;
-  PaymentMethod payment_method = 6;
 }
 
 message UpdatePaymentInfoRequest {
