@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package ccloud.sku;
+
+option java_package = "io.confluent.cloud.protobuf.kafka.product.core.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+enum Sku {
+  UNKNOWN = 0; // Placeholder for the default value.
+  BASIC_LEGACY = 1; // Legacy SKU for multi-tenant and multi-zone clusters.
+  BASIC = 2; // New SKU for multi-tenant clusters without an SLA.
+  STANDARD = 3; // New SKU for multi-tenant clusters with an SLA.
+  DEDICATED = 4; // New SKU for dedicated clusters that have CKU-based pricing.
+  DEDICATED_LEGACY = 5; // Legacy SKU for dedicated clusters.
+  ENTERPRISE = 6; // New SKU for multi-tenant clusters with private networking.
+}

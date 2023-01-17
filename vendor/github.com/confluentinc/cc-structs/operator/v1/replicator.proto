@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "gogoproto/gogo.proto";
+package operator.v1;
+
+option go_package = "github.com/confluentinc/cc-structs/operator/v1;v1";
+
+
+message ReplicatorInfo {
+  string name = 1;
+  string account_id = 2;
+  string kafka_cluster_id = 3;
+  string physical_cluster_id = 4;
+  string source_cluster_name = 5;
+  string destination_cluster_name = 6;
+  int32 kafka_user_id = 7;
+  string status = 8;
+  string service_provider = 9;
+  string region = 10;
+  int32 organization_id = 11;
+  map<string, string> config = 12;
+  repeated ReplicatorTask tasks = 13;
+}
+
+message ReplicatorUserMetric {
+  ReplicatorMetric metric = 1;
+  map<string, ReplicatorMetric> topic_metrics = 2;
+}
+
+message ReplicatorTask {
+  string id = 1;
+  string state = 2;
+}
+
+message ReplicatorMetric {
+  int64 byte_throughput = 1;
+  int64 throughput = 2;
+  int64 lag = 3;
+  int64 latency = 4;
+}

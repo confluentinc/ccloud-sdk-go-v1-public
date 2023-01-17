@@ -1,0 +1,373 @@
+syntax = "proto3";
+
+import "gogoproto/gogo.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "operator/v1/common.proto";
+
+package operator.v1;
+
+option java_package = "io.confluent.cloud.protobuf.operator.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/cc-structs/operator/v1;v1";
+
+enum ConnectPlugin {
+  S3_SINK = 0;
+  GCS_SINK = 1;
+  ES_SINK = 2;
+  BQ_SINK = 3;
+}
+
+// a message to represent a collection of connectors
+message ConnectorList {
+  k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta type_meta = 1 [(gogoproto.embed)=true, (gogoproto.jsontag)=",inline"];
+  k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta list_meta = 2 [(gogoproto.embed)=true, (gogoproto.jsontag)="metadata,omitempty"];
+  repeated Connector items = 3;
+}
+
+// a single connector running in some physical connect cluster.
+message Connector {
+  option (gogoproto.goproto_stringer) = false;
+  k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta type_meta = 1 [(gogoproto.embed)=true, (gogoproto.jsontag)=",inline"];
+  k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta object_meta = 2 [(gogoproto.embed)=true, (gogoproto.jsontag)="metadata,omitempty"];
+  ConnectorStatus status = 3;
+  ConnectorSpec spec = 4;
+  ConnectOverrideMap error_mapping = 5;
+  int32 org_id = 6;
+  string account_id =7;
+  string request_id = 8;
+}
+
+// status information which will be stored in the mothership database, primarily to be shown on the UI.
+message ConnectorStatus {
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time time = 1;
+  // validated configs from the connectors service
+  ValidatedConnectorConfig connector_config = 2;
+  // per task status, along with any associated error messages
+  map<string, TaskStatus> task_statuses = 3;
+  string override_status = 4;
+  Status status = 5;
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time status_last_updated_time = 6;
+  string connector_raw_error_msg  = 7;
+
+  // Status matches the values of ConnectorStatus in scheduler.proto
+  enum Status {
+    NONE = 0;
+    PROVISIONING = 1;
+    RUNNING = 2;
+    DEGRADED = 3;
+    FAILED = 4;
+    PAUSED = 5;
+    DELETED = 6;
+  }
+}
+
+message TaskStatus {
+  // actual task state
+  ActualState.Values state = 1;
+  // the epoch timestamp when this task status was last updated
+  uint64 last_updated = 2;
+  // any task specific error message or stack trace
+  string error_message = 3;
+}
+
+// the actual state of a task.
+// A different enum from DesiredState to accommodate different error or partial states
+message ActualState {
+  enum Values {
+      NONE = 0;
+    RUNNING = 1;
+    STOPPED = 2;
+    DELETED = 3;
+    UNASSIGNED = 4;
+    // ERROR is positioned at a much larger value to accommodate comparable members in ActualState and DesiredState
+    // for example, ActualState.STOPPED == DesiredState.STOPPED amd so on.
+
+    ERROR = 100;  // [deprecated = true] not supported yet in this proto compiler version
+    PENDING = 101;
+    SYSTEM_ERROR = 102;
+    USER_ACTIONABLE_ERROR = 103;
+  }
+}
+
+message ConnectorSpec {
+  // name of the connector (logical cluster id)
+  string id = 1;
+  // name of physical connect cluster that hosts this connector
+  string physical_cluster_id = 2;
+  // type of plugin
+  ConnectPlugin deprecated_plugin = 3;
+  // kafka cluster used for internal worker use (status, offsets and config topics).
+  KafkaDependency internal_cluster = 4;
+  // original configs that were sent to the connectors service from the UI, desired configs. note that override_configs can override
+  // these configs.
+  ConnectorConfigs configs = 5;
+  // REST endpoint of the worker hosting the connector (visible within the k8s cluster/satellite)
+  string worker_rest_endpoint = 6;
+  // the operation that we want to perform on this connector. to be set by the scheduler, and consumed and executed by downstream services.
+  DesiredState desired_state = 7;
+  string plugin_type = 8;
+  PluginMetadata plugin_metadata = 9;
+  // configs that were applied to Worker, actual configs
+  ConnectorConfigs actual_configs = 10;
+  ConnectFeatureFlags feature_flags = 11;
+  // epoch beyond which connector should be deleted (if non zero)
+  // introduced to delete data previews after running for some time
+  int64 scheduled_delete_timestamp = 12;
+
+  // config overrides that are applied to the connector's low level configs. these are merged
+  // with the low-level configs that the `configs` (desired configs) above translate to by the deletegating rest extension.
+  ConnectorConfigs override_configs = 13;
+
+  // connector creation_timestamp
+  int64 creation_timestamp = 14;
+
+  enum DesiredState {
+    NONE = 0;
+    RUNNING = 1;
+    STOPPED = 2;
+    DELETED = 3;
+  }
+}
+
+message ConnectFeatureFlags {
+  bool delegating_service_enabled = 1;
+  bool operator_poll_status_dark_enabled = 2;
+  bool operator_poll_status_prod_enabled = 3;
+}
+
+message PluginMetadata {
+  ProductMaturityPhase.Values product_maturity_phase = 1;
+}
+
+/*
+
+Possible state transitions for Connectors and Tasks:
+
+                         +---------------+
+                         |               |
+       +-----------------+    STARTED    |
+       |                 |               |
+       |                 +-------+-------+
+       |                         |
+       v                         |
++------+-------+         +-------v-------+        +--------------+
+|              |         |               |        |              |
+|    ERROR     +<--------+    RUNNING    +------->+    DELETED   |
+|              |         |               |        |              |
++----+-----+---+         +-------+-------+        +-------+------+
+     ^     |                     ^                        ^
+     |     |                     |                        |
+     |     |                     v                        |
+     |     |             +-------+-------+                |
+     |     |             |               |                |
+     +-------------------+    STOPPED    +----------------+
+           |             |               |                |
+           |             +---------------+                |
+           |                                              |
+           +----------------------------------------------+
+*/
+
+message ConnectorConfigs {
+  // template used for materializing configs
+  string template_id = 1;
+  // the raw configs from the UI
+  map<string, string> user_configs = 2;
+  reserved 3;
+  // ts when ANY updated was requested by user. Originall just for configs, but now used for state transition, too
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time requested_time = 4;
+}
+
+message ConfigDefinition {
+  string name = 1;
+  ConfigType.Values type = 2;
+  bool required = 3;
+  string default_value = 4;
+  ConfigImportance.Values importance = 5;
+  string documentation = 6;
+  string group = 7;
+  ConfigWidth.Values width = 8;
+  string display_name = 9;
+  repeated string dependents = 10;
+  int32 order = 11;
+  string alias = 12;
+}
+
+message ConfigValue {
+  string name = 1;
+  string value = 2;
+  repeated string recommended_values = 3;
+  repeated string errors = 4;
+  bool visible = 5;
+}
+
+message Configs {
+  ConfigDefinition definition = 1;
+  ConfigValue value = 2;
+  map<string,string> metadata = 3 [(gogoproto.jsontag)="metadata,omitempty"];
+}
+
+message ValidatedConnectorConfig {
+  string name = 1;
+  int32 error_count = 2;
+  repeated string groups = 3;
+  // a collection of config definitions and their values. all secrets will be masked.
+  repeated Configs configs = 4;
+  map<string, string> materialized_configs = 5 [deprecated = true];
+}
+
+message ConfigType {
+  enum Values {
+      NONE = 0;
+    BOOLEAN = 1;
+    INT = 2;
+    SHORT = 3;
+    LONG = 4;
+    DOUBLE = 5;
+    STRING = 6;
+    LIST = 7;
+    ENUM = 8;
+    PASSWORD = 9;
+    CLASS = 10;
+  }
+}
+
+message ConfigWidth {
+  enum Values {
+      NONE = 0;
+    SHORT = 1;
+    MEDIUM = 2;
+    LONG = 3;
+  }
+}
+
+message ConfigImportance {
+  enum Values {
+      NONE = 0;
+    HIGH = 1;
+    MEDIUM = 2;
+    LOW = 3;
+  }
+}
+
+message ConnectorState {
+  string state = 1;
+  string worker_id = 2;
+  string trace = 3;
+}
+
+message TaskState {
+  int32 id = 1;
+  string state = 2;
+  string worker_id = 3;
+  string msg = 4;
+}
+
+message ConnectorStateInfo {
+  string name = 1;
+  ConnectorState connector = 2;
+  repeated TaskState tasks = 3;
+  //lowercase of kafka.scheduler.v1.ConnectorType
+  string type = 4;
+}
+
+message ProductMaturityPhase {
+  enum Values {
+      NONE = 0;
+    INTERNAL = 1;
+    PREVIEW = 2;
+    PA = 3;
+    GA = 4;
+    LANDED = 5;
+  }
+}
+
+message ConnectorIdType {
+  enum Values {
+      NONE = 0;
+    ID = 1;
+    NAME = 2;
+  }
+}
+
+message ConnectorId {
+  string id = 1;
+  ConnectorIdType.Values id_type = 2;
+}
+
+message ConnectorPluginInfo {
+  string class = 1;
+  //lowercase of kafka.scheduler.v1.ConnectorType
+  string type = 2;
+  string version = 3;
+}
+
+message ConnectorPluginDisplayInfo {
+  string image_url = 1;
+  ProductMaturityPhase.Values product_maturity_phase = 2;
+  string display_name = 3;
+}
+
+message ConnectorPluginValidationParameters {
+  bool validate_templated_vpc = 1; // execute templated validations in mothership even for VPC-peered cluster
+  bool validate_delegated_vpc = 2; // execute delegated validations in mothership even for VPC-peered cluster
+}
+
+message ConnectorExpansion {
+  ConnectorStateInfo status = 1;
+  ConnectorInfo info = 2;
+  ConnectorId id = 3;
+  map<string, string> extensions = 4;
+}
+
+message ConnectorPluginExpansion {
+  ConnectorPluginDisplayInfo display = 1;
+  ConnectorPluginInfo info = 2;
+  map<string, string> extensions = 3;
+}
+
+message ConnectorInfo {
+  string name = 1;
+  //lowercase of kafka.scheduler.v1.ConnectorType
+  string type = 2;
+  map<string, string> config = 3;
+  repeated ConnectorTaskId tasks = 4;
+}
+
+message ConnectorTaskId {
+  string connector = 1;
+  int32 task = 2;
+}
+
+message TaskInfo {
+  ConnectorTaskId id = 1;
+  map<string, string> config = 2;
+}
+
+message ConfigInfos {
+  string name = 1;
+  repeated string groups = 2;
+  int32 error_count = 3;
+  repeated Configs configs = 4;
+}
+
+message ConnectorPlugin {
+  string name = 1;
+  string clouds = 2;
+  ConnectorPluginInfo plugin = 3;
+  ConnectorPluginDisplayInfo display = 4;
+  ConnectorPluginValidationParameters validation_parameters = 5;
+}
+
+message ConnectOverrideMessage {
+  string error_message = 1;
+  string user_message = 2;
+  string connector_type = 3;
+  int32 error_mapping_id = 4;
+  bool check_ld = 5;
+}
+
+// Holds all the connect error message overrides
+message ConnectOverrideMap {
+  repeated ConnectOverrideMessage connect_overrides = 1;
+}

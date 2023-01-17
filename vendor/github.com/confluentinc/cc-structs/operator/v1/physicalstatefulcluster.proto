@@ -1,0 +1,681 @@
+syntax = "proto3";
+
+package operator.v1;
+
+import "gogoproto/gogo.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "k8s.io/api/core/v1/generated.proto";
+import "k8s.io/api/networking/v1/generated.proto";
+
+option java_package = "io.confluent.cloud.protobuf.operator.v1";
+option java_multiple_files = true;
+option java_outer_classname = "PhysicalStatefulClusterProto";
+
+option go_package = "github.com/confluentinc/cc-structs/operator/v1;v1";
+
+message PhysicalStatefulClusterList {
+  k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta type_meta = 1 [(gogoproto.embed)=true, (gogoproto.jsontag)=",inline"];
+  k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta list_meta = 2 [(gogoproto.embed)=true, (gogoproto.jsontag)="metadata,omitempty"];
+  repeated PhysicalStatefulCluster items = 3;
+}
+
+message PhysicalStatefulCluster {
+  k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta type_meta = 1 [(gogoproto.embed)=true, (gogoproto.jsontag)=",inline"];
+  k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta object_meta = 2 [(gogoproto.embed)=true, (gogoproto.jsontag)="metadata,omitempty"];
+  PhysicalStatefulClusterStatus status = 3;
+  PhysicalStatefulClusterSpec spec = 4;
+}
+
+message PhysicalStatefulClusterSpec {
+  string type = 1; //cluster type (e.g zookeeper, kafka, etc.)
+  PhysicalStatefulClusterCommonSpec common = 2;
+  Cloud cloud = 3;
+  PhysicalStatefulClusterPolicy policy = 4;
+  string cluster_id = 5; //unique id for physical cluster
+}
+
+message PhysicalStatefulClusterPolicy {
+  bool external_sla_in_effect = 1;
+}
+
+message Version {
+  string plugin = 1;
+  string psc = 2;
+}
+
+// This message defines list of pod attributes to be exposed to
+// the container enviroment variables through Downward APIs, the list
+// of the fields can be expanded in the future to include more variables
+// to be exposed as described in the following link:
+// https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/#the-downward-api
+message PodInfoExportPolicy {
+  // pod attribute: "status.hostIP", env name: "HOST_IP"
+  bool host_ip = 1;
+  // pod attribute: "metadata.namespace", env name: "POD_NAMESPACE"
+  bool pod_namespace = 2;
+}
+
+// Information regarding secret to mount
+// Secret keys are mounted in /mnt/secrets/secret-name/
+// https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets
+message MountedSecret {
+  // secret name
+  string secret_ref = 1;
+  // optional information at key level
+  repeated KeyItem key_items = 2;
+}
+
+message KeyItem {
+  // secret key
+  string key = 1;
+  // mount path relative to /mnt/secrets/secret-name/
+  string path = 2;
+}
+
+//This part of the spec is common across all clouds (minikube, AWS, GKE, Azure)
+message PhysicalStatefulClusterCommonSpec {
+  Container container = 1;
+  uint32 replicas = 2;
+  PodResources resources = 3;
+  map<string, PodList> placement = 4; //zone to PodList
+  Network network = 5;
+  PhysicalStatefulClusterConfig config = 6;
+  reserved 7;
+  reserved 8;
+  map<string, Logs> logs = 9;
+  repeated HealthCheck health_checks = 10;
+  Ingress ingress = 11;
+  Metrics metrics = 12;
+  Version version = 13; // semver version of the spec, e.g. 1.0.0
+  uint32 minimum_replicas = 14; // Operator Service will use this to determine if a psc is in ResourceReady state
+  ClusterDeletionHandler cluster_deletion_handler = 15; // cluster deletion handler is invoked by the PSC operator on cluster deletion
+  PodSecurityContext pod_security_context = 16; // Pod Level Security Configurations.
+  map<string,string> pod_annotations = 17; // pod level annotations
+  repeated InitContainer init_containers = 18; // init container list
+  PodManagementPolicy pod_management_policy = 19; // pod management policy
+  Affinity affinity = 20; // contains node affinity and pod (anti)affinity
+  bool skip_host_port = 21; // set to true if you want multiple pscs on the same node
+  UpdateStrategy update_strategy = 22; // indicates the statefulset update strategy that will be employed to update Pods in the StatefulSet when a revision is made to Template.
+  map<string,string> psc_annotations = 23; // special annotations to be used by the operator
+  ServiceAccount service_account = 24; // service account this physical cluster uses.
+  repeated ExtraVolume extra_volumes = 25; // extra volumes, that can be mounted to main/init container(s)
+  reserved 26, 27;
+  repeated k8s.io.api.core.v1.Toleration pod_tolerations = 28; // tolerations for the pod spec
+  NetworkPolicy network_policy = 29; // network policy for the cluster
+  map<string, string> additional_pod_labels = 30; // Additional labels for pods created by the PSC StatefulSet.
+  string runtime_class_name = 31; // RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used to run this pod
+  bool enable_broker_rack_zone_ids = 32; // flag that indicates whether broker.rack is set to AZ id (as opposed to an integer: 0/1/2)
+  CNIProviderNetworkPolicy cni_network_policy = 33; // Info for creating CNI provider network policies
+  BooleanType auto_mount_service_account_token = 34; // Indicates whether a service account token should be automatically mounted.
+                                                     // Setting this flag to False leads to kubelet not mounting the ServiceAccount's API credentials.
+}
+
+message BooleanType {
+  bool value = 1;
+}
+
+message NetworkPolicy {
+  repeated k8s.io.api.networking.v1.NetworkPolicyIngressRule ingress = 1; // List of ingress rules to be applied to the selected pods.
+  repeated k8s.io.api.networking.v1.NetworkPolicyEgressRule egress = 2; // List of egress rules to be applied to the selected pods.
+  repeated string policy_types = 3; // List of rule types that the NetworkPolicy relates to.
+}
+
+message ExtraVolume {
+  // deprecated, use host_path_volume.path instead
+  string host_path = 1 [deprecated = true]; // path on the node
+  string mount_path = 2; // where to mount it in container(s)
+  bool attachable = 3; // whether to attach this volume to the main container
+  repeated string attach_to_init_containers = 4; //names of init containers, to which the volume should be mounted
+  k8s.io.api.core.v1.EmptyDirVolumeSource empty_dir_volume = 5; // EmptyDir volume details if applicable
+  k8s.io.api.core.v1.HostPathVolumeSource host_path_volume = 6; // HostPath volume details if applicable
+}
+
+message ServiceAccount {
+  string name = 1; // name of service account
+  map<string,string> annotations = 2; // annotations to set on service account
+  bool apply = 3; // whether the operator should attempt to upsert the service
+                  // account.
+}
+
+message UpdateStrategy {
+  UpdateStrategyType type = 1;
+  // Number of replicas to keep in the older version during an update, if it is rolling update, its similar to statefulset partition, if it is OnDelete, it will update num_replicas - replicas_to_not_update.
+  uint32 replicas_to_not_update = 2;
+  // The update is paused or not
+  bool pause = 3;
+  // The update is aborted. See roll/v1/roll.proto/Roll.Operation.ABORT
+  bool abort = 4;
+}
+
+enum UpdateStrategyType {
+  ROLLING_UPDATE = 0; // Default
+  ON_DELETE = 1;
+}
+
+enum PodManagementPolicy {
+  PARALLEL = 0; // Parallel is the default
+  ORDERED_READY = 1;
+}
+
+message PodSecurityContext  {
+  int64 fs_group = 1;  // A special supplemental group that applies to all containers in a pod. Generally supported by volume types to honor the GID
+  int64 run_as_group = 2; //The GID to run the entry point of the container process
+  bool  run_as_non_root = 3; // Indicates that the container must run as a non-root user.
+  int64 run_as_user = 4; // The UID to run the entrypoint of the container process.
+  SELinuxOptions selinux_options = 5; // The SELinux context to be applied to all containers
+  repeated int64 supplemental_groups = 6; // A list of groups applied to the first process run in each container, in addition to the container's primary GID
+  repeated Sysctl systls = 7; // Sysctls hold a list of namespaced sysctls used for the pod
+  SeccompProfile seccomp_profile = 8; //The seccomp options to use by the containers in this pod.
+}
+
+message SeccompProfile {
+  string type = 1; // type indicates which kind of seccomp profile will be applied.
+  string localhost_profile = 2; // localhost_profile indicates a profile defined in a file on the node should be used.
+}
+
+message SELinuxOptions {
+  string user = 1; // User is an SELinux user label that applies to the container
+  string role = 2; // Role is an SELinux role label that applies to the container
+  string type = 3; // Type is an SELinux type label that applies to the container
+  string level  = 4; // Level is SELinux level label that applies to the container
+}
+
+message Sysctl {
+  string name=1; // Name of a property to set
+  string value=2; // Value if property to set
+}
+
+message ClusterDeletionHandler {
+  repeated string exec_command = 1; // defines the command for the cluster deletion handler. This command is kubectl execed into the running pods of the cluster
+}
+
+message PodList {
+  repeated string pods = 1;
+}
+
+message Container {
+  string image = 1; // docker image name without the repo (e.g. cc-kafka-4.0.0)
+  repeated string command = 2;  //Entrypoint array. The docker image's ENTRYPOINT is used if this is not provided.
+  repeated string args = 3; //Arguments to the entrypoint. The docker image's CMD is used if this is not provided.
+  reserved 4;
+  int64 termination_grace_period_seconds = 6; // expected cleanup time for your container. also serves as preStop handler timeout.
+  PreStopHandler pre_stop_handler = 7; // pre stop handler is called immediately before a container is terminated
+  Probe readiness_probe = 8; // if probe fails, stops traffic and pauses rolling upgrade
+  Probe liveness_probe = 9; // if probe fails, automatically restarts pod
+  map<string, string> env_var = 10; // maps of key=value to inject as environment inside container
+  string service_account = 11; // name of service account. TODO(tjj): deprecate for service_account top-level message on psc.
+  NodeAffinity node_affinity = 12; // deprecating old node affinity api
+  Rack rack = 13; // deprecating old pod antiaffinity api
+  PodInfoExportPolicy pod_info_export_policy = 14; // Defines a set of pod/container attributes to be exposed as enviroment variables.
+  repeated MountedSecret mounted_secrets = 15; // list of secrets to mount
+  SecurityContext security_context = 16; // Container Level Security Configurations.
+}
+
+message SecurityContext {
+  int64 run_as_group = 1; //The GID to run the entry point of the container process
+  bool  run_as_non_root = 2; // Indicates that the container must run as a non-root user.
+  int64 run_as_user = 3; // The UID to run the entrypoint of the container process.
+  bool privileged = 4; // Run container in privileged mode.
+  bool allow_privilege_escalation = 5; // AllowPrivilegeEscalation controls whether a process can gain more privileges than its parent process.
+}
+
+message InitContainer {
+  string name = 1; // init container name
+  string image = 2; // docker image name without the repo (e.g. init-container)
+  repeated string command = 3;  // entrypoint array. The container's ENTRYPOINT is used if this is not provided.
+  repeated string args = 4; // arguments to the entrypoint. The docker image's CMD is used if this is not provided.
+  map<string, string> env_var = 5; // maps of key=value to be injected as an environment variable inside the container.
+  PodResources resources = 6; // resources for container
+  SecurityContext security_context = 7; // Container Level Security Configurations.
+}
+
+message Affinity {
+  NodeAffinity node_affinity = 1; // node affinity
+  PodLevelAffinity pod_affinity = 2; // pod affinity
+  PodLevelAffinity pod_anti_affinity = 3; // pod anti-affinity
+}
+
+enum AffinityRule {
+  PREFERRED = 0; // refers to PreferredDuringSchedulingIgnoredDuringExecution
+  REQUIRED = 1; // refers to RequiredDuringSchedulingIgnoredDuringExecution
+}
+
+message NodeAffinity {
+  string key = 1; // key refers to the node label
+  repeated string values = 2; // possible node labels key can match with
+  AffinityRule rule = 3; // rule determines if affinity is required or preferred
+}
+
+message PodLevelAffinity {
+  AffinityRule rule = 1; // rule determines if affinity is required or preferred
+  repeated PodLevelAffinityTerm terms = 2; // definition of where a pod should be located
+}
+
+message PodLevelAffinityTerm {
+  string key = 1; // refers to the pod label
+  repeated string values = 2; // name of cp component
+  repeated string namespaces = 3; // namespaces pods of a certain name can reside
+  TopologyKey topology_key = 4; // necesary for enabling multizone node label selection
+  Weight weight = 5; // refers to the weight field for preferred scheduling
+}
+
+message TopologyKey {
+  string key = 1; // key
+}
+
+message Weight {
+  int32 weight = 1; // integer value of weight
+}
+
+message Rack {
+  string topology_key = 1; // OLD AFFINITY: containers are scheduled in different rack/datacenter topology specified by topology_key
+}
+
+message Probe {
+  int32 initial_delay_seconds = 2; // number of seconds after the container has started before liveness probes are initiated
+  int32 timeout_seconds = 3; // number of seconds after which the probe times out
+  int32 period_seconds = 4; // how often (in seconds) to perform the probe
+  int32 success_threshold = 5; // minimum consecutive successes for the probe to be considered successful after having failed
+  int32 failure_threshold = 6; // minimum consecutive failures for the probe to be considered failed after having succeeded
+  reserved 7; // now we have separate handler messages instead of exec_command
+  // must only specify one of 'exec', 'http', or 'tcp'
+  ExecHandler exec = 8;
+  HTTPHandler http = 9;
+  TCPHandler tcp = 10;
+}
+
+message ExecHandler {
+  repeated string command = 1; // command line to execute inside the container
+}
+
+message HTTPHandler {
+  enum URIScheme {
+    HTTP  = 0;
+    HTTPS = 1;
+  }
+  URIScheme scheme = 1; // Scheme to use for connecting to the host. Defaults to HTTP.
+  uint32 port = 2; // Name or number of the port to access on the container.
+  string path = 3; // Path to access on the HTTP server.
+}
+
+message TCPHandler {
+  uint32 port = 1; // Number or name of the port to access on the container.
+}
+
+message PreStopHandler {
+  repeated string exec_command = 1; // defines a specific action that should be taken
+}
+
+message Network {
+  Proxy proxy = 1; //proxy settings for external ingress
+  repeated Port ports = 2; //ports exposed as k8s services
+  ClientEndpoints client_endpoints = 3; //Endpoints for clients to connect
+  DiscoveryService discovery_service = 4; //headless service created for discovery purposes
+  string service_type = 5 [deprecated = true]; //service type to expose to clients
+  bool use_default_resolver_for_healthcheck = 6;    //If false, external DNS resolvers will be reached for
+
+}
+
+message DiscoveryService {
+  map<string, string> annotations = 1; //annotations added to the discovery service
+  map<string, string> labels = 2; //labels added to the discovery service
+}
+
+message ClientEndpoints {
+  // This field is deprecated as physical clusters no longer
+  // have external endpoints. More details can be found in MCM-266
+  string external = 1;
+  string internal = 2;
+}
+
+message Metrics {
+  uint32 interval_secs = 1;
+  reserved 2;
+  uint32 retention_months = 3;
+  uint32 port = 4;
+  string scheme = 5;
+  string metrics_path = 6;
+  repeated MetricSink sinks = 7;
+}
+
+message MetricSink {
+  string id = 1;
+  repeated string blacklist = 2;
+  repeated string whitelist = 3;
+  repeated string deltalist = 4;
+}
+
+message Logs {
+  uint32 retention_months = 1;
+}
+
+message ProxyPorts {
+  map<string, ProxyPort> ports = 1; //pod to ProxyPort
+}
+
+message Proxy {
+  map<string, ProxyPorts> routes = 1 [deprecated = true]; //proxy to ProxyPorts
+  bool ssl = 3;
+  bool internal = 4;
+  Bootstrap bootstrap = 5;
+  repeated ProxyPods pods = 6;
+  map<string, string> annotations = 7; //annotations added to the ELB
+  bool c_cloud_managed_lb = 8;
+}
+
+message ProxyPods {
+    string name = 1;
+    string dns  = 2;
+    uint32 node_port = 3;
+    uint32 port = 4;
+}
+
+message Bootstrap {
+  string dns = 1;
+  uint32 port = 2;
+  uint32 node_port = 3;
+  repeated BootstrapPort additional_ports = 4; // additional ports on bootstrap LB
+  string external_traffic_policy = 5;
+}
+
+message BootstrapPort {
+  string internal_port_name = 1; // name of the internal port that needs to be exposed
+  uint32 port = 2; // port number on bootstrap LB
+  uint32 node_port = 3; // node port 
+}
+
+message ProxyPort {
+  uint32 external = 1;
+  uint32 internal = 2;
+}
+
+message PodResources {
+  string cpu = 1; // cpu in millicores
+  string memory = 2;
+  repeated Storage storage = 3;
+  Resources requests = 4;
+  Resources limits = 5;
+}
+
+message Resources {
+  string cpu = 1;
+  string memory = 2;
+}
+
+// Confluent Storage Type mapping to each Cloud Provider
+// STANDARD_MAGNETIC: AWS -> st1, GCP -> Standard persistent disks, Azure -> Standard HDD
+// STANDARD_SSD: AWS -> gp2, GCP -> Balanced persistent disks, Azure -> Standard SSD
+// SLOW_MAGNETIC: AWS -> sc1, GCP -> Standard persistent disks, Azure -> Standard HDD
+// DEFAULT: *This is not a real storage class. It is being used as an empty placeholder for CLI inputs.*
+// NEXT_GEN_SSD: AWS -> gp3, GCP -> Performance persistent disks, Azure -> Premium SSD
+// HIGH_IOPS_SSD: AWS -> io2, GCP -> Extreme persistent disks, Azure -> Ultra disk
+enum StorageType {
+  STANDARD_MAGNETIC = 0;
+  STANDARD_SSD = 1;
+  SLOW_MAGNETIC = 2;
+  DEFAULT = 3;
+  NEXT_GEN_SSD = 4;
+  HIGH_IOPS_SSD = 5;
+}
+
+message Storage {
+  StorageType type = 1;
+  string capacity = 2;
+  string name = 3;               // pvc name
+  string storage_class_name = 4; // user-created storage class reference
+  string encryption_key_id = 5; // encryption key id (e.g. kms key id on aws)
+  string storage_class_id = 6; // unique id for this storage class in the mothership db (currently)
+  reserved 7;
+  reserved 8;
+  uint32 iops = 9; // number of I/O operations per second for AWS GP3 (range: 3,000 to 16,000; default: 3000)
+  uint32 throughput = 10; // throughput to provision in MiB/s for a AWS GP3 volume (max: 1,000 MiB/s)
+  string disk_encryption_set_id = 11; // Azure DiskEncryptionSet Id - optional value if BYOK enabled on Azure
+}
+
+message Port {
+  string name = 1;
+  uint32 port = 2;
+  string protocol = 3;
+  uint32 host_port = 4;
+}
+
+message PhysicalStatefulClusterConfig {
+  repeated Config shared = 1;
+  repeated PodConfig pod = 2;
+  repeated PodConfig init = 3; // configs that are injected into the config-init-container as config maps
+}
+
+message PodConfig {
+  string id = 1;
+  repeated Config config = 2;
+}
+
+message Config {
+  string name = 1;
+  string value = 2;
+}
+
+message HealthCheck {
+  reserved 1;
+  string name = 2;
+  Container container = 3;
+  PodResources resources = 4;
+  repeated Config configuration = 5;
+  map<string, Metrics> metrics = 6;
+  Network network = 7;
+  // Operator Service uses the ClusterStatusProbe to calculate URL (e.g. http://kafka-healthcheck-external.pkc-8l7pl:8080/health) to pull additional psc condition in interval, then use the result for calculating PSC status summary.
+  // The URL returns json form of PhysicalStatefulClusterHealthCheckClusterStatus.
+  ClusterStatusProbe cluster_status_probe = 8;
+  Affinity affinity = 9;
+  bool skip_host_port = 10; // set to true if you want healthcheck and psc on the same node
+  // Version of the Healthcheck in order to have the ability to independently roll health checks
+  Version version = 11;
+  map<string, string> additional_pod_labels = 12; // Additional labels for pods created by the healthcheck Deployment.
+}
+
+message HealthCheckStatus {
+  // Name of the HC
+  string name = 1;
+  // lowest pod HC pscVersion. Used to determine if a HC is in rolling, lowest_pod_psc_version != Healthcheck.version.psc
+  string lowest_pod_psc_version = 2;
+}
+
+message ClusterStatusProbe {
+  string scheme = 1;
+  uint32 port = 2;
+  string path = 3;
+  // Operator uses the interval to determine if pulling from URL or not when HealthCheck deployment is ready, results will override psc status summary.
+  uint32 interval_seconds = 4;
+}
+
+message Ingress {
+  bool load_balanced = 1;
+}
+
+message Cloud {
+  string name = 1;
+  string docker_repo = 2;
+  Aws aws = 3;
+  Gcp gcp = 4;
+  Local local = 5;
+  string k8s_cluster_id = 6;
+}
+
+message Local {
+}
+
+message Aws {
+  string vpc = 1;
+  repeated string zones = 2;
+  map<string, string> proxy_to_zone = 3;
+  Route53 route53 = 4;
+  Elb elb = 5;
+}
+
+message Route53 {
+  string hosted_zone = 1; // The base domain name (used in looking up DNS records) eg. aws.confluent.cloud
+  uint32 ttl_secs = 2;
+}
+
+message Elb {
+  ELBAccessLogConfig access_log_config = 1;
+  ELBHealthcheck healthcheck = 2;
+  uint32 idle_timeout_secs = 3;
+  map<string,string> instance_selector = 4;
+  SecurityGroup security_groups = 5;
+  string ssl_certificate_id = 6;
+}
+
+message SecurityGroup {
+  string ingress_name = 1;
+  repeated string ingress_custom_cidr = 2;
+  string egress_name = 3;
+}
+
+message ELBAccessLogConfig {
+  //You can specify an interval of either 5 minutes or 60 minutes.
+  uint32 emit_interval_mins = 1;
+  bool enabled = 2;
+  string s3_bucket_name = 3;
+  string s3_bucket_prefix = 4;
+}
+
+message ELBHealthcheck {
+  uint32 healthy_threshold = 1;
+  uint32 interval_secs = 2;
+  string target = 3;
+  uint32 timeout_secs = 4;
+  uint32 unhealthy_threshold = 5;
+}
+
+message Gcp {
+}
+
+enum ProxyAccess {
+  PRIVATE = 0;
+  PUBLIC = 1;
+}
+
+message PhysicalStatefulClusterStatus {
+  enum ClusterSummary{
+    // if phase == Phase_PENDING
+    PROVISIONING = 0;
+    // if phase == Phase_DELETING
+    DELETING = 1;
+    // if phase == Phase_DELETED
+    DELETED = 2;
+    // if phase == Phase_RUNNING && PSCResourcesReady ConditionUnknown . For Phase 2, delegate to component check and its result takes precedence.
+    UNKNOWN = 3;
+    // if phase == Phase_RUNNING && PSCResourcesReady ConditionTrue.  For Phase 2, delegate to component check and its result takes precedence.
+    UP = 4;
+    // if phase == Phase_ERROR || phase == Phase_RUNNING && PSCResourcesReady ConditionFalse. For Phase 2, delegate to component check and its result takes precedence.
+    DOWN = 5;
+    // For Phase 2 only, delegate to component check and its result takes precedence.
+    DEGRADED = 6;
+    // Set when psc controller reconcile is blocked due to potential roll. 
+    // Removed once reconcile is unblocked by either a psc spec change, reverting an out of band pod template spec change, or deleting the pod template spec diff annotation
+    BLOCKED = 7;
+  }
+  string phase = 1;
+  reserved 2;
+  ProxyStatus proxy_status = 3;
+  reserved 4;
+  reserved 5;
+  Version version = 6;
+  repeated PhysicalStatefulClusterCondition conditions = 7;
+  // last time Summary is evaluated
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_probe_time = 8;
+  // last time Summary is changed
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_transition_time = 9;
+  // ClusterSummary's string form
+  string summary = 10;
+  // lowest pod pscVersion. Used to determine if a PSC is in rolling, lowest_pod_psc_version != version.psc
+  string lowest_pod_psc_version = 11;
+  // the diff shows changes between desired and actual pod template specs. Used to help identify the potential cause of a roll
+  string pod_template_spec_diff = 12;
+
+  repeated HealthCheckStatus health_check_status = 13;
+}
+
+// reference: https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#typical-status-properties
+message PhysicalStatefulClusterCondition {
+  // Set by operator to calculate PhysicalStatefulClusterStatus Summary
+  string type = 1;
+  // Same as defined in api.core.v1.ConditionStatus. reference https://github.com/kubernetes/api/blob/843ad2d9b9ae703c74f2f43959e6ce0b24cc3185/core/v1/types.go#L2209
+  string status = 2;
+  // last time condition is evaluated
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_probe_time = 3;
+  // last time condition status is changed
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_transition_time = 4;
+  string message = 5;
+  string reason = 6;
+  // Optional information to add depending on condition type
+  PhysicalStatefulClusterConditionAdditionalInfo additional_info = 7;
+}
+
+message PhysicalStatefulClusterConditionAdditionalInfo {
+  message RollProgress {
+    int32 pods_updated = 1;
+    int32 total_pods = 2;
+  }
+
+  // roll information set during roll operation
+  RollProgress roll_progress = 1;
+}
+
+// Return from pulling cluster_status_endpoint
+message PhysicalStatefulClusterHealthCheckClusterStatus {
+  // ClusterSummary' DOWN|UP|DEGRADED, is used to override PhysicalStatefulClusterStatus.Summary
+  PhysicalStatefulClusterStatus.ClusterSummary summary = 1;
+  // Append to PhysicalStatefulClusterStatus.conditions
+  repeated PhysicalStatefulClusterCondition conditions = 2;
+}
+
+message ProxyStatus {
+  string phase = 1;
+  string reason = 2;
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time time = 3 ;
+}
+
+message PostRollConfig {
+  enum Validation {
+    BROKER_STATE = 0;
+    NETWORK_HEALTH_STATUS = 1;
+  }
+  bool enabled = 1;
+  repeated Validation validations = 2;
+}
+
+message CNIProviderNetworkPolicy {
+  EndpointSelector endpoint_selector = 1; // spec for pod selection
+  repeated IngressRule ingress = 2; // spec for ingress rules
+  repeated EgressRule egress = 3; // spec for egress rules
+}
+
+message EndpointSelector {
+  map<string, string> match_labels = 1; //match_labels is used to a label query over a set of resources and select those which match these key,value constraints
+}
+
+message IngressRule {
+  repeated EndpointSelector from_endpoints = 1; //from_endpoints is a list of endpoints identified by an EndpointSelector which are allowed to communicate with the endpoint subject to the rule.
+  repeated PortRule to_ports = 2; //to_ports is a list of destination ports identified by port number and protocol which the endpoint subject to the rule is allowed to receive connections on.
+}
+
+message EgressRule {
+  repeated FQDNSelector to_fqdns = 1; //to_fqdns allows whitelisting DNS names in place of IPs.
+  repeated PortRule to_ports = 2; //to_ports is a list of destination ports identified by port number and protocol which the endpoint subject to the rule is allowed to connect to.
+}
+
+message FQDNSelector {
+  string match_name = 1; //match_name matches literal DNS names.
+  string match_pattern = 2; //match_pattern allows using wildcards to match DNS names.
+}
+
+message PortRule {
+  repeated PortProtocol ports = 1; //ports is a list of L4 port/protocol
+}
+
+message PortProtocol {
+  string port = 1; //port is an L4 port number
+  string protocol = 2; //protocol is the L4 protocol.
+}

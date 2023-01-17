@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package operator.v1;
+
+import "gogoproto/gogo.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+
+option java_package = "io.confluent.cloud.protobuf.operator.v1";
+option java_multiple_files = true;
+option java_outer_classname = "LogicalKafkaClusterProto";
+
+option go_package = "github.com/confluentinc/cc-structs/operator/v1;v1";
+
+message LogicalKafkaClusterList {
+  k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta type_meta = 1 [(gogoproto.embed)=true, (gogoproto.jsontag)=",inline"];
+  k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta list_meta = 2 [(gogoproto.embed)=true, (gogoproto.jsontag)="metadata,omitempty"];
+  repeated LogicalKafkaCluster items = 3;
+}
+
+message LogicalKafkaCluster {
+  k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta type_meta = 1 [(gogoproto.embed)=true, (gogoproto.jsontag)=",inline"];
+  k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta object_meta = 2 [(gogoproto.embed)=true, (gogoproto.jsontag)="metadata,omitempty"];
+
+  string logical_cluster_id = 3;
+  string physical_cluster_id = 4;
+  string logical_cluster_name = 5;
+  string account_id = 6;
+  string k8s_cluster_id = 7;
+  string logical_cluster_type = 8;
+  uint64 storage_bytes = 9;
+  uint64 network_ingress_byte_rate = 10;
+  uint64 network_egress_byte_rate = 11;
+  uint64 broker_request_percentage = 12;
+  uint64 max_network_ingress_byte_rate = 13;
+  uint64 max_network_egress_byte_rate = 14;
+  int32 max_partitions = 15;
+}

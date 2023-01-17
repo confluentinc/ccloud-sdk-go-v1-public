@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package ccloud.core;
+
+import "core/error.proto";
+import "gogoproto/gogo.proto";
+import "k8s.io/api/core/v1/generated.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+option java_package = "io.confluent.cloud.protobuf.kafka.core.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+// How services know whether to operate on the msg or ignore. If the service
+// was running in AWS for instance, and the router said the cloud was for "GCP"
+// it'd ignore. Specified by the scheduler-service.
+message Router {
+  string cloud = 1;
+  string region = 2;
+  string k8s_cluster = 3;
+  reserved 4;
+  string cluster = 5;
+}
+
+message Secret {
+  // see APIKeysSecret, APIKeysDataKey in consts.go if you're using this for the API keys
+  k8s.io.api.core.v1.Secret secret = 1 [(gogoproto.embed)=true, (validate.rules).message.skip = true, (gogoproto.moretags) = "redact:\"-\""];
+}
+
+// APIKeys is the data marshaled in secret.Data's "api_key" key-value (see k8s' Secret.Data)
+message APIKeys {
+  // The keys are the users' api key values.
+  map<string, APIKey> keys = 1;
+}
+
+message APIKey {
+  string sasl_mechanism = 1;
+  string hashed_secret = 2;
+  string hash_function = 3;
+  string logical_cluster_id = 4;
+  string user_id = 6;
+  bool service_account = 7;
+}
+
+message KafkaHealthcheckExternalKeys {
+  string kafka_key = 1;
+  string kafka_secret = 2 [(gogoproto.moretags) = "redact:\"-\""];
+  string dd_api_key = 3 [(gogoproto.moretags) = "redact:\"-\""];
+  string kafka_link_key = 4;
+  string kafka_link_secret = 5 [(gogoproto.moretags) = "redact:\"-\""];
+  string kafka_rbac_key = 6;
+  string kafka_rbac_secret = 7 [(gogoproto.moretags) = "redact:\"-\""];
+}
+
+message KSQLHealthcheckExternalKeys {
+  string dd_api_key = 1 [(gogoproto.moretags) = "redact:\"-\""];
+  string ksql_key = 2;
+  string ksql_secret = 3 [(gogoproto.moretags) = "redact:\"-\""];
+}
+
+message TieredStorage {
+  string backend = 1;
+  string bucket = 2;
+  string region = 3;
+  bool tier_all_topics = 4;
+  string role = 5;
+  string encryption_key_id = 6;
+  google.protobuf.Int64Value local_hotset_ms = 7;
+  string endpoint = 8;
+  reserved 9;
+  // e.g. credentials JSON, for example the REST API/clients format:
+  // https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys
+  bytes service_account_secret = 10 [(gogoproto.moretags) = "redact:\"-\""];
+  // e.g. the service account email in gcp
+  string service_account_id = 11;
+  // cire-storage-bucket-service deployment reference
+  string deployment_id = 12;
+}
+
+message ReadinessHealthCheckRequest {
+  map<string, string> request_carrier = 1 [(gogoproto.moretags) = "redact:\"-\""];
+  core.Error error = 2;
+}
+
+message ReadinessHealthCheckReply {
+  core.Error error = 1;
+  string message = 2;
+}
+
+message Credentials {
+  string username = 1;
+  string password = 2 [(gogoproto.moretags) = "redact:\"-\""];
+}
+
+message MarketplaceCreds {
+  string token = 1;
+  core.MarketplacePartner partner = 2;
+}
+
+enum MarketplacePartner {
+  UNKNOWN = 0;
+  GCP = 1;
+  AWS = 2;
+  AZURE = 3;
+}
+
+message DataBalancerConfig {
+  google.protobuf.Int64Value replication_throttle_bytes_per_sec = 1;
+  google.protobuf.BoolValue self_healing_goal_violation_enabled = 2;
+  google.protobuf.Int32Value max_volume_throughput_mb_per_sec = 3;
+  google.protobuf.DoubleValue write_throughput_multiplier = 4;
+  google.protobuf.DoubleValue read_throughput_multiplier = 5;
+}
+
+// Used by spec services to return feature flags to scheduler
+message FeatureFlagValue {
+      oneof flag_value {
+        int64 int_val = 1;
+        bool bool_val = 2;
+        string string_val = 3;
+    }
+}
