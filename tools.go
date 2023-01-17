@@ -4,7 +4,6 @@
 package tools
 
 import (
-	_ "github.com/confluentinc/cc-structs/operator/v1"
 	_ "github.com/confluentinc/proto-go-setter"
 	_ "github.com/envoyproxy/protoc-gen-validate"
 	_ "github.com/gogo/googleapis/google/rpc"
