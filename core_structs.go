@@ -188,3 +188,15 @@ func (e *Error) printStack(b *bytes.Buffer) {
 type Stack struct {
 	Callers []uintptr
 }
+
+func (t *Stack) Size() int {
+	return 0
+}
+
+func (t *Stack) Unmarshal(data []byte) error {
+	return nil
+}
+
+func (t *Stack) MarshalTo(data []byte) (n int, err error) {
+	return 0, nil
+}

@@ -3887,38 +3887,6 @@ func (m *SuspensionStatus) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *MarketplaceCreds) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MarketplaceCreds) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Token) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOrg(dAtA, i, uint64(len(m.Token)))
-		i += copy(dAtA[i:], m.Token)
-	}
-	if m.Partner != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintOrg(dAtA, i, uint64(m.Partner))
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
-}
-
 func (m *SignupRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4038,39 +4006,6 @@ func (m *SignupRequest) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintOrg(dAtA, i, uint64(len(m.CountryCode)))
 		i += copy(dAtA[i:], m.CountryCode)
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
-}
-
-func (m *Credentials) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Credentials) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Username) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOrg(dAtA, i, uint64(len(m.Username)))
-		i += copy(dAtA[i:], m.Username)
-	}
-	if len(m.Password) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintOrg(dAtA, i, uint64(len(m.Password)))
-		i += copy(dAtA[i:], m.Password)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -5338,26 +5273,6 @@ func (m *SignupRequest) Size() (n int) {
 		n += 1 + l + sovOrg(uint64(l))
 	}
 	l = len(m.CountryCode)
-	if l > 0 {
-		n += 1 + l + sovOrg(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *Credentials) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Username)
-	if l > 0 {
-		n += 1 + l + sovOrg(uint64(l))
-	}
-	l = len(m.Password)
 	if l > 0 {
 		n += 1 + l + sovOrg(uint64(l))
 	}
