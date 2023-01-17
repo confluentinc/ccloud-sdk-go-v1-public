@@ -173,6 +173,10 @@ message DeleteSchemaValidationResourcesReply {
   .ccloud.core.Error error = 1;
 }
 
+message DeleteSchemaRegistryClusterReply {
+  .ccloud.core.Error error = 1;
+}
+
 message SchemaRegistryClusterConfig {
   string name = 4 [deprecated = true];
   string kafka_cluster_id = 1; //internal only

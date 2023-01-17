@@ -27,3 +27,7 @@ func (t *GetMeRequest) SetRequestCarrier(request_carrier map[string]string) {
 func (t *GetLoginRealmRequest) SetRequestCarrier(request_carrier map[string]string) {
 	t.RequestCarrier = request_carrier
 }
+
+func (t *CreateEmailVerificationRequest) SetRequestCarrier(request_carrier map[string]string) {
+	t.RequestCarrier = request_carrier
+}

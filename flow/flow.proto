@@ -67,3 +67,9 @@ message GetLoginRealmReply {
   bool is_sso = 2;
   .ccloud.core.Error  error = 3;
 }
+
+message CreateEmailVerificationRequest {
+  // Only username is required
+  .ccloud.org.Credentials credentials = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+}
