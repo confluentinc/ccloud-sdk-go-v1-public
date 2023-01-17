@@ -3,7 +3,6 @@ package ccloud
 import (
 	"bytes"
 	"fmt"
-	fmt "fmt"
 	math "math"
 	"runtime"
 	"sort"
