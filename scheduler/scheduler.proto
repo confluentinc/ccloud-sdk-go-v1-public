@@ -134,6 +134,14 @@ message CreateSchemaRegistryClusterRequest {
   SchemaRegistryCluster cluster = 4;
 }
 
+message CreateSchemaRegistryClusterReply {
+  .ccloud.core.Error error = 1;
+  // {"field name": "err msg"}
+  map<string, string> validation_errors = 2;
+  SchemaRegistryCluster cluster = 3;
+  APICredentials credentials = 4;
+}
+
 message GetSchemaRegistryClustersReply {
   .ccloud.core.Error error = 1;
   repeated SchemaRegistryCluster clusters = 2;

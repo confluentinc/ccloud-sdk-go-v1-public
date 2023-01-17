@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package ccloud.flow;
+
+import "gogoproto/gogo.proto";
+import "core/error.proto";
+import "org/org.proto";
+import "setter.proto";
+
+option java_package = "io.confluent.cloud.protobuf.kafka.flow.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+message AuthenticateRequest {
+  string email = 1;
+  string password = 2 [(gogoproto.moretags) = "redact:\"-\""];
+  map<string, string> request_carrier = 3 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  string id_token = 4;
+  string external_oauth_token = 5;
+  string org_resource_id = 6;
+  string identity_pool = 7;
+  string refresh_token = 8;
+}
+
+message AuthenticateReply {
+  string token = 1;
+  .ccloud.core.Error  error = 2;
+  .ccloud.org.User user = 3;
+  .ccloud.org.Organization organization = 4;
+  string refresh_token = 5;
+  string identity_provider = 6;
+}
+
+message CreateConnectAuthTokenReply {
+  .ccloud.core.Error  error = 1;
+  string token = 2;
+}
+
+message CreateDecisionEngineAuthTokenReply {
+  .ccloud.core.Error  error = 1;
+  string token = 2;
+}
+
+message GetMeRequest {
+  map<string, string> request_carrier = 1 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  // parameters parsed from auth context
+}
+
+message GetMeReply {
+  .ccloud.core.Error  error = 1;
+  .ccloud.org.User user = 2;
+  .ccloud.org.Organization organization = 3;
+  repeated .ccloud.org.Account accounts = 4;
+  .ccloud.org.Account account = 5; // deprecated, use accounts instead
+}
+
+message GetLoginRealmRequest {
+  string client_id = 1;
+  string email = 2;
+  map<string, string> request_carrier = 3 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  string org_resource_id = 4; // optional
+}
+
+message GetLoginRealmReply {
+  string realm = 1;
+  bool is_sso = 2;
+  .ccloud.core.Error  error = 3;
+}
