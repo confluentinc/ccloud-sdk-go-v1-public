@@ -540,6 +540,10 @@ type Marketplace struct {
 	XXX_sizecache        int32                    `json:"-"`
 }
 
+func (m *Marketplace) Reset()         { *m = Marketplace{} }
+func (m *Marketplace) String() string { return proto.CompactTextString(m) }
+func (*Marketplace) ProtoMessage()    {}
+
 type Address struct {
 	Street1              string   `protobuf:"bytes,1,opt,name=street1,proto3" json:"street1,omitempty" db:"street1,omitempty" url:"street1,omitempty"`
 	Street2              string   `protobuf:"bytes,2,opt,name=street2,proto3" json:"street2,omitempty" db:"street2,omitempty" url:"street2,omitempty"`
