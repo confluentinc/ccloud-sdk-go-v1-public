@@ -69,11 +69,6 @@ message Card {
   string exp_year = 5;
 }
 
-message Account {
-  string bank_name = 1;
-  string last4 = 2;
-}
-
 message GetPaymentInfoReply {
   Card card = 1;
   .ccloud.org.Organization organization = 3;
