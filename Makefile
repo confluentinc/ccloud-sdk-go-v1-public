@@ -9,4 +9,4 @@ protoc-binaries:
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@v1.9.5
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@v1.9.5
 	# Install protoc-gen-structs, since we already have it just install it from local
-	(cd cmd/protoc-gen-structs && go install .)
+	(cd protoc-gen-structs && go install .)
