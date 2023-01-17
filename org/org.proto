@@ -1,0 +1,360 @@
+syntax = "proto3";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+import "core/core.proto";
+import "core/error.proto";
+import "setter.proto";
+import "sql.proto";
+
+package ccloud.org;
+
+option java_package = "io.confluent.cloud.protobuf.kafka.org.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+message PageInfo {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+// representation of SSO configs on the DB records themselves
+message Sso {
+  option (sql.all) = "json";
+
+  bool enabled = 1; // indicates whether SSO is enabled for an org or not
+  string auth0_connection_name = 2; // Name of Auth0 Connection for org's SAML Identity Provider
+  string tenant_id = 3; // Tenant ID of a multi-tenant SSO config (optional)
+  bool multi_tenant = 4; // True if connection is a multi-tenant connection
+  reserved 5; // SsoOverrides overrides = 5;
+  SsoMode mode = 7; // Not in use yet
+}
+
+enum SsoMode {
+  SSO_MODE_UNKNOWN = 0;
+  SSO_MODE_RESTRICTED = 1;
+  SSO_MODE_LAX = 2;
+}
+
+enum AuthType {
+  AUTH_TYPE_UNKNOWN = 0;
+  AUTH_TYPE_LOCAL = 1;
+  AUTH_TYPE_SSO = 2;
+  reserved 3; // deprecated AUTH_TYPE_LOCAL_AND_SSO
+}
+
+message User {
+  int32 id = 1 [(gogoproto.moretags) = "url:\"id\""];
+  string email = 2 [(validate.rules).string.email = true, (gogoproto.moretags) = "url:\"email\""];
+  string first_name = 3 [(gogoproto.moretags) = "url:\"first_name\""];
+  string last_name = 4 [(gogoproto.moretags) = "url:\"last_name\""];
+  reserved 5; // DEPRECATED string okta_id = 5;
+  reserved 6; //int32 organization_id = 6 [(gogoproto.moretags) = "url:\"organization_id\""]; // deprecated
+  bool deactivated = 7;
+  google.protobuf.Timestamp verified = 11;
+  google.protobuf.Timestamp created = 8;
+  google.protobuf.Timestamp modified = 9;
+  reserved 10; // deprecated password_changed
+  string service_name = 12;
+  string service_description = 13;
+  bool service_account = 14; // True for serviceAccounts, False for regular user
+  reserved 15; //Sso sso = 15; // deprecated
+  map<string, string> preferences = 16;
+  bool internal = 17;
+  string resource_id = 18;
+  google.protobuf.Timestamp deactivated_at = 19;
+  string social_connection = 20;
+  AuthType auth_type = 21;
+}
+
+message Account {
+  string id = 1;
+  string name = 2;
+  reserved 3;
+  int32 organization_id = 4;
+  bool deactivated = 5;
+  google.protobuf.Timestamp created = 6;
+  google.protobuf.Timestamp modified = 7;
+  AccountConfig config = 8;
+  bool internal = 9;
+  google.protobuf.Timestamp deactivated_at = 10;
+  string org_resource_id = 11;
+}
+
+message AccountConfig {
+  int32 max_kafka_clusters = 1;
+}
+
+message Plan {
+  message Product {
+    double read_throughput_mb = 1; // max
+    double write_throughput_mb = 2; // max
+    // max data that can be retained, usable, not counting total allocated for replication
+    int32 storage_gb = 3;
+  }
+
+  message Billing {
+    BillingMethod method = 1;
+    BillingInterval interval = 2;
+
+    // in hundredths of a cent, aggregates the running cost of all clusters
+    // in the current billing cycle
+    uint64 accrued_this_cycle = 3;
+
+    string stripe_customer_id = 4;
+    string email = 5;  // used to send invoices and other billing related notifications
+  }
+
+  Address tax_address = 1;
+  ProductLevel product_level = 2; // defaults to PRO
+  google.protobuf.Timestamp trial_start = 3;
+  google.protobuf.Timestamp trial_end = 4;
+  google.protobuf.Timestamp plan_start = 5;
+  google.protobuf.Timestamp plan_end = 6;
+  reserved 7; // coupon
+  Product product = 8;
+  Billing billing = 9;
+  string referral_code = 10;
+  google.protobuf.BoolValue  accept_tos = 11;
+  bool allow_multi_tenant = 12;
+  google.protobuf.BoolValue  accept_tos_platform = 13;
+}
+
+enum BillingMethod {
+  STRIPE = 0;
+  MANUAL = 1;
+  GCP = 2;
+  SKIP = 3;
+  MARKETPLACE = 4;
+  NONE = 5;
+}
+
+enum BillingInterval {
+  MONTHLY = 0;
+  ANNUALLY = 1; // only available to MANUAL or GCP billing
+}
+
+enum ProductLevel {
+  DEVELOPER = 0;
+  TEAM = 1;
+  ENTERPRISE = 2;
+  UNIFIED = 3;   // Default for Unified customers post 10/31 launch
+}
+
+message Saml {
+  bool enabled = 1; // indicates whether SAML is enabled for an org or not
+  string metadata_url = 2; // SAML metadata url https://en.wikipedia.org/wiki/SAML_Metadata
+}
+
+message Organization {
+  int32 id = 1;
+  string name = 2;
+  bool deactivated = 3;
+  string stripe_customer_id = 4; // DEPRECATED
+  google.protobuf.Timestamp created = 5;
+  google.protobuf.Timestamp modified = 6;
+  string billing_email = 7; // DEPRECATED
+  Plan plan = 8;
+  Saml saml  = 9;
+  Sso sso = 10;
+  Marketplace marketplace = 11;
+  string resource_id = 12;
+
+  //derived flags
+  bool has_entitlement = 13; // DEPRECATED
+  bool show_billing = 14;
+
+  AuditLog audit_log = 15;
+
+  // Derived flag from active orders (based on the current time), indicating if an org has commitment with us.
+  bool has_commitment = 16 [deprecated = true];
+
+  //derived marketplace subscription
+  MarketplaceSubscription marketplace_subscription = 17;
+
+  google.protobuf.Timestamp deactivated_at = 18;
+
+  SuspensionStatus suspension_status = 19;
+
+  string display_label = 20;
+}
+
+message SuspensionStatus {
+  google.protobuf.Timestamp suspended = 1;
+  SuspensionStatusType status = 2;
+  SuspensionEventType event_type = 3;
+  google.protobuf.Timestamp scheduled_deactivated_at = 4;
+  int64 version = 5;
+  string error_message = 6;
+  google.protobuf.Timestamp scheduled_resources_deleted_at = 7;
+  google.protobuf.Timestamp resources_deleted_at = 8;
+}
+
+enum SuspensionStatusType {
+  SUSPENSION_UNKNOWN = 0;
+  SUSPENSION_IN_PROGRESS = 1;
+  SUSPENSION_COMPLETED = 2;
+  UNSUSPENSION_IN_PROGRESS = 3;
+  SUSPENSION_FAILED = 4;
+  UNSUSPENSION_FAILED = 5;
+}
+
+enum MarketplaceSubscription {
+  SUBSCRIPTION_NONE = 0;
+  SUBSCRIPTION_PENDING = 1;
+  SUBSCRIPTION_ACTIVE = 2;
+}
+
+// TODO remove with CDMUM-789
+message MarketplaceCreds {
+  string token = 1;
+  core.MarketplacePartner partner = 2;
+}
+
+enum SuspensionEventType {
+  SUSPENSION_EVENT_UNKNOWN = 0;
+  SUSPENSION_EVENT_END_OF_FREE_TRIAL = 1;
+  SUSPENSION_EVENT_CUSTOMER_INITIATED_ORG_DEACTIVATION = 2;
+  SUSPENSION_EVENT_MARKETPLACE_ENTITLEMENT_CANCELLATION = 3;
+  SUSPENSION_EVENT_NO_PAYMENT = 4;
+  SUSPENSION_EVENT_SECURITY_INCIDENT_OR_ABUSE = 5;
+  SUSPENSION_EVENT_OTHERS = 6;
+  SUSPENSION_EVENT_INTERNAL_INITIATED_ORG_DEACTIVATION = 7;
+}
+
+message SignupRequest {
+  Organization organization = 1;
+  User user = 2;
+  Credentials credentials = 3;
+  string stripe_token = 4; // generated by FE through stripe.js
+  bool enterprise = 5; //deprecate
+  map<string, string> request_carrier = 6 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  Utm utm = 7;
+  bool existing_creds = 8;
+  string token = 9;
+  MarketplaceCreds marketplace_creds = 10; // set for signup through marketplace
+  string country_code = 11; // two-character ISO-3166 country code in uppercase
+}
+
+message Credentials {
+  string username = 1;
+  string password = 2 [(gogoproto.moretags) = "redact:\"-\""];
+}
+
+message SignupReply {
+  User user = 1;
+  Organization organization = 2;
+  Account account = 3;
+  reserved 4; // "token"
+  .ccloud.core.Error error = 5;
+}
+
+message GetUsersReply {
+  repeated User users = 1;
+  .ccloud.core.Error error = 2;
+  PageInfo page_info = 3;
+}
+
+message CreateAccountRequest {
+  Account account = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+}
+
+message CreateAccountReply {
+  Account account = 1;
+  .ccloud.core.Error error = 2;
+}
+
+message GetAccountReply {
+  Account account = 1;
+  .ccloud.core.Error error = 2;
+}
+
+message ListAccountsReply {
+  repeated Account accounts = 1;
+  .ccloud.core.Error error = 2;
+  PageInfo page_info = 3;
+}
+
+message Address {
+  string street1 = 1;
+  string street2 = 2;
+  string city = 3;
+  string state = 4;
+  string country = 5;
+  string zip = 6;
+}
+
+message Utm {
+  string source = 1;
+  string campaign = 2;
+  string medium = 3;
+  string partner = 4;
+  string term = 5;
+  string content = 6;
+}
+
+/*
+ * Following fields are required to get the service account
+ * id, organization_id of the super user making the request.
+ */
+message GetServiceAccountsRequest {
+  User user = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  PageInfo page_info = 3;
+  Organization organization = 4;  // if specified, scope the lookup within the org
+}
+
+// GetServiceAccountsReply contains the requests service account user
+message GetServiceAccountsReply {
+  repeated User users = 1;
+  .ccloud.core.Error error = 2;
+  PageInfo page_info = 3;
+}
+
+/*
+ * Following fields are required to get the service account
+ * id of the service account.
+ */
+message GetServiceAccountRequest {
+  User user = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  bool include_deactivated = 3;
+  Organization organization = 4;
+}
+
+// GetServiceAccountReply contains the requested service account user
+message GetServiceAccountReply {
+  User user = 1;
+  .ccloud.core.Error error = 2;
+}
+
+message Marketplace {
+  core.MarketplacePartner partner = 1;
+  string customer_id = 2; //Identifies customer uniquely in partner(gcp, aws, azure...)
+  MarketplaceCustomerState customer_state = 3;
+  bool console_integrated = 4; //True if customer comes from console integration
+}
+
+enum MarketplaceCustomerState {
+  CUSTOMER_APPROVAL_PENDING = 0;  //gcp goes to pending by default; needs explicit approval
+  CUSTOMER_APPROVAL_SENT = 1; //approval sent to partner(gcp) but haven't recieved confirmation yet
+  CUSTOMER_APPROVED = 2;  // aws and azure are approved by default. gcp approved on pub/sub confirmation
+  CUSTOMER_DELETED = 3; // deleted on partner
+
+}
+
+/**
+ * Represents the customer-accessible audit log cluster info for the organization
+ */
+message AuditLog {
+  string cluster_id = 1; /// id for the logical kafka cluster
+  string account_id = 2; /// id for the owning account
+  int32 service_account_id = 3; /// id for the service account to request api-key
+  string topic_name = 4; /// kafka topic name for audit events
+  string service_account_resource_id = 5; /// resource id for the service account to request api-key
+}
+

@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "core/error.proto";
+import "org/org.proto";
+import "setter.proto";
+
+package ccloud.billing;
+
+option java_package = "io.confluent.cloud.protobuf.kafka.billing.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+message GetPriceTableReply {
+  PriceTable price_table = 1;
+  .ccloud.core.Error error = 2;
+}
+
+// promo code api object for users
+message ClaimPromoCodeRequest {
+  int32 org_id = 1;
+  string code = 2;
+  int32 claimed_by = 3;
+  map<string, string> request_carrier = 4 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+}
+
+message ClaimPromoCodeReply {
+  PromoCodeClaim claim = 1;
+  .ccloud.core.Error error = 2;
+}
+
+message GetPromoCodeClaimsRequest {
+  int32 org_id = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  bool exclude_expired = 3;
+}
+
+message GetPromoCodeClaimsReply {
+  repeated PromoCodeClaim claims = 1;
+  .ccloud.core.Error error = 2;
+}
+
+message PromoCodeClaim {
+  int32 org_id = 1;
+  string code = 2;
+  int64 amount = 3;
+  int64 balance = 4;
+  google.protobuf.Timestamp claim_date = 5;
+  google.protobuf.Timestamp credit_expiration_date = 6;
+  int32 claimed_by = 7;
+}
+
+message PriceTable {
+  map<string, UnitPrices> price_table = 1;
+}
+
+message UnitPrices {
+  map<string, double> prices = 1;
+  string unit = 2;
+}
+
+message Card {
+  string cardholder = 1;
+  string brand = 2;
+  string last4 = 3;
+  string exp_month = 4;
+  string exp_year = 5;
+}
+
+message GetPaymentInfoReply {
+  Card card = 1;
+  .ccloud.org.Organization organization = 3;
+  .ccloud.core.Error error = 2;
+  TaxAddress tax_address = 4;
+  repeated TaxId tax_ids = 5;
+}
+
+message UpdatePaymentInfoRequest {
+  string stripe_token = 1 [(gogoproto.moretags) = "redact:\"-\""];
+  .ccloud.org.Organization organization = 2;  // org id required
+  map<string, string> request_carrier = 3 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+}
+
+message UpdatePaymentInfoReply {
+  Card card = 1;
+  .ccloud.org.Organization organization = 3; // only updates org email
+  .ccloud.core.Error error = 2;
+}
+
+message TaxAddress {
+  string line1 = 1;
+  string line2 = 2;
+  string city = 3;
+  string state = 4;
+  // country must follow the ISO 3166-1 alpha-2 standard
+  // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+  string country = 5;
+  string postal_code = 6;
+}
+
+message TaxId {
+  // details of taxId definition is here:
+  // https://stripe.com/docs/api/customer_tax_ids/object
+  string type_enum = 1; // Type of the tax ID. e.g. us_ein
+  string tax_id = 2; // Value of the tax ID.
+  string stripe_object_id = 3 [(gogoproto.moretags) = "redact:\"-\""];
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package ccloud.core;
+
+import "gogoproto/gogo.proto";
+
+option java_package = "io.confluent.cloud.protobuf.kafka.core.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+
+message Error {
+  // http status code
+  int32 code = 1;
+  // a short, human-readable summary of the problem. It should not change from occurrence to occurrence of the problem
+  string title = 9;
+  // human-readable explanation specific to this occurrence of the problem
+  string message = 2;
+  map<string, string> nested_errors = 3;
+  repeated string details = 4;
+  bytes stack = 5 [(gogoproto.customtype) = "Stack"];
+  // an application-specific error code, expressed as a string value.
+  string error_code = 6;
+  // optional pointer to input request document
+  ErrorSource source = 7;
+  // list of errors that are needed for public apis
+  repeated Error multi_errors = 8;
+}
+
+message ErrorSource {
+  // a JSON Pointer [RFC6901] to the associated entity in the request document [e.g. \"/data\" for a primary data object, or \"/data/attributes/title\" for a specific attribute].
+  string pointer = 1;
+  // a string indicating which query parameter caused the error.
+  string parameter = 2;
+  // a url indicating the location of the conflicting resource
+  string location = 3;
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "sql.proto";
+
+package ccloud.streamgovernance;
+
+option java_package = "io.confluent.cloud.protobuf.kafka.streamgovernance.v2";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+message StreamGovernanceRegion {
+  google.protobuf.Timestamp created = 1;
+  google.protobuf.Timestamp modified = 2;
+  google.protobuf.Timestamp deactivated = 3;
+  string id = 4;
+  string display_name = 5;  // Inferred at runtime from the region.
+  string cloud = 6;         // Inferred at runtime from the region.
+  string region_id = 7;
+  string environment_id = 8;
+
+  message Config {
+    option (sql.all) = "json";
+    string cluster_id = 1;
+    repeated string package = 2;
+    reserved 3;
+    string geolocation_name = 4 [deprecated = true];
+  }
+
+  Config config = 9;
+}

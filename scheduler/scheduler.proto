@@ -1,0 +1,235 @@
+syntax = "proto3";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "core/error.proto";
+import "streamgovernance/streamgovernance.proto";
+import "setter.proto";
+import "sql.proto";
+
+package ccloud.scheduler;
+
+option java_package = "io.confluent.cloud.protobuf.kafka.scheduler.v1";
+option java_multiple_files = true;
+
+option go_package = "github.com/confluentinc/ccloud-sdk-go-v1-public;ccloud";
+
+enum NetworkType {
+  UNKNOWN_TYPE = 0;
+  PUBLIC = 1;
+  PRIVATE_LINK = 2;
+  TRANSIT_GATEWAY = 3;
+  VPC_PEERING = 4;
+  // INTERNAL requires that source traffic origniates from the NetworkRegion's requested CIDR.
+  INTERNAL = 5;
+}
+
+message APICredentials {
+  string key = 1;
+  string secret = 2 [(gogoproto.moretags) = "redact:\"-\""];
+}
+
+message Schedulability {
+  message Tenancy {
+    message Durability {
+      repeated NetworkType low = 1 [(gogoproto.jsontag) = "LOW"];
+      repeated NetworkType high = 2 [(gogoproto.jsontag) = "HIGH"];
+    }
+    Durability shared_cluster = 1;
+    Durability dedicated_cluster = 2;
+  }
+  Tenancy shared_network = 1;
+  Tenancy dedicated_network = 2;
+}
+
+message AvailabilityZone {
+  reserved 1;
+  // us-west-2
+  string name = 2;
+  // AWS:   zone id
+  // GCP:   zone name
+  // AZURE: zone name
+  string zone_id = 3;
+  // The internal mothership zone id
+  string id = 4;
+  string region_id = 5;
+  google.protobuf.BoolValue sni_enabled = 6;
+  google.protobuf.BoolValue schedulable = 7;
+  google.protobuf.Timestamp created = 8 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp modified = 9 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp deactivated = 10 [(gogoproto.stdtime) = true];
+  reserved 11;
+  string realm = 12;
+}
+
+message Region {
+  string id = 1;
+  string cloud = 2;
+  repeated AvailabilityZone zones = 3;
+  string name = 4;
+  // This field will be calcuated at runtime. Default to false
+  // e.g. when there is available physical cluster for logical cluster provision, it will be set to true
+  bool is_schedulable = 5;
+  // This field will be calcuated at runtime. Default to false
+  // e.g. when there is available physical cluster for logical cluster provision, and its Durability==High, it will be set to true
+  bool is_multizone_enabled = 6;
+
+  message Docker {
+    option (sql.all) = "json";
+    string repo = 1;
+    string image_prefix = 2;
+  }
+
+  message Config {
+    option (sql.all) = "json";
+    Docker docker = 1;
+  }
+
+  Config config = 7;
+
+  // This is a vanity field. This means that it is not persisted to the DB
+  // but computed at runtime.
+  Schedulability schedulability = 8;
+}
+
+message AccountMetadata {
+  option (sql.all) = "json";
+  string id = 1;
+}
+
+message CloudMetadata {
+  string id = 1;
+  repeated Region regions = 2;
+  string name = 3;
+  repeated AccountMetadata accounts = 4;
+}
+
+message SchemaRegistryLocation {
+  GlobalSchemaRegistryLocation id = 1 [deprecated = true];
+  string name = 2 [deprecated = true];
+  string cluster_id = 3;
+  string service_provider = 4;
+  repeated string package = 5; // List of packages this location belongs to.
+  string service_provider_region = 6;
+  string region_display_name = 7;
+}
+
+message EnvironmentStatus {
+  string info = 1;
+  string error = 2;
+}
+
+message GetEnvironmentMetadataReply {
+  .ccloud.core.Error error = 1;
+  repeated CloudMetadata clouds = 2;
+  EnvironmentStatus status = 3;
+  repeated SchemaRegistryLocation schema_registry_locations = 4;
+}
+
+message CreateSchemaRegistryClusterRequest {
+  SchemaRegistryClusterConfig config = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+  reserved 3;
+  SchemaRegistryCluster cluster = 4;
+}
+
+message CreateSchemaRegistryClusterReply {
+  .ccloud.core.Error error = 1;
+  // {"field name": "err msg"}
+  map<string, string> validation_errors = 2;
+  SchemaRegistryCluster cluster = 3;
+  APICredentials credentials = 4;
+}
+
+message GetSchemaRegistryClustersReply {
+  .ccloud.core.Error error = 1;
+  repeated SchemaRegistryCluster clusters = 2;
+  string next_page_token = 3;
+}
+
+message GetSchemaRegistryClusterReply {
+  .ccloud.core.Error error = 1;
+  SchemaRegistryCluster cluster = 2;
+}
+
+message UpdateSchemaRegistryClusterRequest {
+  SchemaRegistryCluster cluster = 1;
+  map<string, string> request_carrier = 2 [(setter.include)=true, (gogoproto.moretags) = "redact:\"-\""];
+}
+
+message UpdateSchemaRegistryClusterReply {
+  .ccloud.core.Error error = 1;
+  map<string, string> validation_errors = 2;
+  SchemaRegistryCluster cluster = 3;
+}
+
+message DeleteSchemaValidationResourcesRequest {
+  string logical_cluster_id = 1;
+  int32 organization_id = 2;
+}
+
+message DeleteSchemaValidationResourcesReply {
+  .ccloud.core.Error error = 1;
+}
+
+message DeleteSchemaRegistryClusterReply {
+  .ccloud.core.Error error = 1;
+}
+
+message SchemaRegistryClusterConfig {
+  string name = 4 [deprecated = true];
+  string kafka_cluster_id = 1; //internal only
+  int32 servers = 2; // internal only: number of servers in the cluster
+  string account_id = 3;
+  GlobalSchemaRegistryLocation location = 5 [deprecated = true];
+  string service_provider = 6; // e.g. aws, gcp, or local
+  string physical_cluster_id = 7; // internal only: physical cluster to create logical cluster against
+  string package = 8;
+  string service_provider_region = 9; // e.g. us-west-2
+  .ccloud.streamgovernance.StreamGovernanceRegion region = 10;
+  bool dedicated = 11;
+}
+
+enum GlobalSchemaRegistryLocation {
+  NONE = 0;
+  US = 1;
+  EU = 2;
+  APAC = 3;
+}
+
+enum ClusterStatus {
+  PROVISIONING = 0;
+  UP = 1;
+  DOWN = 2;
+  DELETING = 3;
+  DELETED = 4;
+  EXPANSION_PENDING = 5;
+  EXPANDING = 6;
+  SHRINK_PENDING = 7;
+  SHRINKING = 8;
+  STORAGE_EXPANDING = 9;
+}
+
+message SchemaRegistryCluster {
+  string id = 1;
+  string name = 10;
+  string kafka_cluster_id = 2;
+  string endpoint = 3; // e.g. https://r0.schema-registry-psrc-9llo9.confluent.aws.confluent.cloud:32000,https://r0.schema-registry-psrc-9llo9.confluent.aws.confluent.cloud:32001
+  google.protobuf.Timestamp created = 4;
+  google.protobuf.Timestamp modified = 5;
+  ClusterStatus status = 6;
+  string physical_cluster_id = 7; // internal only
+  string account_id = 8 [(gogoproto.moretags) = "url:\"account_id\""]; // id of account, set by the auth/gateway service
+  int32 organization_id = 9;
+  // maximum number of schemas allowed for this logical cluster
+  int32 max_schemas = 11;
+  string org_resource_id = 12;
+  string package = 13;
+  reserved 14;
+  reserved 15;
+  reserved 16;
+  string service_provider = 17;        // deprecated
+  string service_provider_region = 18; // deprecated
+  .ccloud.streamgovernance.StreamGovernanceRegion region = 19;
+}
