@@ -275,13 +275,6 @@ func (m *Organization) Reset()         { *m = Organization{} }
 func (m *Organization) String() string { return proto.CompactTextString(m) }
 func (*Organization) ProtoMessage()    {}
 
-func (m *Organization) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
 func (m *Organization) GetId() int32 {
 	if m != nil {
 		return m.Id
@@ -289,25 +282,46 @@ func (m *Organization) GetId() int32 {
 	return 0
 }
 
-func (m *Organization) GetResourceId() string {
+func (m *Organization) GetName() string {
 	if m != nil {
-		return m.ResourceId
+		return m.Name
 	}
 	return ""
 }
 
-func (m *Organization) GetSuspensionStatus() *SuspensionStatus {
+func (m *Organization) GetDeactivated() bool {
 	if m != nil {
-		return m.SuspensionStatus
+		return m.Deactivated
+	}
+	return false
+}
+
+func (m *Organization) GetStripeCustomerId() string {
+	if m != nil {
+		return m.StripeCustomerId
+	}
+	return ""
+}
+
+func (m *Organization) GetCreated() *types.Timestamp {
+	if m != nil {
+		return m.Created
 	}
 	return nil
 }
 
-func (m *Organization) GetAuditLog() *AuditLog {
+func (m *Organization) GetModified() *types.Timestamp {
 	if m != nil {
-		return m.AuditLog
+		return m.Modified
 	}
 	return nil
+}
+
+func (m *Organization) GetBillingEmail() string {
+	if m != nil {
+		return m.BillingEmail
+	}
+	return ""
 }
 
 func (m *Organization) GetPlan() *Plan {
@@ -317,11 +331,81 @@ func (m *Organization) GetPlan() *Plan {
 	return nil
 }
 
-func (m *Organization) GetDeactivated() bool {
+func (m *Organization) GetSaml() *Saml {
 	if m != nil {
-		return m.Deactivated
+		return m.Saml
+	}
+	return nil
+}
+
+func (m *Organization) GetSso() *Sso {
+	if m != nil {
+		return m.Sso
+	}
+	return nil
+}
+
+func (m *Organization) GetMarketplace() *Marketplace {
+	if m != nil {
+		return m.Marketplace
+	}
+	return nil
+}
+
+func (m *Organization) GetResourceId() string {
+	if m != nil {
+		return m.ResourceId
+	}
+	return ""
+}
+
+func (m *Organization) GetHasEntitlement() bool {
+	if m != nil {
+		return m.HasEntitlement
 	}
 	return false
+}
+
+func (m *Organization) GetShowBilling() bool {
+	if m != nil {
+		return m.ShowBilling
+	}
+	return false
+}
+
+func (m *Organization) GetAuditLog() *AuditLog {
+	if m != nil {
+		return m.AuditLog
+	}
+	return nil
+}
+
+func (m *Organization) GetMarketplaceSubscription() MarketplaceSubscription {
+	if m != nil {
+		return m.MarketplaceSubscription
+	}
+	return MarketplaceSubscription_SUBSCRIPTION_NONE
+}
+
+func (m *Organization) GetDeactivatedAt() *types.Timestamp {
+	if m != nil {
+		return m.DeactivatedAt
+	}
+	return nil
+}
+
+func (m *Organization) GetSuspensionStatus() *SuspensionStatus {
+	if m != nil {
+		return m.SuspensionStatus
+	}
+	return nil
+}
+
+func (m *Organization) GetDisplayLabel() string {
+	if m != nil {
+		return m.DisplayLabel
+	}
+	return ""
 }
 
 // Represents the customer-accessible audit log cluster info for the organization
