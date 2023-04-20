@@ -14,6 +14,7 @@ type AccountInterface interface {
 // Auth allows authenticating in Confluent Cloud
 type Auth interface {
 	Login(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
+	OktaLogin(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
 	User(context.Context) (*GetMeReply, error)
 }
 
