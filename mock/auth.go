@@ -16,11 +16,18 @@ type Auth struct {
 	lockLogin sync.Mutex
 	LoginFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
 
+	lockOktaLogin sync.Mutex
+	OktaLoginFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
+
 	lockUser sync.Mutex
 	UserFunc func(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error)
 
 	calls struct {
 		Login []struct {
+			Arg0 context.Context
+			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+		}
+		OktaLogin []struct {
 			Arg0 context.Context
 			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
 		}
@@ -71,6 +78,47 @@ func (m *Auth) LoginCalls() []struct {
 	return m.calls.Login
 }
 
+// OktaLogin mocks base method by wrapping the associated func.
+func (m *Auth) OktaLogin(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
+	m.lockOktaLogin.Lock()
+	defer m.lockOktaLogin.Unlock()
+
+	if m.OktaLoginFunc == nil {
+		panic("mocker: Auth.OktaLoginFunc is nil but Auth.OktaLogin was called.")
+	}
+
+	call := struct {
+		Arg0 context.Context
+		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+	}{
+		Arg0: arg0,
+		Arg1: arg1,
+	}
+
+	m.calls.OktaLogin = append(m.calls.OktaLogin, call)
+
+	return m.OktaLoginFunc(arg0, arg1)
+}
+
+// OktaLoginCalled returns true if OktaLogin was called at least once.
+func (m *Auth) OktaLoginCalled() bool {
+	m.lockOktaLogin.Lock()
+	defer m.lockOktaLogin.Unlock()
+
+	return len(m.calls.OktaLogin) > 0
+}
+
+// OktaLoginCalls returns the calls made to OktaLogin.
+func (m *Auth) OktaLoginCalls() []struct {
+	Arg0 context.Context
+	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+} {
+	m.lockOktaLogin.Lock()
+	defer m.lockOktaLogin.Unlock()
+
+	return m.calls.OktaLogin
+}
+
 // User mocks base method by wrapping the associated func.
 func (m *Auth) User(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error) {
 	m.lockUser.Lock()
@@ -114,6 +162,9 @@ func (m *Auth) Reset() {
 	m.lockLogin.Lock()
 	m.calls.Login = nil
 	m.lockLogin.Unlock()
+	m.lockOktaLogin.Lock()
+	m.calls.OktaLogin = nil
+	m.lockOktaLogin.Unlock()
 	m.lockUser.Lock()
 	m.calls.User = nil
 	m.lockUser.Unlock()
