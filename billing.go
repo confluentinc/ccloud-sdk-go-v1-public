@@ -9,12 +9,9 @@ import (
 )
 
 const (
-	priceTableEndpoint                 = "/api/organizations/%d/price_table?product=%v"
-	paymentInfoEndpoint                = "/api/organizations/%d/payment_info"
-	updateDefaultPaymentMethodEndpoint = "/api/organizations/%d/update_default_payment_method"
-	billingProfileEndpoint             = "/api/organizations/%d/billing_profile"
-	taxInfoEndpoint                    = "/api/organizations/%d/tax_info"
-	promoCodeEndpoint                  = "/api/organizations/%d/promo_code_claims"
+	priceTableEndpoint  = "/api/organizations/%d/price_table?product=%v"
+	paymentInfoEndpoint = "/api/organizations/%d/payment_info"
+	promoCodeEndpoint   = "/api/organizations/%d/promo_code_claims"
 )
 
 type BillingService struct {

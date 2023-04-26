@@ -29,7 +29,7 @@ func (a *AuthService) Login(ctx context.Context, req *AuthenticateRequest) (*Aut
 }
 
 func (a *AuthService) OktaLogin(ctx context.Context, req *AuthenticateRequest) (*AuthenticateReply, error) {
-	return a.login(ctx, "/okta/auth/sessions", req)
+	return a.login(ctx, "/api/okta/auth/sessions", req)
 }
 
 func (a *AuthService) login(_ context.Context, path string, req *AuthenticateRequest) (*AuthenticateReply, error) {
