@@ -5,7 +5,6 @@
 package mock
 
 import (
-	context "context"
 	sync "sync"
 
 	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
@@ -14,17 +13,16 @@ import (
 // EnvironmentMetadata is a mock of EnvironmentMetadata interface
 type EnvironmentMetadata struct {
 	lockGet sync.Mutex
-	GetFunc func(arg0 context.Context) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.CloudMetadata, error)
+	GetFunc func() ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.CloudMetadata, error)
 
 	calls struct {
 		Get []struct {
-			Arg0 context.Context
 		}
 	}
 }
 
 // Get mocks base method by wrapping the associated func.
-func (m *EnvironmentMetadata) Get(arg0 context.Context) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.CloudMetadata, error) {
+func (m *EnvironmentMetadata) Get() ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.CloudMetadata, error) {
 	m.lockGet.Lock()
 	defer m.lockGet.Unlock()
 
@@ -33,14 +31,11 @@ func (m *EnvironmentMetadata) Get(arg0 context.Context) ([]*github_com_confluent
 	}
 
 	call := struct {
-		Arg0 context.Context
-	}{
-		Arg0: arg0,
-	}
+	}{}
 
 	m.calls.Get = append(m.calls.Get, call)
 
-	return m.GetFunc(arg0)
+	return m.GetFunc()
 }
 
 // GetCalled returns true if Get was called at least once.
@@ -53,7 +48,6 @@ func (m *EnvironmentMetadata) GetCalled() bool {
 
 // GetCalls returns the calls made to Get.
 func (m *EnvironmentMetadata) GetCalls() []struct {
-	Arg0 context.Context
 } {
 	m.lockGet.Lock()
 	defer m.lockGet.Unlock()

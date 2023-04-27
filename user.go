@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -43,7 +42,7 @@ func NewUserService(client *Client) *UserService {
 }
 
 // List returns the users in the authenticated user's organization.
-func (s *UserService) List(_ context.Context) ([]*User, error) {
+func (s *UserService) List() ([]*User, error) {
 	reply := new(GetUsersReply)
 	_, err := s.sling.New().Get(USERS).Receive(reply, reply)
 	if err := ReplyErr(reply, err); err != nil {
@@ -53,7 +52,7 @@ func (s *UserService) List(_ context.Context) ([]*User, error) {
 }
 
 // GetServiceAccounts returns a collection of service account users.
-func (s *UserService) GetServiceAccounts(_ context.Context) ([]*User, error) {
+func (s *UserService) GetServiceAccounts() ([]*User, error) {
 	reply := new(GetServiceAccountsReply)
 
 	_, err := s.sling.New().Get(SERVICEACCOUNTS).Receive(reply, reply)
@@ -65,7 +64,7 @@ func (s *UserService) GetServiceAccounts(_ context.Context) ([]*User, error) {
 }
 
 // GetServiceAccount returns a service account user.
-func (s *UserService) GetServiceAccount(_ context.Context, id int32) (*User, error) {
+func (s *UserService) GetServiceAccount(id int32) (*User, error) {
 	url := fmt.Sprintf(SERVICEACCOUNT, id)
 	res := new(GetServiceAccountReply)
 
@@ -74,7 +73,7 @@ func (s *UserService) GetServiceAccount(_ context.Context, id int32) (*User, err
 }
 
 // LoginRealm gets a user's login realm information. can be used to determine if the user is an SSO user
-func (s *UserService) LoginRealm(_ context.Context, req *GetLoginRealmRequest) (*GetLoginRealmReply, error) {
+func (s *UserService) LoginRealm(req *GetLoginRealmRequest) (*GetLoginRealmReply, error) {
 	reply := new(GetLoginRealmReply)
 
 	if req == nil || req.Email == "" {

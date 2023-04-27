@@ -8,68 +8,64 @@
 
 package ccloud
 
-import (
-	"context"
-)
-
 // Account service allows managing accounts in Confluent Cloud
 type AccountInterface interface {
-	Create(context.Context, *Account) (*Account, error)
-	Get(context.Context, *Account) (*Account, error)
-	List(context.Context, *Account) ([]*Account, error)
+	Create(*Account) (*Account, error)
+	Get(*Account) (*Account, error)
+	List(*Account) ([]*Account, error)
 }
 
 // Auth allows authenticating in Confluent Cloud
 type Auth interface {
-	Login(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
-	OktaLogin(context.Context, *AuthenticateRequest) (*AuthenticateReply, error)
-	User(context.Context) (*GetMeReply, error)
+	Login(*AuthenticateRequest) (*AuthenticateReply, error)
+	OktaLogin(*AuthenticateRequest) (*AuthenticateReply, error)
+	User() (*GetMeReply, error)
 }
 
 // Billing service allows getting billing information for an org in Confluent Cloud
 type Billing interface {
-	GetPriceTable(ctx context.Context, org *Organization, product string) (*PriceTable, error)
-	GetPaymentInfo(ctx context.Context, org *Organization) (*Card, error)
-	UpdatePaymentInfo(ctx context.Context, org *Organization, stripeToken string) error
-	ClaimPromoCode(ctx context.Context, org *Organization, code string) (*PromoCodeClaim, error)
-	GetClaimedPromoCodes(ctx context.Context, org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error)
+	GetPriceTable(*Organization, string) (*PriceTable, error)
+	GetPaymentInfo(*Organization) (*Card, error)
+	UpdatePaymentInfo(*Organization, string) error
+	ClaimPromoCode(*Organization, string) (*PromoCodeClaim, error)
+	GetClaimedPromoCodes(*Organization, bool) ([]*PromoCodeClaim, error)
 }
 
 // Environment metadata service allows getting information about available cloud regions data
 type EnvironmentMetadata interface {
-	Get(context.Context) ([]*CloudMetadata, error)
+	Get() ([]*CloudMetadata, error)
 }
 
 // External Identity services allow managing external identities for Bring-Your-Own-Key in Confluent Cloud.
 type ExternalIdentity interface {
-	CreateExternalIdentity(ctx context.Context, cloud, accountID string) (externalIdentityName string, err error)
+	CreateExternalIdentity(string, string) (string, error)
 }
 
 type Growth interface {
-	GetFreeTrialInfo(context.Context, int32) ([]*GrowthPromoCodeClaim, error)
+	GetFreeTrialInfo(int32) ([]*GrowthPromoCodeClaim, error)
 }
 
 // Schema Registry service allows managing SR clusters in Confluent Cloud
 type SchemaRegistry interface {
-	CreateSchemaRegistryCluster(context.Context, *SchemaRegistryClusterConfig) (*SchemaRegistryCluster, error)
-	GetSchemaRegistryClusters(context.Context, *SchemaRegistryCluster) ([]*SchemaRegistryCluster, error)
-	GetSchemaRegistryCluster(context.Context, *SchemaRegistryCluster) (*SchemaRegistryCluster, error)
-	UpdateSchemaRegistryCluster(context.Context, *SchemaRegistryCluster) (*SchemaRegistryCluster, error)
-	DeleteSchemaRegistryCluster(context.Context, *SchemaRegistryCluster) error
+	CreateSchemaRegistryCluster(*SchemaRegistryClusterConfig) (*SchemaRegistryCluster, error)
+	GetSchemaRegistryClusters(*SchemaRegistryCluster) ([]*SchemaRegistryCluster, error)
+	GetSchemaRegistryCluster(*SchemaRegistryCluster) (*SchemaRegistryCluster, error)
+	UpdateSchemaRegistryCluster(*SchemaRegistryCluster) (*SchemaRegistryCluster, error)
+	DeleteSchemaRegistryCluster(*SchemaRegistryCluster) error
 }
 
 // Signup service allows managing signups in Confluent Cloud
 type Signup interface {
-	Create(context.Context, *SignupRequest) (*SignupReply, error)
-	SendVerificationEmail(context.Context, *User) error
+	Create(*SignupRequest) (*SignupReply, error)
+	SendVerificationEmail(*User) error
 }
 
 // User service allows managing users in Confluent Cloud
 type UserInterface interface {
-	List(context.Context) ([]*User, error)
-	GetServiceAccounts(context.Context) ([]*User, error)
-	GetServiceAccount(context.Context, int32) (*User, error)
-	LoginRealm(context.Context, *GetLoginRealmRequest) (*GetLoginRealmReply, error)
+	List() ([]*User, error)
+	GetServiceAccounts() ([]*User, error)
+	GetServiceAccount(int32) (*User, error)
+	LoginRealm(*GetLoginRealmRequest) (*GetLoginRealmReply, error)
 }
 
 // Logger provides an interface that will be used for all logging in this client. User provided

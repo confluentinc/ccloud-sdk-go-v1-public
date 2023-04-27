@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/dghubble/sling"
@@ -24,13 +23,13 @@ func NewSignupService(client *Client) *SignupService {
 	}
 }
 
-func (s *SignupService) Create(_ context.Context, req *SignupRequest) (*SignupReply, error) {
+func (s *SignupService) Create(req *SignupRequest) (*SignupReply, error) {
 	res := new(SignupReply)
 	_, err := s.sling.New().Post(signupEndpoint).BodyProvider(Request(req)).Receive(res, res)
 	return res, WrapErr(ReplyErr(res, err), "failed to sign up")
 }
 
-func (s *SignupService) SendVerificationEmail(_ context.Context, user *User) error {
+func (s *SignupService) SendVerificationEmail(user *User) error {
 	req := CreateEmailVerificationRequest{
 		Credentials: &Credentials{
 			Username: user.Email,

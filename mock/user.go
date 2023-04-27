@@ -5,7 +5,6 @@
 package mock
 
 import (
-	context "context"
 	sync "sync"
 
 	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
@@ -14,37 +13,33 @@ import (
 // UserInterface is a mock of UserInterface interface
 type UserInterface struct {
 	lockList sync.Mutex
-	ListFunc func(arg0 context.Context) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error)
+	ListFunc func() ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error)
 
 	lockGetServiceAccounts sync.Mutex
-	GetServiceAccountsFunc func(arg0 context.Context) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error)
+	GetServiceAccountsFunc func() ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error)
 
 	lockGetServiceAccount sync.Mutex
-	GetServiceAccountFunc func(arg0 context.Context, arg1 int32) (*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error)
+	GetServiceAccountFunc func(arg0 int32) (*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error)
 
 	lockLoginRealm sync.Mutex
-	LoginRealmFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmReply, error)
+	LoginRealmFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmReply, error)
 
 	calls struct {
 		List []struct {
-			Arg0 context.Context
 		}
 		GetServiceAccounts []struct {
-			Arg0 context.Context
 		}
 		GetServiceAccount []struct {
-			Arg0 context.Context
-			Arg1 int32
+			Arg0 int32
 		}
 		LoginRealm []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
 		}
 	}
 }
 
 // List mocks base method by wrapping the associated func.
-func (m *UserInterface) List(arg0 context.Context) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error) {
+func (m *UserInterface) List() ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error) {
 	m.lockList.Lock()
 	defer m.lockList.Unlock()
 
@@ -53,14 +48,11 @@ func (m *UserInterface) List(arg0 context.Context) ([]*github_com_confluentinc_c
 	}
 
 	call := struct {
-		Arg0 context.Context
-	}{
-		Arg0: arg0,
-	}
+	}{}
 
 	m.calls.List = append(m.calls.List, call)
 
-	return m.ListFunc(arg0)
+	return m.ListFunc()
 }
 
 // ListCalled returns true if List was called at least once.
@@ -73,7 +65,6 @@ func (m *UserInterface) ListCalled() bool {
 
 // ListCalls returns the calls made to List.
 func (m *UserInterface) ListCalls() []struct {
-	Arg0 context.Context
 } {
 	m.lockList.Lock()
 	defer m.lockList.Unlock()
@@ -82,7 +73,7 @@ func (m *UserInterface) ListCalls() []struct {
 }
 
 // GetServiceAccounts mocks base method by wrapping the associated func.
-func (m *UserInterface) GetServiceAccounts(arg0 context.Context) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error) {
+func (m *UserInterface) GetServiceAccounts() ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error) {
 	m.lockGetServiceAccounts.Lock()
 	defer m.lockGetServiceAccounts.Unlock()
 
@@ -91,14 +82,11 @@ func (m *UserInterface) GetServiceAccounts(arg0 context.Context) ([]*github_com_
 	}
 
 	call := struct {
-		Arg0 context.Context
-	}{
-		Arg0: arg0,
-	}
+	}{}
 
 	m.calls.GetServiceAccounts = append(m.calls.GetServiceAccounts, call)
 
-	return m.GetServiceAccountsFunc(arg0)
+	return m.GetServiceAccountsFunc()
 }
 
 // GetServiceAccountsCalled returns true if GetServiceAccounts was called at least once.
@@ -111,7 +99,6 @@ func (m *UserInterface) GetServiceAccountsCalled() bool {
 
 // GetServiceAccountsCalls returns the calls made to GetServiceAccounts.
 func (m *UserInterface) GetServiceAccountsCalls() []struct {
-	Arg0 context.Context
 } {
 	m.lockGetServiceAccounts.Lock()
 	defer m.lockGetServiceAccounts.Unlock()
@@ -120,7 +107,7 @@ func (m *UserInterface) GetServiceAccountsCalls() []struct {
 }
 
 // GetServiceAccount mocks base method by wrapping the associated func.
-func (m *UserInterface) GetServiceAccount(arg0 context.Context, arg1 int32) (*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error) {
+func (m *UserInterface) GetServiceAccount(arg0 int32) (*github_com_confluentinc_ccloud_sdk_go_v1_public.User, error) {
 	m.lockGetServiceAccount.Lock()
 	defer m.lockGetServiceAccount.Unlock()
 
@@ -129,16 +116,14 @@ func (m *UserInterface) GetServiceAccount(arg0 context.Context, arg1 int32) (*gi
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 int32
+		Arg0 int32
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.GetServiceAccount = append(m.calls.GetServiceAccount, call)
 
-	return m.GetServiceAccountFunc(arg0, arg1)
+	return m.GetServiceAccountFunc(arg0)
 }
 
 // GetServiceAccountCalled returns true if GetServiceAccount was called at least once.
@@ -151,8 +136,7 @@ func (m *UserInterface) GetServiceAccountCalled() bool {
 
 // GetServiceAccountCalls returns the calls made to GetServiceAccount.
 func (m *UserInterface) GetServiceAccountCalls() []struct {
-	Arg0 context.Context
-	Arg1 int32
+	Arg0 int32
 } {
 	m.lockGetServiceAccount.Lock()
 	defer m.lockGetServiceAccount.Unlock()
@@ -161,7 +145,7 @@ func (m *UserInterface) GetServiceAccountCalls() []struct {
 }
 
 // LoginRealm mocks base method by wrapping the associated func.
-func (m *UserInterface) LoginRealm(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmReply, error) {
+func (m *UserInterface) LoginRealm(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmReply, error) {
 	m.lockLoginRealm.Lock()
 	defer m.lockLoginRealm.Unlock()
 
@@ -170,16 +154,14 @@ func (m *UserInterface) LoginRealm(arg0 context.Context, arg1 *github_com_conflu
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.LoginRealm = append(m.calls.LoginRealm, call)
 
-	return m.LoginRealmFunc(arg0, arg1)
+	return m.LoginRealmFunc(arg0)
 }
 
 // LoginRealmCalled returns true if LoginRealm was called at least once.
@@ -192,8 +174,7 @@ func (m *UserInterface) LoginRealmCalled() bool {
 
 // LoginRealmCalls returns the calls made to LoginRealm.
 func (m *UserInterface) LoginRealmCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.GetLoginRealmRequest
 } {
 	m.lockLoginRealm.Lock()
 	defer m.lockLoginRealm.Unlock()

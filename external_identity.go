@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -28,7 +27,7 @@ func NewExternalIdentityService(client *Client) *ExternalIdentityService {
 	}
 }
 
-func (s *ExternalIdentityService) CreateExternalIdentity(_ context.Context, cloud, accountID string) (string, error) {
+func (s *ExternalIdentityService) CreateExternalIdentity(cloud, accountID string) (string, error) {
 	responseBody := new(CreateExternalIdentityResponse)
 	response, err := s.sling.New().Post("/api/external_identities").BodyJSON(&CreateExternalIdentityRequest{
 		Cloud:     cloud,

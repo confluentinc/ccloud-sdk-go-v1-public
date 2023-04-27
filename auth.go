@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/dghubble/sling"
@@ -24,15 +23,15 @@ func NewAuthService(client *Client) *AuthService {
 }
 
 // Login attempts to log a user in with an Auth0 ID token, returning either a (CCloud) token or an error.
-func (a *AuthService) Login(ctx context.Context, req *AuthenticateRequest) (*AuthenticateReply, error) {
-	return a.login(ctx, "/api/sessions", req)
+func (a *AuthService) Login(req *AuthenticateRequest) (*AuthenticateReply, error) {
+	return a.login("/api/sessions", req)
 }
 
-func (a *AuthService) OktaLogin(ctx context.Context, req *AuthenticateRequest) (*AuthenticateReply, error) {
-	return a.login(ctx, "/api/okta/auth/sessions", req)
+func (a *AuthService) OktaLogin(req *AuthenticateRequest) (*AuthenticateReply, error) {
+	return a.login("/api/okta/auth/sessions", req)
 }
 
-func (a *AuthService) login(_ context.Context, path string, req *AuthenticateRequest) (*AuthenticateReply, error) {
+func (a *AuthService) login(path string, req *AuthenticateRequest) (*AuthenticateReply, error) {
 	res := new(AuthenticateReply)
 
 	httpResp, err := a.sling.New().Post(path).BodyProvider(Request(req)).Receive(res, res)
@@ -58,7 +57,7 @@ func (a *AuthService) login(_ context.Context, path string, req *AuthenticateReq
 }
 
 // User returns the AuthConfig for the authenticated user.
-func (a *AuthService) User(_ context.Context) (*GetMeReply, error) {
+func (a *AuthService) User() (*GetMeReply, error) {
 	reply := &GetMeReply{}
 	_, err := a.sling.New().Get("/api/me").Receive(reply, reply)
 	if err := ReplyErr(reply, err); err != nil {

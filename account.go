@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -34,7 +33,7 @@ func NewAccountService(client *Client) *AccountService {
 // Create creates a new account
 // When Creating a new Account following fields are required
 // name, organization_id
-func (s *AccountService) Create(_ context.Context, account *Account) (*Account, error) {
+func (s *AccountService) Create(account *Account) (*Account, error) {
 	body := &CreateAccountRequest{Account: account}
 	reply := new(CreateAccountReply)
 
@@ -50,7 +49,7 @@ func (s *AccountService) Create(_ context.Context, account *Account) (*Account, 
 }
 
 // Get returns details for a given account.
-func (s *AccountService) Get(_ context.Context, account *Account) (*Account, error) {
+func (s *AccountService) Get(account *Account) (*Account, error) {
 	if !isValidResource(account.Id) {
 		return nil, ErrNotFound
 	}
@@ -70,7 +69,7 @@ func (s *AccountService) Get(_ context.Context, account *Account) (*Account, err
 }
 
 // List returns the accounts that match
-func (s *AccountService) List(_ context.Context, account *Account) ([]*Account, error) {
+func (s *AccountService) List(account *Account) ([]*Account, error) {
 	reply := new(ListAccountsReply)
 	resp, err := s.sling.New().Get(ACCOUNTS).QueryStruct(account).Receive(reply, reply)
 	if err := ReplyErr(reply, err); err != nil {

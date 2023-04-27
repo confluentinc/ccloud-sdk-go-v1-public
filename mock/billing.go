@@ -5,7 +5,6 @@
 package mock
 
 import (
-	context "context"
 	sync "sync"
 
 	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
@@ -14,50 +13,45 @@ import (
 // Billing is a mock of Billing interface
 type Billing struct {
 	lockGetPriceTable sync.Mutex
-	GetPriceTableFunc func(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, product string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PriceTable, error)
+	GetPriceTableFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PriceTable, error)
 
 	lockGetPaymentInfo sync.Mutex
-	GetPaymentInfoFunc func(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Card, error)
+	GetPaymentInfoFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Card, error)
 
 	lockUpdatePaymentInfo sync.Mutex
-	UpdatePaymentInfoFunc func(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, stripeToken string) error
+	UpdatePaymentInfoFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 string) error
 
 	lockClaimPromoCode sync.Mutex
-	ClaimPromoCodeFunc func(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, code string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error)
+	ClaimPromoCodeFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error)
 
 	lockGetClaimedPromoCodes sync.Mutex
-	GetClaimedPromoCodesFunc func(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, excludeExpired bool) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error)
+	GetClaimedPromoCodesFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 bool) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error)
 
 	calls struct {
 		GetPriceTable []struct {
-			Ctx     context.Context
-			Org     *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-			Product string
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+			Arg1 string
 		}
 		GetPaymentInfo []struct {
-			Ctx context.Context
-			Org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
 		}
 		UpdatePaymentInfo []struct {
-			Ctx         context.Context
-			Org         *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-			StripeToken string
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+			Arg1 string
 		}
 		ClaimPromoCode []struct {
-			Ctx  context.Context
-			Org  *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-			Code string
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+			Arg1 string
 		}
 		GetClaimedPromoCodes []struct {
-			Ctx            context.Context
-			Org            *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-			ExcludeExpired bool
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+			Arg1 bool
 		}
 	}
 }
 
 // GetPriceTable mocks base method by wrapping the associated func.
-func (m *Billing) GetPriceTable(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, product string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PriceTable, error) {
+func (m *Billing) GetPriceTable(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PriceTable, error) {
 	m.lockGetPriceTable.Lock()
 	defer m.lockGetPriceTable.Unlock()
 
@@ -66,18 +60,16 @@ func (m *Billing) GetPriceTable(ctx context.Context, org *github_com_confluentin
 	}
 
 	call := struct {
-		Ctx     context.Context
-		Org     *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-		Product string
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+		Arg1 string
 	}{
-		Ctx:     ctx,
-		Org:     org,
-		Product: product,
+		Arg0: arg0,
+		Arg1: arg1,
 	}
 
 	m.calls.GetPriceTable = append(m.calls.GetPriceTable, call)
 
-	return m.GetPriceTableFunc(ctx, org, product)
+	return m.GetPriceTableFunc(arg0, arg1)
 }
 
 // GetPriceTableCalled returns true if GetPriceTable was called at least once.
@@ -90,9 +82,8 @@ func (m *Billing) GetPriceTableCalled() bool {
 
 // GetPriceTableCalls returns the calls made to GetPriceTable.
 func (m *Billing) GetPriceTableCalls() []struct {
-	Ctx     context.Context
-	Org     *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-	Product string
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+	Arg1 string
 } {
 	m.lockGetPriceTable.Lock()
 	defer m.lockGetPriceTable.Unlock()
@@ -101,7 +92,7 @@ func (m *Billing) GetPriceTableCalls() []struct {
 }
 
 // GetPaymentInfo mocks base method by wrapping the associated func.
-func (m *Billing) GetPaymentInfo(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Card, error) {
+func (m *Billing) GetPaymentInfo(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization) (*github_com_confluentinc_ccloud_sdk_go_v1_public.Card, error) {
 	m.lockGetPaymentInfo.Lock()
 	defer m.lockGetPaymentInfo.Unlock()
 
@@ -110,16 +101,14 @@ func (m *Billing) GetPaymentInfo(ctx context.Context, org *github_com_confluenti
 	}
 
 	call := struct {
-		Ctx context.Context
-		Org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
 	}{
-		Ctx: ctx,
-		Org: org,
+		Arg0: arg0,
 	}
 
 	m.calls.GetPaymentInfo = append(m.calls.GetPaymentInfo, call)
 
-	return m.GetPaymentInfoFunc(ctx, org)
+	return m.GetPaymentInfoFunc(arg0)
 }
 
 // GetPaymentInfoCalled returns true if GetPaymentInfo was called at least once.
@@ -132,8 +121,7 @@ func (m *Billing) GetPaymentInfoCalled() bool {
 
 // GetPaymentInfoCalls returns the calls made to GetPaymentInfo.
 func (m *Billing) GetPaymentInfoCalls() []struct {
-	Ctx context.Context
-	Org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
 } {
 	m.lockGetPaymentInfo.Lock()
 	defer m.lockGetPaymentInfo.Unlock()
@@ -142,7 +130,7 @@ func (m *Billing) GetPaymentInfoCalls() []struct {
 }
 
 // UpdatePaymentInfo mocks base method by wrapping the associated func.
-func (m *Billing) UpdatePaymentInfo(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, stripeToken string) error {
+func (m *Billing) UpdatePaymentInfo(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 string) error {
 	m.lockUpdatePaymentInfo.Lock()
 	defer m.lockUpdatePaymentInfo.Unlock()
 
@@ -151,18 +139,16 @@ func (m *Billing) UpdatePaymentInfo(ctx context.Context, org *github_com_conflue
 	}
 
 	call := struct {
-		Ctx         context.Context
-		Org         *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-		StripeToken string
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+		Arg1 string
 	}{
-		Ctx:         ctx,
-		Org:         org,
-		StripeToken: stripeToken,
+		Arg0: arg0,
+		Arg1: arg1,
 	}
 
 	m.calls.UpdatePaymentInfo = append(m.calls.UpdatePaymentInfo, call)
 
-	return m.UpdatePaymentInfoFunc(ctx, org, stripeToken)
+	return m.UpdatePaymentInfoFunc(arg0, arg1)
 }
 
 // UpdatePaymentInfoCalled returns true if UpdatePaymentInfo was called at least once.
@@ -175,9 +161,8 @@ func (m *Billing) UpdatePaymentInfoCalled() bool {
 
 // UpdatePaymentInfoCalls returns the calls made to UpdatePaymentInfo.
 func (m *Billing) UpdatePaymentInfoCalls() []struct {
-	Ctx         context.Context
-	Org         *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-	StripeToken string
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+	Arg1 string
 } {
 	m.lockUpdatePaymentInfo.Lock()
 	defer m.lockUpdatePaymentInfo.Unlock()
@@ -186,7 +171,7 @@ func (m *Billing) UpdatePaymentInfoCalls() []struct {
 }
 
 // ClaimPromoCode mocks base method by wrapping the associated func.
-func (m *Billing) ClaimPromoCode(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, code string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error) {
+func (m *Billing) ClaimPromoCode(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 string) (*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error) {
 	m.lockClaimPromoCode.Lock()
 	defer m.lockClaimPromoCode.Unlock()
 
@@ -195,18 +180,16 @@ func (m *Billing) ClaimPromoCode(ctx context.Context, org *github_com_confluenti
 	}
 
 	call := struct {
-		Ctx  context.Context
-		Org  *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-		Code string
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+		Arg1 string
 	}{
-		Ctx:  ctx,
-		Org:  org,
-		Code: code,
+		Arg0: arg0,
+		Arg1: arg1,
 	}
 
 	m.calls.ClaimPromoCode = append(m.calls.ClaimPromoCode, call)
 
-	return m.ClaimPromoCodeFunc(ctx, org, code)
+	return m.ClaimPromoCodeFunc(arg0, arg1)
 }
 
 // ClaimPromoCodeCalled returns true if ClaimPromoCode was called at least once.
@@ -219,9 +202,8 @@ func (m *Billing) ClaimPromoCodeCalled() bool {
 
 // ClaimPromoCodeCalls returns the calls made to ClaimPromoCode.
 func (m *Billing) ClaimPromoCodeCalls() []struct {
-	Ctx  context.Context
-	Org  *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-	Code string
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+	Arg1 string
 } {
 	m.lockClaimPromoCode.Lock()
 	defer m.lockClaimPromoCode.Unlock()
@@ -230,7 +212,7 @@ func (m *Billing) ClaimPromoCodeCalls() []struct {
 }
 
 // GetClaimedPromoCodes mocks base method by wrapping the associated func.
-func (m *Billing) GetClaimedPromoCodes(ctx context.Context, org *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, excludeExpired bool) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error) {
+func (m *Billing) GetClaimedPromoCodes(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization, arg1 bool) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.PromoCodeClaim, error) {
 	m.lockGetClaimedPromoCodes.Lock()
 	defer m.lockGetClaimedPromoCodes.Unlock()
 
@@ -239,18 +221,16 @@ func (m *Billing) GetClaimedPromoCodes(ctx context.Context, org *github_com_conf
 	}
 
 	call := struct {
-		Ctx            context.Context
-		Org            *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-		ExcludeExpired bool
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+		Arg1 bool
 	}{
-		Ctx:            ctx,
-		Org:            org,
-		ExcludeExpired: excludeExpired,
+		Arg0: arg0,
+		Arg1: arg1,
 	}
 
 	m.calls.GetClaimedPromoCodes = append(m.calls.GetClaimedPromoCodes, call)
 
-	return m.GetClaimedPromoCodesFunc(ctx, org, excludeExpired)
+	return m.GetClaimedPromoCodesFunc(arg0, arg1)
 }
 
 // GetClaimedPromoCodesCalled returns true if GetClaimedPromoCodes was called at least once.
@@ -263,9 +243,8 @@ func (m *Billing) GetClaimedPromoCodesCalled() bool {
 
 // GetClaimedPromoCodesCalls returns the calls made to GetClaimedPromoCodes.
 func (m *Billing) GetClaimedPromoCodesCalls() []struct {
-	Ctx            context.Context
-	Org            *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
-	ExcludeExpired bool
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.Organization
+	Arg1 bool
 } {
 	m.lockGetClaimedPromoCodes.Lock()
 	defer m.lockGetClaimedPromoCodes.Unlock()

@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/dghubble/sling"
@@ -23,7 +22,7 @@ func NewGrowthService(client *Client) *GrowthService {
 	}
 }
 
-func (o *GrowthService) GetFreeTrialInfo(_ context.Context, orgId int32) ([]*GrowthPromoCodeClaim, error) {
+func (o *GrowthService) GetFreeTrialInfo(orgId int32) ([]*GrowthPromoCodeClaim, error) {
 	req := &GetFreeTrialInfoRequest{OrgId: orgId}
 	res := &GetFreeTrialInfoReply{}
 

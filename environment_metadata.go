@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/dghubble/sling"
@@ -22,7 +21,7 @@ func NewEnvironmentMetadataService(client *Client) *EnvironmentMetadataService {
 	}
 }
 
-func (s *EnvironmentMetadataService) Get(_ context.Context) ([]*CloudMetadata, error) {
+func (s *EnvironmentMetadataService) Get() ([]*CloudMetadata, error) {
 	reply := new(GetEnvironmentMetadataReply)
 	_, err := s.sling.New().Get("/api/env_metadata").Receive(reply, reply)
 	if err := ReplyErr(reply, err); err != nil {
