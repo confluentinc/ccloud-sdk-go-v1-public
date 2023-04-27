@@ -5,7 +5,6 @@
 package mock
 
 import (
-	context "context"
 	sync "sync"
 
 	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
@@ -14,24 +13,28 @@ import (
 // Auth is a mock of Auth interface
 type Auth struct {
 	lockLogin sync.Mutex
-	LoginFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
+	LoginFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
+
+	lockOktaLogin sync.Mutex
+	OktaLoginFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
 
 	lockUser sync.Mutex
-	UserFunc func(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error)
+	UserFunc func() (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error)
 
 	calls struct {
 		Login []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+		}
+		OktaLogin []struct {
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
 		}
 		User []struct {
-			Arg0 context.Context
 		}
 	}
 }
 
 // Login mocks base method by wrapping the associated func.
-func (m *Auth) Login(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
+func (m *Auth) Login(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
 	m.lockLogin.Lock()
 	defer m.lockLogin.Unlock()
 
@@ -40,16 +43,14 @@ func (m *Auth) Login(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.Login = append(m.calls.Login, call)
 
-	return m.LoginFunc(arg0, arg1)
+	return m.LoginFunc(arg0)
 }
 
 // LoginCalled returns true if Login was called at least once.
@@ -62,8 +63,7 @@ func (m *Auth) LoginCalled() bool {
 
 // LoginCalls returns the calls made to Login.
 func (m *Auth) LoginCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
 } {
 	m.lockLogin.Lock()
 	defer m.lockLogin.Unlock()
@@ -71,8 +71,46 @@ func (m *Auth) LoginCalls() []struct {
 	return m.calls.Login
 }
 
+// OktaLogin mocks base method by wrapping the associated func.
+func (m *Auth) OktaLogin(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
+	m.lockOktaLogin.Lock()
+	defer m.lockOktaLogin.Unlock()
+
+	if m.OktaLoginFunc == nil {
+		panic("mocker: Auth.OktaLoginFunc is nil but Auth.OktaLogin was called.")
+	}
+
+	call := struct {
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+	}{
+		Arg0: arg0,
+	}
+
+	m.calls.OktaLogin = append(m.calls.OktaLogin, call)
+
+	return m.OktaLoginFunc(arg0)
+}
+
+// OktaLoginCalled returns true if OktaLogin was called at least once.
+func (m *Auth) OktaLoginCalled() bool {
+	m.lockOktaLogin.Lock()
+	defer m.lockOktaLogin.Unlock()
+
+	return len(m.calls.OktaLogin) > 0
+}
+
+// OktaLoginCalls returns the calls made to OktaLogin.
+func (m *Auth) OktaLoginCalls() []struct {
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+} {
+	m.lockOktaLogin.Lock()
+	defer m.lockOktaLogin.Unlock()
+
+	return m.calls.OktaLogin
+}
+
 // User mocks base method by wrapping the associated func.
-func (m *Auth) User(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error) {
+func (m *Auth) User() (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error) {
 	m.lockUser.Lock()
 	defer m.lockUser.Unlock()
 
@@ -81,14 +119,11 @@ func (m *Auth) User(arg0 context.Context) (*github_com_confluentinc_ccloud_sdk_g
 	}
 
 	call := struct {
-		Arg0 context.Context
-	}{
-		Arg0: arg0,
-	}
+	}{}
 
 	m.calls.User = append(m.calls.User, call)
 
-	return m.UserFunc(arg0)
+	return m.UserFunc()
 }
 
 // UserCalled returns true if User was called at least once.
@@ -101,7 +136,6 @@ func (m *Auth) UserCalled() bool {
 
 // UserCalls returns the calls made to User.
 func (m *Auth) UserCalls() []struct {
-	Arg0 context.Context
 } {
 	m.lockUser.Lock()
 	defer m.lockUser.Unlock()
@@ -114,6 +148,9 @@ func (m *Auth) Reset() {
 	m.lockLogin.Lock()
 	m.calls.Login = nil
 	m.lockLogin.Unlock()
+	m.lockOktaLogin.Lock()
+	m.calls.OktaLogin = nil
+	m.lockOktaLogin.Unlock()
 	m.lockUser.Lock()
 	m.calls.User = nil
 	m.lockUser.Unlock()

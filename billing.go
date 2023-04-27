@@ -1,7 +1,6 @@
 package ccloud
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -9,12 +8,9 @@ import (
 )
 
 const (
-	priceTableEndpoint                 = "/api/organizations/%d/price_table?product=%v"
-	paymentInfoEndpoint                = "/api/organizations/%d/payment_info"
-	updateDefaultPaymentMethodEndpoint = "/api/organizations/%d/update_default_payment_method"
-	billingProfileEndpoint             = "/api/organizations/%d/billing_profile"
-	taxInfoEndpoint                    = "/api/organizations/%d/tax_info"
-	promoCodeEndpoint                  = "/api/organizations/%d/promo_code_claims"
+	priceTableEndpoint  = "/api/organizations/%d/price_table?product=%v"
+	paymentInfoEndpoint = "/api/organizations/%d/payment_info"
+	promoCodeEndpoint   = "/api/organizations/%d/promo_code_claims"
 )
 
 type BillingService struct {
@@ -29,7 +25,7 @@ func NewBillingService(client *Client) *BillingService {
 	}
 }
 
-func (o *BillingService) GetPriceTable(_ context.Context, org *Organization, product string) (*PriceTable, error) {
+func (o *BillingService) GetPriceTable(org *Organization, product string) (*PriceTable, error) {
 	url := fmt.Sprintf(priceTableEndpoint, org.Id, product)
 	res := new(GetPriceTableReply)
 
@@ -41,7 +37,7 @@ func (o *BillingService) GetPriceTable(_ context.Context, org *Organization, pro
 	return res.PriceTable, nil
 }
 
-func (o *BillingService) GetPaymentInfo(_ context.Context, org *Organization) (*Card, error) {
+func (o *BillingService) GetPaymentInfo(org *Organization) (*Card, error) {
 	url := fmt.Sprintf(paymentInfoEndpoint, org.Id)
 	res := new(GetPaymentInfoReply)
 
@@ -49,7 +45,7 @@ func (o *BillingService) GetPaymentInfo(_ context.Context, org *Organization) (*
 	return res.Card, WrapErr(ReplyErr(res, err), "failed to get payment info")
 }
 
-func (o *BillingService) UpdatePaymentInfo(_ context.Context, org *Organization, stripeToken string) error {
+func (o *BillingService) UpdatePaymentInfo(org *Organization, stripeToken string) error {
 	url := fmt.Sprintf(paymentInfoEndpoint, org.Id)
 	req := &UpdatePaymentInfoRequest{StripeToken: stripeToken}
 	res := &UpdatePaymentInfoReply{}
@@ -58,7 +54,7 @@ func (o *BillingService) UpdatePaymentInfo(_ context.Context, org *Organization,
 	return WrapErr(ReplyErr(res, err), "failed to update payment info")
 }
 
-func (o *BillingService) ClaimPromoCode(_ context.Context, org *Organization, code string) (*PromoCodeClaim, error) {
+func (o *BillingService) ClaimPromoCode(org *Organization, code string) (*PromoCodeClaim, error) {
 	url := fmt.Sprintf(promoCodeEndpoint, org.Id)
 	req := &ClaimPromoCodeRequest{Code: code}
 	res := &ClaimPromoCodeReply{}
@@ -67,7 +63,7 @@ func (o *BillingService) ClaimPromoCode(_ context.Context, org *Organization, co
 	return res.Claim, WrapErr(ReplyErr(res, err), "failed to claim promo code")
 }
 
-func (o *BillingService) GetClaimedPromoCodes(_ context.Context, org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error) {
+func (o *BillingService) GetClaimedPromoCodes(org *Organization, excludeExpired bool) ([]*PromoCodeClaim, error) {
 	url := fmt.Sprintf(promoCodeEndpoint, org.Id)
 	req := &GetPromoCodeClaimsRequest{ExcludeExpired: excludeExpired}
 	res := &GetPromoCodeClaimsReply{}

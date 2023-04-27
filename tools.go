@@ -1,5 +1,4 @@
 //go:build tools
-// +build tools
 
 package tools
 
@@ -10,7 +9,7 @@ import (
 	_ "github.com/gogo/googleapis/protoc-gen-gogogoogleapis"
 	_ "github.com/gogo/protobuf/gogoproto"
 	_ "github.com/gogo/protobuf/proto"
+	_ "github.com/travisjeffery/mocker/cmd/mocker"
 	_ "github.com/travisjeffery/proto-go-sql"
-
 	_ "k8s.io/api"
 )

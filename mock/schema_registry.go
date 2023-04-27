@@ -5,7 +5,6 @@
 package mock
 
 import (
-	context "context"
 	sync "sync"
 
 	github_com_confluentinc_ccloud_sdk_go_v1_public "github.com/confluentinc/ccloud-sdk-go-v1-public"
@@ -14,46 +13,41 @@ import (
 // SchemaRegistry is a mock of SchemaRegistry interface
 type SchemaRegistry struct {
 	lockCreateSchemaRegistryCluster sync.Mutex
-	CreateSchemaRegistryClusterFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
+	CreateSchemaRegistryClusterFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
 
 	lockGetSchemaRegistryClusters sync.Mutex
-	GetSchemaRegistryClustersFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
+	GetSchemaRegistryClustersFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
 
 	lockGetSchemaRegistryCluster sync.Mutex
-	GetSchemaRegistryClusterFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
+	GetSchemaRegistryClusterFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
 
 	lockUpdateSchemaRegistryCluster sync.Mutex
-	UpdateSchemaRegistryClusterFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
+	UpdateSchemaRegistryClusterFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error)
 
 	lockDeleteSchemaRegistryCluster sync.Mutex
-	DeleteSchemaRegistryClusterFunc func(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) error
+	DeleteSchemaRegistryClusterFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) error
 
 	calls struct {
 		CreateSchemaRegistryCluster []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig
 		}
 		GetSchemaRegistryClusters []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 		}
 		GetSchemaRegistryCluster []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 		}
 		UpdateSchemaRegistryCluster []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 		}
 		DeleteSchemaRegistryCluster []struct {
-			Arg0 context.Context
-			Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 		}
 	}
 }
 
 // CreateSchemaRegistryCluster mocks base method by wrapping the associated func.
-func (m *SchemaRegistry) CreateSchemaRegistryCluster(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
+func (m *SchemaRegistry) CreateSchemaRegistryCluster(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
 	m.lockCreateSchemaRegistryCluster.Lock()
 	defer m.lockCreateSchemaRegistryCluster.Unlock()
 
@@ -62,16 +56,14 @@ func (m *SchemaRegistry) CreateSchemaRegistryCluster(arg0 context.Context, arg1 
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.CreateSchemaRegistryCluster = append(m.calls.CreateSchemaRegistryCluster, call)
 
-	return m.CreateSchemaRegistryClusterFunc(arg0, arg1)
+	return m.CreateSchemaRegistryClusterFunc(arg0)
 }
 
 // CreateSchemaRegistryClusterCalled returns true if CreateSchemaRegistryCluster was called at least once.
@@ -84,8 +76,7 @@ func (m *SchemaRegistry) CreateSchemaRegistryClusterCalled() bool {
 
 // CreateSchemaRegistryClusterCalls returns the calls made to CreateSchemaRegistryCluster.
 func (m *SchemaRegistry) CreateSchemaRegistryClusterCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryClusterConfig
 } {
 	m.lockCreateSchemaRegistryCluster.Lock()
 	defer m.lockCreateSchemaRegistryCluster.Unlock()
@@ -94,7 +85,7 @@ func (m *SchemaRegistry) CreateSchemaRegistryClusterCalls() []struct {
 }
 
 // GetSchemaRegistryClusters mocks base method by wrapping the associated func.
-func (m *SchemaRegistry) GetSchemaRegistryClusters(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
+func (m *SchemaRegistry) GetSchemaRegistryClusters(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) ([]*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
 	m.lockGetSchemaRegistryClusters.Lock()
 	defer m.lockGetSchemaRegistryClusters.Unlock()
 
@@ -103,16 +94,14 @@ func (m *SchemaRegistry) GetSchemaRegistryClusters(arg0 context.Context, arg1 *g
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.GetSchemaRegistryClusters = append(m.calls.GetSchemaRegistryClusters, call)
 
-	return m.GetSchemaRegistryClustersFunc(arg0, arg1)
+	return m.GetSchemaRegistryClustersFunc(arg0)
 }
 
 // GetSchemaRegistryClustersCalled returns true if GetSchemaRegistryClusters was called at least once.
@@ -125,8 +114,7 @@ func (m *SchemaRegistry) GetSchemaRegistryClustersCalled() bool {
 
 // GetSchemaRegistryClustersCalls returns the calls made to GetSchemaRegistryClusters.
 func (m *SchemaRegistry) GetSchemaRegistryClustersCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 } {
 	m.lockGetSchemaRegistryClusters.Lock()
 	defer m.lockGetSchemaRegistryClusters.Unlock()
@@ -135,7 +123,7 @@ func (m *SchemaRegistry) GetSchemaRegistryClustersCalls() []struct {
 }
 
 // GetSchemaRegistryCluster mocks base method by wrapping the associated func.
-func (m *SchemaRegistry) GetSchemaRegistryCluster(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
+func (m *SchemaRegistry) GetSchemaRegistryCluster(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
 	m.lockGetSchemaRegistryCluster.Lock()
 	defer m.lockGetSchemaRegistryCluster.Unlock()
 
@@ -144,16 +132,14 @@ func (m *SchemaRegistry) GetSchemaRegistryCluster(arg0 context.Context, arg1 *gi
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.GetSchemaRegistryCluster = append(m.calls.GetSchemaRegistryCluster, call)
 
-	return m.GetSchemaRegistryClusterFunc(arg0, arg1)
+	return m.GetSchemaRegistryClusterFunc(arg0)
 }
 
 // GetSchemaRegistryClusterCalled returns true if GetSchemaRegistryCluster was called at least once.
@@ -166,8 +152,7 @@ func (m *SchemaRegistry) GetSchemaRegistryClusterCalled() bool {
 
 // GetSchemaRegistryClusterCalls returns the calls made to GetSchemaRegistryCluster.
 func (m *SchemaRegistry) GetSchemaRegistryClusterCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 } {
 	m.lockGetSchemaRegistryCluster.Lock()
 	defer m.lockGetSchemaRegistryCluster.Unlock()
@@ -176,7 +161,7 @@ func (m *SchemaRegistry) GetSchemaRegistryClusterCalls() []struct {
 }
 
 // UpdateSchemaRegistryCluster mocks base method by wrapping the associated func.
-func (m *SchemaRegistry) UpdateSchemaRegistryCluster(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
+func (m *SchemaRegistry) UpdateSchemaRegistryCluster(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) (*github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster, error) {
 	m.lockUpdateSchemaRegistryCluster.Lock()
 	defer m.lockUpdateSchemaRegistryCluster.Unlock()
 
@@ -185,16 +170,14 @@ func (m *SchemaRegistry) UpdateSchemaRegistryCluster(arg0 context.Context, arg1 
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.UpdateSchemaRegistryCluster = append(m.calls.UpdateSchemaRegistryCluster, call)
 
-	return m.UpdateSchemaRegistryClusterFunc(arg0, arg1)
+	return m.UpdateSchemaRegistryClusterFunc(arg0)
 }
 
 // UpdateSchemaRegistryClusterCalled returns true if UpdateSchemaRegistryCluster was called at least once.
@@ -207,8 +190,7 @@ func (m *SchemaRegistry) UpdateSchemaRegistryClusterCalled() bool {
 
 // UpdateSchemaRegistryClusterCalls returns the calls made to UpdateSchemaRegistryCluster.
 func (m *SchemaRegistry) UpdateSchemaRegistryClusterCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 } {
 	m.lockUpdateSchemaRegistryCluster.Lock()
 	defer m.lockUpdateSchemaRegistryCluster.Unlock()
@@ -217,7 +199,7 @@ func (m *SchemaRegistry) UpdateSchemaRegistryClusterCalls() []struct {
 }
 
 // DeleteSchemaRegistryCluster mocks base method by wrapping the associated func.
-func (m *SchemaRegistry) DeleteSchemaRegistryCluster(arg0 context.Context, arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) error {
+func (m *SchemaRegistry) DeleteSchemaRegistryCluster(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster) error {
 	m.lockDeleteSchemaRegistryCluster.Lock()
 	defer m.lockDeleteSchemaRegistryCluster.Unlock()
 
@@ -226,16 +208,14 @@ func (m *SchemaRegistry) DeleteSchemaRegistryCluster(arg0 context.Context, arg1 
 	}
 
 	call := struct {
-		Arg0 context.Context
-		Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 	}{
 		Arg0: arg0,
-		Arg1: arg1,
 	}
 
 	m.calls.DeleteSchemaRegistryCluster = append(m.calls.DeleteSchemaRegistryCluster, call)
 
-	return m.DeleteSchemaRegistryClusterFunc(arg0, arg1)
+	return m.DeleteSchemaRegistryClusterFunc(arg0)
 }
 
 // DeleteSchemaRegistryClusterCalled returns true if DeleteSchemaRegistryCluster was called at least once.
@@ -248,8 +228,7 @@ func (m *SchemaRegistry) DeleteSchemaRegistryClusterCalled() bool {
 
 // DeleteSchemaRegistryClusterCalls returns the calls made to DeleteSchemaRegistryCluster.
 func (m *SchemaRegistry) DeleteSchemaRegistryClusterCalls() []struct {
-	Arg0 context.Context
-	Arg1 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.SchemaRegistryCluster
 } {
 	m.lockDeleteSchemaRegistryCluster.Lock()
 	defer m.lockDeleteSchemaRegistryCluster.Unlock()
