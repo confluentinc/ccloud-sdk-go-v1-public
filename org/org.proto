@@ -30,7 +30,10 @@ message Sso {
   string tenant_id = 3; // Tenant ID of a multi-tenant SSO config (optional)
   bool multi_tenant = 4; // True if connection is a multi-tenant connection
   reserved 5; // SsoOverrides overrides = 5;
+  reserved 6;
   SsoMode mode = 7; // Not in use yet
+  string connection_name = 8; // will replace auth0_connection_name
+  string vendor = 9; //sp vendor
 }
 
 enum SsoMode {
