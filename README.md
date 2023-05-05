@@ -4,13 +4,18 @@
 
 ## To generate / update `*pb.go` files
 
-* Install `protoc-gen-go`, 
+* Install `protoc-gen-go`:
+```
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+```
 
-* run `go mod vendor` in `ccloud-sdk-go-v1-public`
+* Run `go mod vendor`
 
-* at `ccloud-sdk-go-v1-public` root dir, run the following command:
+* At `ccloud-sdk-go-v1-public` root dir, run the following command, replace `org/org.go` with relevant file
 ```
 protoc --go_out=. --go_out=/ org/org.proto -I=./ -I=vendor/github.com/gogo/protobuf \
   -I=vendor/github.com/envoyproxy/protoc-gen-validate \
   -I=vendor 
 ```
+
+* Remove vendor folder and make a PR
