@@ -11,7 +11,7 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 * Run `go mod vendor`
 
-* At `ccloud-sdk-go-v1-public` root dir, run the following command, replace `org/org.go` with relevant file
+* Run the following command, replacing `org/org.go` with the relevant file
 ```
 protoc --go_out=. --go_out=/ org/org.proto -I=./ -I=vendor/github.com/gogo/protobuf \
   -I=vendor/github.com/envoyproxy/protoc-gen-validate \
