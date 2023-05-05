@@ -18,4 +18,4 @@ protoc --go_out=. --go_out=/ org/org.proto -I=./ -I=vendor/github.com/gogo/proto
   -I=vendor 
 ```
 
-* Remove vendor folder and make a PR
+* Remove the `vendor/` directory and open a PR
