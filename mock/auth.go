@@ -18,6 +18,12 @@ type Auth struct {
 	lockOktaLogin sync.Mutex
 	OktaLoginFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
 
+	lockLogout sync.Mutex
+	LogoutFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
+
+	lockOktaLogout sync.Mutex
+	OktaLogoutFunc func(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error)
+
 	lockUser sync.Mutex
 	UserFunc func() (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error)
 
@@ -26,6 +32,12 @@ type Auth struct {
 			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
 		}
 		OktaLogin []struct {
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+		}
+		Logout []struct {
+			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+		}
+		OktaLogout []struct {
 			Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
 		}
 		User []struct {
@@ -109,6 +121,82 @@ func (m *Auth) OktaLoginCalls() []struct {
 	return m.calls.OktaLogin
 }
 
+// Logout mocks base method by wrapping the associated func.
+func (m *Auth) Logout(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
+	m.lockLogout.Lock()
+	defer m.lockLogout.Unlock()
+
+	if m.LogoutFunc == nil {
+		panic("mocker: Auth.LogoutFunc is nil but Auth.Logout was called.")
+	}
+
+	call := struct {
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+	}{
+		Arg0: arg0,
+	}
+
+	m.calls.Logout = append(m.calls.Logout, call)
+
+	return m.LogoutFunc(arg0)
+}
+
+// LogoutCalled returns true if Logout was called at least once.
+func (m *Auth) LogoutCalled() bool {
+	m.lockLogout.Lock()
+	defer m.lockLogout.Unlock()
+
+	return len(m.calls.Logout) > 0
+}
+
+// LogoutCalls returns the calls made to Logout.
+func (m *Auth) LogoutCalls() []struct {
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+} {
+	m.lockLogout.Lock()
+	defer m.lockLogout.Unlock()
+
+	return m.calls.Logout
+}
+
+// OktaLogout mocks base method by wrapping the associated func.
+func (m *Auth) OktaLogout(arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest) (*github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateReply, error) {
+	m.lockOktaLogout.Lock()
+	defer m.lockOktaLogout.Unlock()
+
+	if m.OktaLogoutFunc == nil {
+		panic("mocker: Auth.OktaLogoutFunc is nil but Auth.OktaLogout was called.")
+	}
+
+	call := struct {
+		Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+	}{
+		Arg0: arg0,
+	}
+
+	m.calls.OktaLogout = append(m.calls.OktaLogout, call)
+
+	return m.OktaLogoutFunc(arg0)
+}
+
+// OktaLogoutCalled returns true if OktaLogout was called at least once.
+func (m *Auth) OktaLogoutCalled() bool {
+	m.lockOktaLogout.Lock()
+	defer m.lockOktaLogout.Unlock()
+
+	return len(m.calls.OktaLogout) > 0
+}
+
+// OktaLogoutCalls returns the calls made to OktaLogout.
+func (m *Auth) OktaLogoutCalls() []struct {
+	Arg0 *github_com_confluentinc_ccloud_sdk_go_v1_public.AuthenticateRequest
+} {
+	m.lockOktaLogout.Lock()
+	defer m.lockOktaLogout.Unlock()
+
+	return m.calls.OktaLogout
+}
+
 // User mocks base method by wrapping the associated func.
 func (m *Auth) User() (*github_com_confluentinc_ccloud_sdk_go_v1_public.GetMeReply, error) {
 	m.lockUser.Lock()
@@ -151,6 +239,12 @@ func (m *Auth) Reset() {
 	m.lockOktaLogin.Lock()
 	m.calls.OktaLogin = nil
 	m.lockOktaLogin.Unlock()
+	m.lockLogout.Lock()
+	m.calls.Logout = nil
+	m.lockLogout.Unlock()
+	m.lockOktaLogout.Lock()
+	m.calls.OktaLogout = nil
+	m.lockOktaLogout.Unlock()
 	m.lockUser.Lock()
 	m.calls.User = nil
 	m.lockUser.Unlock()

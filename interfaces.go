@@ -19,6 +19,8 @@ type AccountInterface interface {
 type Auth interface {
 	Login(*AuthenticateRequest) (*AuthenticateReply, error)
 	OktaLogin(*AuthenticateRequest) (*AuthenticateReply, error)
+	Logout(*AuthenticateRequest) (*AuthenticateReply, error)
+	OktaLogout(*AuthenticateRequest) (*AuthenticateReply, error)
 	User() (*GetMeReply, error)
 }
 
