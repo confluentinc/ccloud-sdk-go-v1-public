@@ -56,6 +56,25 @@ func (a *AuthService) login(path string, req *AuthenticateRequest) (*Authenticat
 	return res, nil
 }
 
+// Logout attempts to log a user out with an Auth0 ID token.
+func (a *AuthService) Logout(req *AuthenticateRequest) (*AuthenticateReply, error) {
+	return a.logout("/api/sessions", req)
+}
+
+func (a *AuthService) OktaLogout(req *AuthenticateRequest) (*AuthenticateReply, error) {
+	return a.logout("/api/okta/auth/sessions", req)
+}
+
+func (a *AuthService) logout(path string, req *AuthenticateRequest) (*AuthenticateReply, error) {
+	res := new(AuthenticateReply)
+
+	if httpResp, err := a.sling.New().Delete(path).BodyProvider(Request(req)).Receive(res, res); err != nil || httpResp.StatusCode != http.StatusOK {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 // User returns the AuthConfig for the authenticated user.
 func (a *AuthService) User() (*GetMeReply, error) {
 	reply := &GetMeReply{}
