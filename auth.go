@@ -56,7 +56,7 @@ func (a *AuthService) login(path string, req *AuthenticateRequest) (*Authenticat
 	return res, nil
 }
 
-// Logout attempts to log a user in with an Auth0 ID token, returning either a (CCloud) token or an error.
+// Logout attempts to log a user out with an Auth0 ID token.
 func (a *AuthService) Logout(req *AuthenticateRequest) (*AuthenticateReply, error) {
 	return a.logout("/api/sessions", req)
 }
