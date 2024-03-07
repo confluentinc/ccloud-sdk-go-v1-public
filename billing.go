@@ -8,9 +8,10 @@ import (
 )
 
 const (
-	priceTableEndpoint  = "/api/organizations/%d/price_table?product=%v"
-	paymentInfoEndpoint = "/api/organizations/%d/payment_info"
-	promoCodeEndpoint   = "/api/organizations/%d/promo_code_claims"
+	priceTableEndpoint                 = "/api/organizations/%d/price_table?product=%v"
+	paymentInfoEndpoint                = "/api/organizations/%d/payment_info"
+	updateDefaultPaymentMethodEndpoint = "/api/organizations/%d/update_default_payment_method"
+	promoCodeEndpoint                  = "/api/organizations/%d/promo_code_claims"
 )
 
 type BillingService struct {
@@ -45,13 +46,13 @@ func (o *BillingService) GetPaymentInfo(org *Organization) (*Card, error) {
 	return res.Card, WrapErr(ReplyErr(res, err), "failed to get payment info")
 }
 
-func (o *BillingService) UpdatePaymentInfo(org *Organization, stripeToken string) error {
-	url := fmt.Sprintf(paymentInfoEndpoint, org.Id)
-	req := &UpdatePaymentInfoRequest{StripeToken: stripeToken}
-	res := &UpdatePaymentInfoReply{}
+func (o *BillingService) UpdateDefaultPaymentMethod(org *Organization, stripeToken string) error {
+	url := fmt.Sprintf(updateDefaultPaymentMethodEndpoint, org.Id)
+	req := &UpdateDefaultPaymentMethodRequest{PaymentMethodId: stripeToken}
+	res := &UpdateDefaultPaymentMethodReply{}
 
 	_, err := o.sling.New().Post(url).BodyProvider(Request(req)).Receive(res, res)
-	return WrapErr(ReplyErr(res, err), "failed to update payment info")
+	return WrapErr(ReplyErr(res, err), "failed to update default payment method")
 }
 
 func (o *BillingService) ClaimPromoCode(org *Organization, code string) (*PromoCodeClaim, error) {

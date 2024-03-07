@@ -63,14 +63,12 @@ type Params struct {
 type Client struct {
 	*Params
 	sling               *sling.Sling
-	Account             AccountInterface
 	Auth                Auth
 	Billing             Billing
 	EnvironmentMetadata EnvironmentMetadata
 	ExternalIdentity    ExternalIdentity
 	Growth              Growth
 	SchemaRegistry      SchemaRegistry
-	Signup              Signup
 	User                UserInterface
 }
 
@@ -134,13 +132,11 @@ func NewClient(p *Params) *Client {
 			ResponseDecoder(NewJSONPBDecoder()),
 	}
 	client.Auth = NewAuthService(client)
-	client.Account = NewAccountService(client)
 	client.Billing = NewBillingService(client)
 	client.EnvironmentMetadata = NewEnvironmentMetadataService(client)
 	client.ExternalIdentity = NewExternalIdentityService(client)
 	client.Growth = NewGrowthService(client)
 	client.SchemaRegistry = NewSchemaRegistryService(client)
-	client.Signup = NewSignupService(client)
 	client.User = NewUserService(client)
 	return client
 }

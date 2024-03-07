@@ -1,19 +1,10 @@
-//go:generate mocker --package mock --prefix "" --destination mock/account.go interfaces.go AccountInterface
 //go:generate mocker --package mock --prefix "" --destination mock/auth.go interfaces.go Auth
-//go:generate mocker --package mock --prefix "" --destination mock/billing.go interfaces.go Billing
 //go:generate mocker --package mock --prefix "" --destination mock/environment_metadata.go interfaces.go EnvironmentMetadata
 //go:generate mocker --package mock --prefix "" --destination mock/growth.go interfaces.go Growth
 //go:generate mocker --package mock --prefix "" --destination mock/schema_registry.go interfaces.go SchemaRegistry
 //go:generate mocker --package mock --prefix "" --destination mock/user.go interfaces.go UserInterface
 
 package ccloud
-
-// Account service allows managing accounts in Confluent Cloud
-type AccountInterface interface {
-	Create(*Account) (*Account, error)
-	Get(*Account) (*Account, error)
-	List(*Account) ([]*Account, error)
-}
 
 // Auth allows authenticating in Confluent Cloud
 type Auth interface {
@@ -28,7 +19,7 @@ type Auth interface {
 type Billing interface {
 	GetPriceTable(*Organization, string) (*PriceTable, error)
 	GetPaymentInfo(*Organization) (*Card, error)
-	UpdatePaymentInfo(*Organization, string) error
+	UpdateDefaultPaymentMethod(*Organization, string) error
 	ClaimPromoCode(*Organization, string) (*PromoCodeClaim, error)
 	GetClaimedPromoCodes(*Organization, bool) ([]*PromoCodeClaim, error)
 }
@@ -54,12 +45,6 @@ type SchemaRegistry interface {
 	GetSchemaRegistryCluster(*SchemaRegistryCluster) (*SchemaRegistryCluster, error)
 	UpdateSchemaRegistryCluster(*SchemaRegistryCluster) (*SchemaRegistryCluster, error)
 	DeleteSchemaRegistryCluster(*SchemaRegistryCluster) error
-}
-
-// Signup service allows managing signups in Confluent Cloud
-type Signup interface {
-	Create(*SignupRequest) (*SignupReply, error)
-	SendVerificationEmail(*User) error
 }
 
 // User service allows managing users in Confluent Cloud

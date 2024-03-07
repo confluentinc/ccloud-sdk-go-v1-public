@@ -89,16 +89,6 @@ message ReadinessHealthCheckReply {
   string message = 2;
 }
 
-message Credentials {
-  string username = 1;
-  string password = 2 [(gogoproto.moretags) = "redact:\"-\""];
-}
-
-message MarketplaceCreds {
-  string token = 1;
-  core.MarketplacePartner partner = 2;
-}
-
 enum MarketplacePartner {
   UNKNOWN = 0;
   GCP = 1;
