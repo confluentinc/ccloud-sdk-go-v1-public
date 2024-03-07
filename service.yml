@@ -8,3 +8,6 @@ github:
   enable: true
 gitignore:
   enable: true
+make:
+  enable: true
+  additional_modules: ['cc-protoc']
