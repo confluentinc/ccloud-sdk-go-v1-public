@@ -25,6 +25,6 @@ func (t *GetPromoCodeClaimsRequest) SetRequestCarrier(request_carrier map[string
 	t.RequestCarrier = request_carrier
 }
 
-func (t *UpdatePaymentInfoRequest) SetRequestCarrier(request_carrier map[string]string) {
+func (t *UpdateDefaultPaymentMethodRequest) SetRequestCarrier(request_carrier map[string]string) {
 	t.RequestCarrier = request_carrier
 }
