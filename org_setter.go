@@ -19,14 +19,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-func (t *SignupRequest) SetRequestCarrier(request_carrier map[string]string) {
-	t.RequestCarrier = request_carrier
-}
-
-func (t *CreateAccountRequest) SetRequestCarrier(request_carrier map[string]string) {
-	t.RequestCarrier = request_carrier
-}
-
 func (t *GetServiceAccountsRequest) SetRequestCarrier(request_carrier map[string]string) {
 	t.RequestCarrier = request_carrier
 }
