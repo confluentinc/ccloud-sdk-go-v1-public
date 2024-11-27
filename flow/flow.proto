@@ -65,7 +65,8 @@ message GetLoginRealmRequest {
 message GetLoginRealmReply {
   string realm = 1;
   bool is_sso = 2;
-  .ccloud.core.Error  error = 3;
+  .ccloud.core.Error error = 3;
+  bool mfa_required = 4;
 }
 
 message CreateEmailVerificationRequest {
