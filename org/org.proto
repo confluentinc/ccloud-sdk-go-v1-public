@@ -180,6 +180,8 @@ message Organization {
   SuspensionStatus suspension_status = 19;
 
   string display_label = 20;
+
+  google.protobuf.Timestamp mfa_enforced_at =21;
 }
 
 message SuspensionStatus {
