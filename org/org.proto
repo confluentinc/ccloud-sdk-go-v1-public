@@ -181,7 +181,11 @@ message Organization {
 
   string display_label = 20;
 
-  google.protobuf.Timestamp mfa_enforced_at =21;
+  string country_code = 21; // two-character ISO-3166 country code in uppercase
+
+  string parent_organization_resource_id = 22;
+
+  google.protobuf.Timestamp mfa_enforced_at = 23;
 }
 
 message SuspensionStatus {
