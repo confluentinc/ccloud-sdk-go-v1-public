@@ -1,6 +1,6 @@
 module github.com/confluentinc/ccloud-sdk-go-v1-public
 
-go 1.22.10
+go 1.22.11
 
 require (
 	github.com/confluentinc/proto-go-setter v0.3.0
