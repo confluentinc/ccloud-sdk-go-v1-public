@@ -71,9 +71,10 @@ type UserInterface interface {
 }
 
 // Logger provides an interface that will be used for all logging in this client. User provided
-// logging implementations must conform to this interface. Popular loggers like zap and logrus
-// already implement this interface.
+// logging implementations must conform to this interface.
 type Logger interface {
+	UnsafeTrace(...interface{})
+	UnsafeTracef(string, ...interface{})
 	Debug(...interface{})
 	Debugf(string, ...interface{})
 	Info(...interface{})
