@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/dghubble/sling"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 )
 
@@ -105,7 +104,7 @@ func (c *LoggingHttpClient) Do(req *http.Request) (*http.Response, error) {
 		body := fmt.Sprintf("%s", req.Body)
 		reqLog = fmt.Sprintf("%s Body:%s", reqLog, body[1:len(body)-1])
 	}
-	c.logger.Debug(caller, " ", reqLog)
+	c.logger.UnsafeTrace(caller, " ", reqLog)
 	res, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -118,7 +117,7 @@ func (c *LoggingHttpClient) Do(req *http.Request) (*http.Response, error) {
 	bufferReader := bytes.NewBuffer(b)
 	res.Body = readCloser{bufferReader, res.Body}
 	resLog := fmt.Sprintf("response: %s X-Request-Id:%s Body: %s", res.Status, res.Header.Get("X-Request-Id"), bufferReader)
-	c.logger.Debug(caller, " ", resLog, " ", reqLog)
+	c.logger.UnsafeTrace(caller, " ", resLog)
 	return res, nil
 }
 
@@ -165,9 +164,6 @@ func setDefaults(p *Params) *Params {
 	}
 	if p.BaseURL == "" {
 		p.BaseURL = "https://confluent.cloud"
-	}
-	if p.Logger == nil {
-		p.Logger = logrus.New()
 	}
 	if p.BaseClient == nil {
 		p.BaseClient = BaseClient
