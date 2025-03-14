@@ -9,7 +9,6 @@ require (
 	github.com/gogo/googleapis v1.4.1
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
-	github.com/sirupsen/logrus v1.9.0
 	github.com/travisjeffery/mocker v1.1.0
 	github.com/travisjeffery/proto-go-sql v0.0.0-20190911121832-39ff47280e87
 	github.com/ugorji/go/codec v1.2.8
