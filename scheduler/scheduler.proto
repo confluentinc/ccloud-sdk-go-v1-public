@@ -23,6 +23,7 @@ enum NetworkType {
   VPC_PEERING = 4;
   // INTERNAL requires that source traffic origniates from the NetworkRegion's requested CIDR.
   INTERNAL = 5;
+  PRIVATE_NETWORK_INTERFACE = 6;
 }
 
 message APICredentials {
