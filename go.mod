@@ -1,6 +1,6 @@
 module github.com/confluentinc/ccloud-sdk-go-v1-public
 
-go 1.22.7
+go 1.23.0
 
 require (
 	github.com/confluentinc/proto-go-setter v0.3.0
@@ -12,7 +12,7 @@ require (
 	github.com/travisjeffery/mocker v1.1.0
 	github.com/travisjeffery/proto-go-sql v0.0.0-20190911121832-39ff47280e87
 	github.com/ugorji/go/codec v1.2.8
-	golang.org/x/oauth2 v0.4.0
+	golang.org/x/oauth2 v0.27.0
 	k8s.io/api v0.17.0
 )
 
@@ -34,7 +34,6 @@ require (
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/tools v0.3.0 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6 // indirect
 	gopkg.in/inf.v0 v0.9.0 // indirect
