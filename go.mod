@@ -1,6 +1,6 @@
 module github.com/confluentinc/ccloud-sdk-go-v1-public
 
-go 1.22.7
+go 1.25.0
 
 require (
 	github.com/confluentinc/proto-go-setter v0.3.0
@@ -31,7 +31,7 @@ require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/sys v0.44.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/tools v0.3.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
