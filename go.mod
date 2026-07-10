@@ -39,7 +39,7 @@ require (
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6 // indirect
 	gopkg.in/inf.v0 v0.9.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
-	k8s.io/apimachinery v0.17.0 // indirect
+	k8s.io/apimachinery v0.17.9 // indirect
 	k8s.io/klog v1.0.0 // indirect
 )
 
